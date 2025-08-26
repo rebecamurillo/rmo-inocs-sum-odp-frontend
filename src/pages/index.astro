@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Badge } from "../components/react-catalyst-ui-kit";
+import { CTAHero, CTASection } from "../components/react";
+import heroImage from "../assets/img/sum-hero.png";
+import mcdaImage from "../assets/img/sum-mcda.png";
+import impactImage from "../assets/img/sum-measure-kpi-impact.png";
+---
+
+<Layout>
+  <CTAHero
+    image={heroImage}
+    title="SUM Open Data Platform"
+    subtitle="A first-of-its-kind, Pan-European Open Data Platform tracking the impact of push/pull measures on New Shared Mobility and Public Transport across 9 Living Labs—and growing."
+    primary={{
+      text: "Add your city",
+      href: "#",
+    }}
+    secondary={{
+      text: "Explore the Living Labs",
+      href: "#",
+    }}
+  />
+  <CTASection
+    title="Push and pull measures impact assessment tool"
+    description="Discover how push and pull measures impacted Living Labs Key Performance Indicators (KPI). The impact assessment tool provides : "
+    imageSrc={impactImage.src}
+    imageAlt="Impactfull measures example"
+    benefits={[
+      "Estimation of what measures worked and where ",
+      "Ranking of each measures",
+      "Estimation of how measures contributed to KPI changes across Living Labs",
+      "Compare Living Labs KPI variations",
+    ]}
+    linkText="Discover the impact assessment tool"
+    linkHref="#"
+    orderReverse={true}
+  />
+  <CTASection
+    title="Decision tool for NSM measures"
+    description="Compare and rank sustainable mobility strategies across multiple cities and stakeholders."
+    imageSrc={mcdaImage.src}
+    imageAlt="Recommended business activities"
+    benefits={[
+      "Analyze the impact of measures from different perspectives",
+      "Define a strategy for your city",
+      "Get recommendations of push and pull measures aligned with your goals",
+      "Multi-Criteria Decision Analysis (MCDA) tool",
+      "Rank and compare mobility strategies",
+      "Customizable criteria and weights",
+    ]}
+    linkText="Try the decision tool"
+    linkHref="#"
+  />
+</Layout>
