@@ -1,3 +1,7 @@
 export * from './CTAHero';
 export * from './CTASection';
 export * from './RButton';
+export * from './StatsSection'
+export * from './TransportBadge';
+export * from './InfoCard';
+export * from './MobilityMeasures';

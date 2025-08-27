@@ -53,7 +53,7 @@ export function CTAHero({
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 size-full object-cover bg-light opacity-30"
+          className="absolute inset-0 -z-10 size-full object-cover bg-dark opacity-30"
         />
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -75,8 +75,8 @@ export function CTAHero({
             )}
 
             <div className="text-center">
-              <h1 className="drop-shadow-[2px_2px_2px_black]">{title}</h1>
-              <h6 className="mt-8 text-gray-950">{subtitle}</h6>
+              <h1 className="drop-shadow-[1px_1px_1px_white]">{title}</h1>
+              <h6 className="mt-8 text-light">{subtitle}</h6>
 
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <RButton

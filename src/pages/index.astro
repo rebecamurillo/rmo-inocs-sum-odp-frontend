@@ -1,7 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Badge } from "../components/react-catalyst-ui-kit";
-import { CTAHero, CTASection } from "../components/react";
+import {
+  CTAHero,
+  CTASection,
+  StatsSection,
+  TransportBadge,
+  InfoCard,
+  MobilityMeasures
+} from "../components/react";
 import heroImage from "../assets/img/sum-hero.png";
 import mcdaImage from "../assets/img/sum-mcda.png";
 import impactImage from "../assets/img/sum-measure-kpi-impact.png";
@@ -11,7 +17,7 @@ import impactImage from "../assets/img/sum-measure-kpi-impact.png";
   <CTAHero
     image={heroImage}
     title="SUM Open Data Platform"
-    subtitle="A first-of-its-kind, Pan-European Open Data Platform tracking the impact of push/pull measures on New Shared Mobility and Public Transport across 9 Living Labs—and growing."
+    subtitle="A first-of-its-kind, Pan-European Open Data Platform tracking the impact of push and pull measures on New Shared Mobility and Public Transport across 9+ Living Labs."
     primary={{
       text: "Add your city",
       href: "#",
@@ -21,6 +27,45 @@ import impactImage from "../assets/img/sum-measure-kpi-impact.png";
       href: "#",
     }}
   />
+  <StatsSection
+    titleHighlight="SEAMLESS"
+    title="Shared Urban Mobility"
+    subtitle="The SUM Open Data Platform collects and delivers data and analytical tools to monitor, evaluate, and optimize the seamless integration of new shared mobility services with public transport across European Living Labs."
+    stats={[
+      { id: 1, name: "Living labs", value: "9" },
+      {
+        id: 2,
+        name: "Measures implemented for New Shared Modes integration",
+        value: "16",
+      },
+      {
+        id: 3,
+        name: "Different Shared Mobility integrated in Living Labs",
+        value: "10",
+      },
+      {
+        id: 4,
+        name: "Average increase for New Share Modes use (since 2023)",
+        value: "+5%",
+      },
+    ]}
+  />
+  <CTASection title="Measures for Shared Urban Mobility" description="" order="center">
+    <div class="'text-center">
+      <div class="flex justify-center flex-wrap gap-1 md:gap-4 mb-8">
+        <TransportBadge type="bus" size="lg" color="secondary" />
+        <TransportBadge type="bike" size="lg" color="primary-light" />
+        <TransportBadge type="car" size="lg" color="accent" />
+        <TransportBadge type="e-car" size="lg" color="light" />
+        <TransportBadge type="e-bus" size="lg" color="secondary" />
+        <TransportBadge type="metro" size="lg" color="primary-light" />
+        <TransportBadge type="scooter" size="lg" color="accent" />
+      </div>
+
+      <MobilityMeasures />
+    </div>
+  </CTASection>
+
   <CTASection
     title="Push and pull measures impact assessment tool"
     description="Discover how push and pull measures impacted Living Labs Key Performance Indicators (KPI). The impact assessment tool provides : "
@@ -34,7 +79,7 @@ import impactImage from "../assets/img/sum-measure-kpi-impact.png";
     ]}
     linkText="Discover the impact assessment tool"
     linkHref="#"
-    orderReverse={true}
+    order="right"
   />
   <CTASection
     title="Decision tool for NSM measures"
