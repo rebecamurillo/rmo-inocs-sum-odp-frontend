@@ -49,28 +49,34 @@ export function CTASection({
             <div className="w-full flex-auto">
               <h2
                 className={`${
-                  order === "center" ? "text-center" : "text-left"
+                  order === "center" ? "text-center lg:px-20" : "text-left"
                 }`}
               >
                 {title}
               </h2>
-              <p className="mt-6 text-lg/8 text-pretty text-gray-600 dark:text-gray-400">
+              <p
+                className={`${
+                  order === "center" ? "text-center lg:px-20" : "text-left"
+                }`}
+              >
                 {description}
               </p>
-              <ul
-                role="list"
-                className="my-10 grid grid-cols-1 gap-x-8 gap-y-3 "
-              >
-                {benefits.map((benefit) => (
-                  <li key={benefit} className="flex gap-x-3">
-                    <CheckCircleIcon
-                      aria-hidden="true"
-                      className="h-10 w-10 flex-none text-secondary"
-                    />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
+              {benefits.length > 0 && (
+                <ul
+                  role="list"
+                  className="my-10 grid grid-cols-1 gap-x-8 gap-y-3 "
+                >
+                  {benefits.map((benefit) => (
+                    <li key={benefit} className="flex gap-x-3">
+                      <CheckCircleIcon
+                        aria-hidden="true"
+                        className="h-10 w-10 flex-none text-secondary"
+                      />
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               {children}
             </div>

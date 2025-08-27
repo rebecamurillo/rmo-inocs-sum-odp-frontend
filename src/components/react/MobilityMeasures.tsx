@@ -1,4 +1,5 @@
 import { InfoCard } from "./InfoCard";
+import React from "react";
 
 type Measure = {
   title: string;
@@ -12,6 +13,10 @@ type MobilityMeasuresProps = {
   pushMeasures?: Measure[];
   pullMeasures?: Measure[];
   className?: string;
+  hideDescription?: boolean;
+  // dynamic columns: number of columns on small screens and on lg
+  colsSmall?: number; // corresponds to grid-cols-{n}
+  colsLg?: number; // corresponds to lg:grid-cols-{n}
 };
 
 const defaultPush: Measure[] = [
@@ -140,62 +145,79 @@ const defaultPull: Measure[] = [
   },
 ];
 
-export function MobilityMeasures({
-  pushMeasures = defaultPush,
-  pullMeasures = defaultPull,
-  className = "",
-}: MobilityMeasuresProps) {
-  return (
-    <div className={`flex flex-col md:flex-row gap-4 items-start ${className}`}>
-      <div className="flex-1 grid grid-cols-1 gap-4">
-        <h3 className="text-center">🔴 Push measures</h3>
-        <small className="text-center italic min-h-10 lg:min-h-0">
-          aim to “push” users away from unsustainable travel modes like private
-          vehicles.
-        </small>
-        <p className="text-center">
-          Push measures are restrictions designed to discourage private car use
-          and reduce car dominance in urban environments.
-        </p>
-        <div className="grid grid-cols-2 mx-1 lg:mx-4 gap-4">
-          {pushMeasures.map((m) => (
-            <InfoCard
-              key={m.title}
-              title={m.title}
-              description={m.description}
-              imageUrl={m.imageUrl}
-              href={m.href}
-              className={m.className}
-            />
-          ))}
-        </div>
-      </div>
+type MeasuresSectionProps = {
+  heading: string;
+  smallText: string;
+  paragraph: string;
+  measures: Measure[];
+  hideDescription?: boolean;
+  colsSmall?: number;
+  colsLg?: number;
+};
 
-      <div className="flex-1 grid grid-cols-1 gap-4">
-        <h3 className="text-center min-h-10 lg:min-h-0">🟢 Pull measures</h3>
-        <small className="text-center italic min-h-10 lg:min-h-0">
-          aim to “pull” people toward sustainable options by improving the
-          experience.
-        </small>
-        <p className="text-center">
-          Pull measures are incentives and improvements that make shared
-          mobility and public transport more attractive and accessible.
-        </p>
-        <div className="grid grid-cols-2 mx-1 lg:mx-4 gap-4">
-          {pullMeasures.map((m) => (
-            <InfoCard
-              key={m.title}
-              title={m.title}
-              description={m.description}
-              imageUrl={m.imageUrl}
-              href={m.href}
-              className={m.className}
-            />
-          ))}
-        </div>
+function MeasuresSection({
+  heading,
+  smallText,
+  paragraph,
+  measures,
+  hideDescription = false,
+  colsSmall = 3,
+  colsLg = 5,
+}: MeasuresSectionProps) {
+  const gridClass = `grid grid-cols-${colsSmall} lg:grid-cols-${colsLg} mx-1 lg:mx-4 gap-4`;
+
+  return (
+    <div className="flex-1 grid grid-cols-1 gap-4">
+      <h3 className="text-center">{heading}</h3>
+      <small className="text-center italic min-h-10 lg:min-h-0">
+        {smallText}
+      </small>
+      <p className="text-center">{paragraph}</p>
+      <div className={gridClass}>
+        {measures.map((m) => (
+          <InfoCard
+            key={m.title}
+            title={m.title}
+            description={hideDescription ? "" : m.description}
+            imageUrl={m.imageUrl}
+            href={m.href}
+            className={m.className}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-export default MobilityMeasures;
+export function MobilityMeasures({
+  pushMeasures = defaultPush,
+  pullMeasures = defaultPull,
+  className = "",
+  hideDescription = false,
+  colsSmall = 2,
+  colsLg = 5,
+}: MobilityMeasuresProps) {
+  return (
+    <div className={`flex flex-col gap-4 items-start my-4 ${className}`}>
+      <MeasuresSection
+        heading="🔴 Push measures"
+        smallText={`Push measures are restrictions designed to discourage private car use and reduce car dominance in urban environments.`}
+        paragraph={``}
+        measures={pushMeasures}
+        hideDescription={hideDescription}
+        colsSmall={colsSmall}
+        colsLg={colsLg}
+      />
+
+      <MeasuresSection
+        heading="🟢 Pull measures"
+        smallText={`Pull measures are incentives and improvements that make shared mobility and public transport more attractive and accessible.`}
+        paragraph={``}
+        measures={pullMeasures}
+        hideDescription={hideDescription}
+        colsSmall={colsSmall}
+        colsLg={colsLg}
+      />
+    </div>
+  );
+}

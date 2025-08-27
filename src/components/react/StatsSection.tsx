@@ -24,7 +24,7 @@ export function StatsSection({
   className = "",
 }: StatsSectionProps) {
   return (
-    <div className={`pt-24 ${className}`}>
+    <div className={`pt-0 ${className}`}>
       <div className="mx-auto max-w-7xl px-3 xl:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-none flex flex-col gap-4">
           <div className="text-center md:mx-10 flex flex-col gap-4">
