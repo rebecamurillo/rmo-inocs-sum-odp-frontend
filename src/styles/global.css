@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #004494;
   --color-primary-light: #75bdfb;
@@ -63,4 +65,8 @@ li {
 
 body {
   @apply text-dark;
+}
+
+label {
+  @apply block text-sm font-medium leading-6 text-dark font-bold;
 }

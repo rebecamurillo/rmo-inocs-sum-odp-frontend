@@ -6,3 +6,4 @@ export * from './TransportBadge';
 export * from './InfoCard';
 export * from './MobilityMeasures';
 export * from './Timeline';
+export * from './form/SignupForm';
