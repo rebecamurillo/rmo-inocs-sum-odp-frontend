@@ -9,7 +9,8 @@ export interface RButtonProps {
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
   defaultArrow?: boolean;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export function RButton({
@@ -20,25 +21,31 @@ export function RButton({
   className = "",
   defaultArrow = false,
   type,
+  ...props
 }: RButtonProps) {
   const classNamePrimary =
-    " rounded-md bg-secondary px-3.5 py-2.5 text-sm font-semibold text-primary shadow-xs hover:bg-primary-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
-  const classNameLink =
-    " text-sm/6 font-semibold text-gray-900";
+    " rounded-md bg-secondary px-3.5 py-2.5 text-sm font-semibold text-primary shadow-xs hover:bg-primary-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ";
+  const classNameLink = " underline text-sm/6 text-gray-900 ";
   const classNameSecondary =
-    " rounded-md border border-secondary px-3.5 py-2.5 text-sm font-semibold shadow-xs hover:bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary";
+    " rounded-md border border-secondary px-3.5 py-2.5 text-sm font-semibold shadow-xs hover:bg-primary-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary ";
 
   const actionClassName =
-    className +
+    "cursor-pointer" +
     (variant === "primary"
       ? classNamePrimary
       : variant === "link"
       ? classNameLink
-      : classNameSecondary);
+      : classNameSecondary) +
+    className;
 
   if (type || onClick) {
     return (
-      <button type={type ?? 'button'} onClick={onClick} className={actionClassName}>
+      <button
+        type={type ?? "button"}
+        onClick={onClick}
+        className={actionClassName}
+        {...props}
+      >
         {text}
         {defaultArrow && <span aria-hidden="true">→</span>}
       </button>
@@ -47,7 +54,7 @@ export function RButton({
 
   if (href) {
     return (
-      <a href={href} className={actionClassName}>
+      <a href={href} className={actionClassName} {...props}>
         {text}
         {defaultArrow && <span aria-hidden="true">→</span>}
       </a>
@@ -55,7 +62,7 @@ export function RButton({
   }
 
   return (
-    <button type="button" className={actionClassName}>
+    <button type="button" className={actionClassName} {...props}>
       {text}
       {defaultArrow && <span aria-hidden="true">→</span>}
     </button>

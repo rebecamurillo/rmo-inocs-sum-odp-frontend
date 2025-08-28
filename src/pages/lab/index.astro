@@ -1,0 +1,148 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { CTACard, LabDashboardTabs } from "../../components/react";
+import { Timeline } from "../../components/react";
+
+const livingLab = {
+  name: "Geneva",
+  user: "JohnDoe",
+};
+
+const steps = [
+  {
+    id: "modal-split-before",
+    title: "1. Modal split (before)",
+    description:
+      "Enter the baseline modal share (cars, bikes, PT, walking, etc.) before any measures were implemented.",
+    completed: true,
+    cta: "Edit modal split",
+    href: "/lab/modal-split",
+  },
+  {
+    id: "kpis-before",
+    title: "2. KPIs (before)",
+    description:
+      "Complete the KPI survey or upload data collected before the implementation period.",
+    completed: false,
+    inProgress: true,
+    cta: "Edit KPIs",
+    href: "/lab/kpis-before",
+  },
+  {
+    id: "measures",
+    title: "3. Measures",
+    description:
+      "Select or add the push and pull measures your city is implementing.",
+    completed: true,
+    cta: "Edit measures",
+    href: "/lab/measures",
+  },
+  {
+    id: "modal-split-after",
+    title: "4. Modal split (after)",
+    description:
+      "Enter the modal share (cars, bikes, PT, walking, etc.) after the measures have been implemented.",
+    completed: false,
+    locked: true,
+    cta: "Edit modal split",
+    href: "/lab/modal-split-after",
+  },
+  {
+    id: "kpis-after",
+    title: "5. KPIs (after)",
+    description:
+      "This will open once your implementation period is complete. You will need to re-submit KPIs for comparison.",
+    completed: false,
+    locked: true,
+    cta: "Edit KPIs",
+    href: "/lab/kpis-after",
+  },
+];
+---
+
+<Layout>
+  <div class="">
+    <section
+      class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8 flex flex-col gap-10 lg:gap-18"
+    >
+      <div class="flex flex-col gap-4">
+        <h2>Welcome {livingLab.user}</h2>
+        <h3>
+          You are managing data for the <strong class="text-success"
+            >Living Lab {livingLab.name}</strong
+          >
+        </h3>
+        <p>
+          Help us improve urban mobility by contributing your city’s data to the
+          Open Data Platform for Seamless Shared Urban Mobility.
+        </p>
+      </div>
+
+      <LabDashboardTabs client:load />
+
+      <div class="grid gap-10 grid-cols-1">
+        <h3 class="text-center">Manage living lab data</h3>
+        <div class="hidden lg:block">
+          <Timeline
+            steps={steps.map((step, idx) => ({
+              stepLabel: `Step.${idx + 1}`,
+              title: step.title,
+              description: step.description,
+              footnote: step.completed
+                ? "✅ Completed"
+                : step.inProgress
+                  ? "⏳ In Progress"
+                  : step.locked
+                    ? "🔒 Locked"
+                    : "Not Started",
+            }))}
+          />
+        </div>
+        <div class="grid gap-1 lg:gap-10 sm:grid-cols-2 lg:grid-cols-2">
+          {
+            steps.map((step, index) => (
+              <CTACard
+                id={step.id}
+                title={step.title}
+                description={step.description}
+                completed={step.completed}
+                inProgress={step.inProgress}
+                locked={step.locked}
+                cta={step.cta}
+                href={step.href}
+                className={index === 2 ? "col-span-2" : ""}
+              />
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Help Section */}
+      <div class="mt-12 p-6 bg-gray-50 border border-gray-200 rounded-lg">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">
+          Need help completing a step?
+        </h3>
+        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
+          <li>
+            <a href="/resources" class="text-blue-600 hover:underline">
+              Access your Living Lab onboarding guide
+            </a>
+          </li>
+          <li>
+            <a href="/faq" class="text-blue-600 hover:underline">
+              Visit the FAQ
+            </a>
+          </li>
+          <li>
+            <a
+              href="mailto:support@sum-project.eu"
+              class="text-blue-600 hover:underline"
+            >
+              Contact the SUM coordination team
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</Layout>

@@ -7,7 +7,7 @@ import {
 } from "../../react-catalyst-ui-kit/typescript/radio";
 import { Label } from "../../react-catalyst-ui-kit/typescript/fieldset";
 import { Select } from "../../react-catalyst-ui-kit/typescript/select";
-import { RButton } from "../RButton";
+import { RButton } from "../ui/RButton";
 
 type Mode = "create" | "join";
 

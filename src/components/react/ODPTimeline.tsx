@@ -1,22 +1,11 @@
-// ...existing code...
-import React from "react";
-import { Badge } from "../react-catalyst-ui-kit";
+import { Timeline, type TimelineProps } from "./ui";
 
-type Step = {
-  stepLabel: string;
-  title: string;
-  description: string;
-  footnote?: string;
-};
-
-type TimelineProps = {
-  title?: string;
-  subtitle?: string;
-  steps?: Step[];
+type ODPTimelineProps = {
+  steps?: TimelineProps["steps"];
   className?: string;
 };
 
-const defaultSteps: Step[] = [
+const defaultSteps = [
   {
     stepLabel: "Before",
     title: "Baseline Survey",
@@ -47,31 +36,15 @@ const defaultSteps: Step[] = [
   },
 ];
 
-export function Timeline({
-  title = "Monitoring measures around New Shared Mobility",
-  subtitle = "From pre-implementation surveys to real-world impact analysis, here's how data flows through the SUM project.",
+export function ODPTimeline({
   steps = defaultSteps,
   className = "",
-}: TimelineProps) {
+}: ODPTimelineProps) {
   return (
-    <section className={`bg-white py-16 px-4 sm:px-8 lg:px-20 ${className}`}>
+    <section className={`bg-white py-16 px-1  ${className}`}>
       <div className="mx-auto flex flex-col gap-4">
-        <ol className="items-start sm:flex">
-          {steps.map((step, idx) => (
-            <li key={`${step.title}-${idx}`} className="relative mb-6 sm:mb-0">
-              <div className="flex items-center">
-                <Badge color="orange">{step.stepLabel}</Badge>
-                <div className="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700" />
-              </div>
-
-              <div className="mt-3">
-                <h5>{step.title}</h5>
-                <small>{step.description}</small>
-                <br></br>
-                {step.footnote && <small>{step.footnote}</small>}
-              </div>
-            </li>
-          ))}
+        <ol className="items-start sm:flex text-left">
+          <Timeline steps={steps}></Timeline>
         </ol>
       </div>
     </section>

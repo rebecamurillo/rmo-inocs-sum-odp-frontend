@@ -1,5 +1,4 @@
-import { InfoCard } from "./InfoCard";
-import React from "react";
+import { InfoCard } from "./ui/InfoCard";
 
 type Measure = {
   title: string;
@@ -14,9 +13,7 @@ type MobilityMeasuresProps = {
   pullMeasures?: Measure[];
   className?: string;
   hideDescription?: boolean;
-  // dynamic columns: number of columns on small screens and on lg
-  colsSmall?: number; // corresponds to grid-cols-{n}
-  colsLg?: number; // corresponds to lg:grid-cols-{n}
+  cols?: 2 | 4;
 };
 
 const defaultPush: Measure[] = [
@@ -151,8 +148,7 @@ type MeasuresSectionProps = {
   paragraph: string;
   measures: Measure[];
   hideDescription?: boolean;
-  colsSmall?: number;
-  colsLg?: number;
+  cols?: 2 | 4;
 };
 
 function MeasuresSection({
@@ -161,10 +157,12 @@ function MeasuresSection({
   paragraph,
   measures,
   hideDescription = false,
-  colsSmall = 3,
-  colsLg = 5,
+  cols = 2,
 }: MeasuresSectionProps) {
-  const gridClass = `grid grid-cols-${colsSmall} lg:grid-cols-${colsLg} mx-1 lg:mx-4 gap-4`;
+  const GRID_CLASS = {
+    2: "grid grid-cols-2 lg:grid-cols-2 mx-1 lg:mx-4 gap-4",
+    4: "grid grid-cols-2 lg:grid-cols-4 mx-1 lg:mx-4 gap-4",
+  };
 
   return (
     <div className="flex-1 grid grid-cols-1 gap-4">
@@ -173,7 +171,7 @@ function MeasuresSection({
         {smallText}
       </small>
       <p className="text-center">{paragraph}</p>
-      <div className={gridClass}>
+      <div className={GRID_CLASS[cols]}>
         {measures.map((m) => (
           <InfoCard
             key={m.title}
@@ -194,19 +192,19 @@ export function MobilityMeasures({
   pullMeasures = defaultPull,
   className = "",
   hideDescription = false,
-  colsSmall = 2,
-  colsLg = 5,
+  cols = 2,
 }: MobilityMeasuresProps) {
   return (
-    <div className={`flex flex-col gap-4 items-start my-4 ${className}`}>
+    <div
+      className={`flex flex-col gap-4 items-start my-4 mx-auto ${className}`}
+    >
       <MeasuresSection
         heading="🔴 Push measures"
         smallText={`Push measures are restrictions designed to discourage private car use and reduce car dominance in urban environments.`}
         paragraph={``}
         measures={pushMeasures}
         hideDescription={hideDescription}
-        colsSmall={colsSmall}
-        colsLg={colsLg}
+        cols={cols}
       />
 
       <MeasuresSection
@@ -215,8 +213,7 @@ export function MobilityMeasures({
         paragraph={``}
         measures={pullMeasures}
         hideDescription={hideDescription}
-        colsSmall={colsSmall}
-        colsLg={colsLg}
+        cols={cols}
       />
     </div>
   );

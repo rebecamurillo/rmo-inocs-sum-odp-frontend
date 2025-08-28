@@ -1,0 +1,106 @@
+import React from "react";
+import {
+  InformationCircleIcon,
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/20/solid";
+import { RButton } from "./RButton";
+export type AlertVariant =
+  | "success"
+  | "warning"
+  | "danger"
+  | "info"
+  | "neutral";
+
+export type InfoAlertProps = {
+  title?: React.ReactNode;
+  children: React.ReactNode;
+  variant?: AlertVariant;
+  actionText?: string;
+  onAction?: () => void;
+  className?: string;
+};
+
+const variantClasses: Record<
+  AlertVariant,
+  { bg: string; border: string; text: string; buttonBg: string }
+> = {
+  success: {
+    bg: "bg-success/50",
+    border: "border-green-200",
+    text: "text-success",
+    buttonBg: "border-success hover:border-success/90 text-primary",
+  },
+  warning: {
+    bg: "bg-warning/50",
+    border: "border-orange-200",
+    text: "text-warning",
+    buttonBg: "border-warning hover:border-warning/90 text-primary",
+  },
+  danger: {
+    bg: "bg-danger/50",
+    border: "border-red-200",
+    text: "text-danger",
+    buttonBg: "border-danger hover:border-danger/90 text-primary",
+  },
+  info: {
+    bg: "bg-info/50",
+    border: "border-sky-200",
+    text: "text-primary",
+    buttonBg: "border-primary hover:border-primary/90 text-primary",
+  },
+  neutral: {
+    bg: "bg-dark/50",
+    border: "border-gray-200",
+    text: "text-dark",
+    buttonBg: "border-dark hover:border-dark/90 text-primary",
+  },
+};
+
+const heroIconsVariants = {
+  info: <InformationCircleIcon className="h-10 w-10" />,
+  success: <CheckCircleIcon className="h-10 w-10" />,
+  warning: <ExclamationTriangleIcon className="h-10 w-10" />,
+  danger: <ExclamationTriangleIcon className="h-10 w-10" />,
+  neutral: <InformationCircleIcon className="h-10 w-10" />,
+};
+
+export function InfoAlert({
+  title,
+  children,
+  variant = "info",
+  actionText,
+  onAction,
+  className = "",
+}: InfoAlertProps) {
+  const v = variantClasses[variant];
+
+  return (
+    <div
+      className={`${v.bg} border ${v.border} rounded-lg p-2 ${className}`}
+      role="status"
+      aria-live="polite"
+    >
+      <div className="flex items-start gap-2">
+        <div className={`${v.text}`}>{heroIconsVariants[variant]}</div>
+
+        <div className="flex-1 gap-0">
+          {title && <h5 className={`${v.text}`}>{title}</h5>}
+          <p className={`${v.text}`}>{children}</p>
+        </div>
+
+        {actionText && (
+          <div className="flex-shrink-0">
+            <RButton
+              variant="link"
+              onClick={onAction}
+              className={`${v.buttonBg}`}
+              text={actionText}
+              defaultArrow
+            ></RButton>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

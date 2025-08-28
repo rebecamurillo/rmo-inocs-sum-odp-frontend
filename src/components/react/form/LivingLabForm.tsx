@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "../../react-catalyst-ui-kit/typescript/input";
 import { Label } from "../../react-catalyst-ui-kit/typescript/fieldset";
-import { RButton } from "../RButton";
+import { RButton } from "../ui/RButton";
 
 export default function LivingLabForm() {
   const [name, setName] = useState("");

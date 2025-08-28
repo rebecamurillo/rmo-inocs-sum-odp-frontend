@@ -6,7 +6,7 @@ import {
   StatsSection,
   TransportBadge,
   MobilityMeasures,
-  Timeline,
+  ODPTimeline,
 } from "../components/react";
 import heroImage from "../assets/img/sum-hero.png";
 import mcdaImage from "../assets/img/sum-mcda.png";
@@ -68,7 +68,7 @@ import impactImage from "../assets/img/sum-measure-kpi-impact.png";
       linkText="Add your city"
       linkHref="#"
     >
-      <Timeline />
+      <ODPTimeline />
     </CTASection>
 
     <CTASection
@@ -78,7 +78,7 @@ import impactImage from "../assets/img/sum-measure-kpi-impact.png";
       linkText="Know more about the measures"
       linkHref="#"
     >
-      <MobilityMeasures hideDescription={true} />
+      <MobilityMeasures hideDescription={true} cols={4} />
     </CTASection>
   </div>
 

@@ -5,7 +5,6 @@
   --color-primary: #004494;
   --color-primary-light: #75bdfb;
   --color-secondary: #98c33a;
-  --color-accent: #ff632f;
 
   --color-dark: #606060;
   --color-light: #dadada;
@@ -13,7 +12,7 @@
   --color-success: #98c33a;
   --color-warning: #ff632f;
   --color-danger: #ff442f;
-  --color-info: #0284c7;
+  --color-info: #75BDFB;
 }
 
 /* Dark theme overrides (toggle with <html class="dark">) */
@@ -48,7 +47,7 @@ h6 {
 }
 
 p {
-  @apply mt-3 text-base text-pretty sm:text-lg;
+  @apply text-base text-pretty sm:text-lg;
 }
 
 small {
@@ -69,4 +68,10 @@ body {
 
 label {
   @apply block text-sm font-medium leading-6 text-dark font-bold;
+}
+
+/* small utility for muted text that follows theme variables */
+.text-muted {
+  color: var(--color-dark);
+  opacity: 0.9;
 }
