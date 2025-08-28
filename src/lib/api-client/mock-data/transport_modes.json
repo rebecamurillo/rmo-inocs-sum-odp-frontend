@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Private Car",
+    "description": "Individually owned motor vehicle used for personal trips.",
+    "type": "PRIVATE"
+  },
+  {
+    "name": "Motorcycle / Scooter",
+    "description": "Two-wheeled motorised vehicle for solo or two-person travel.",
+    "type": "PRIVATE"
+  },
+  {
+    "name": "Carsharing",
+    "description": "Shared access to cars on demand through a membership or app.",
+    "type": "NSM"
+  },
+  {
+    "name": "Bicycle (private)",
+    "description": "User-owned bicycle for short-to-medium distance trips.",
+    "type": "NSM"
+  },
+  {
+    "name": "E-scooter (shared)",
+    "description": "Electric micromobility vehicles available for short, on-demand trips.",
+    "type": "NSM"
+  },
+  {
+    "name": "Walking",
+    "description": "Pedestrian travel for short distances; zero-emission active mode.",
+    "type": "NSM"
+  },
+  {
+    "name": "Bus",
+    "description": "Scheduled public transport on roads serving local or regional routes.",
+    "type": "PUBLIC_TRANSPORT"
+  },
+  {
+    "name": "Tram / Light Rail",
+    "description": "Electric rail-based public transport operating on urban corridors.",
+    "type": "PUBLIC_TRANSPORT"
+  },
+  {
+    "name": "Metro / Subway",
+    "description": "High-capacity rapid transit serving dense urban areas.",
+    "type": "PUBLIC_TRANSPORT"
+  },
+  {
+    "name": "Regional Train",
+    "description": "Rail services connecting cities and suburbs over longer distances.",
+    "type": "PUBLIC_TRANSPORT"
+  },
+  {
+    "name": "On-demand Shuttle",
+    "description": "Flexible shared transit that adapts routes and schedules to demand.",
+    "type": "NSM"
+  },
+  {
+    "name": "Park & Ride",
+    "description": "Parking facilities that connect private cars to public transport hubs.",
+    "type": "PRIVATE"
+  }
+]

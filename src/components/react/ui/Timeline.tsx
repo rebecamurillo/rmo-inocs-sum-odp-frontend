@@ -3,7 +3,7 @@ import { Badge } from "../../react-catalyst-ui-kit";
 type TimelineStep = {
   stepLabel: string;
   title: string;
-  description: string;
+  description?: string;
   footnote?: string;
 };
 
