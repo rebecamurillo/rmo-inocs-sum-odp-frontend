@@ -4,7 +4,8 @@ export type ButtonVariant = "link" | "primary" | "secondary";
 
 export interface RButtonProps {
   variant?: ButtonVariant;
-  text?: React.ReactNode;
+  text?: string;
+  children?: React.ReactNode;
   href?: string;
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
@@ -15,7 +16,8 @@ export interface RButtonProps {
 
 export function RButton({
   variant = "link",
-  text = "",
+  text,
+  children,
   href,
   onClick,
   className = "",
@@ -47,6 +49,7 @@ export function RButton({
         {...props}
       >
         {text}
+        {children}
         {defaultArrow && <span aria-hidden="true">→</span>}
       </button>
     );
@@ -56,6 +59,7 @@ export function RButton({
     return (
       <a href={href} className={actionClassName} {...props}>
         {text}
+        {children}
         {defaultArrow && <span aria-hidden="true">→</span>}
       </a>
     );
@@ -64,6 +68,7 @@ export function RButton({
   return (
     <button type="button" className={actionClassName} {...props}>
       {text}
+      {children}
       {defaultArrow && <span aria-hidden="true">→</span>}
     </button>
   );

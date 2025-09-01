@@ -6,3 +6,4 @@ export * from "./LabDashboardTabs";
 export * from "./ODPTimeline";
 export * from "./ui";
 export * from "./form";
+export * from "./TransportModesList";

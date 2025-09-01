@@ -1,0 +1,21 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { TransportModesList } from "../../components/react";
+
+//TODO : get mocked data for transport modes and modal split (KPI 15)
+// init json file for a living lab, from WP1 reports
+
+const labTransportModes = [];
+---
+
+<Layout>
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4">Transport Modes</h2>
+    <p class="text-sm text-gray-600 mb-6">
+      Enter each mode, type, status, and optionally provide trips, passenger-km,
+      or vehicle-km. At least one of the three is required.
+    </p>
+
+    <TransportModesList modes={labTransportModes} client:load />
+  </div>
+</Layout>
