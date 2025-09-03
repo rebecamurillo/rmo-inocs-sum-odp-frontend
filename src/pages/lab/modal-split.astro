@@ -1,21 +1,53 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { TransportModesList } from "../../components/react";
+import { InfoAlert, TransportModesList } from "../../components/react";
+import ApiClient from "../../lib/api-client/ApiClient";
+import { EnumKpiMetricType } from "../../types";
 
 //TODO : get mocked data for transport modes and modal split (KPI 15)
 // init json file for a living lab, from WP1 reports
+const api = new ApiClient();
 
-const labTransportModes = [];
+const labId = 1;
+const transportModes = await api.getTransportModes();
+const modalSplitKpis = (await api.getKPIs({ kpi_number: "15" })).filter(
+  (kpi) => kpi.metric !== EnumKpiMetricType.NONE
+);
+const livingLabData = await api.getLivingLabAndData(labId);
+const modalSplitResults = livingLabData.kpi_results?.filter((kpi) =>
+  modalSplitKpis.some((mk) => mk.id === kpi.id)
+);
 ---
 
 <Layout>
-  <div class="max-w-5xl mx-auto px-4 py-8">
+  <div class="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-8">
     <h2 class="text-2xl font-bold mb-4">Transport Modes</h2>
     <p class="text-sm text-gray-600 mb-6">
       Enter each mode, type, status, and optionally provide trips, passenger-km,
       or vehicle-km. At least one of the three is required.
     </p>
 
-    <TransportModesList modes={labTransportModes} client:load />
+    <InfoAlert
+      title="How to collect information ?"
+      icon="question"
+      variant="success"
+      actionText="Access documentation"
+    >
+      <small
+        >This page collects modal split for all transport modes, and will also
+        allow to identify shared modes in service or scheduled to be integrated
+        in the living lab network. Summary information, how to ? Examples
+        resources, survey examples, any other usefull information ?</small
+      >
+    </InfoAlert>
+
+    <TransportModesList
+      modes={transportModes}
+      kpis={modalSplitKpis}
+      livingLabId={labId}
+      livingLabTransportModes={livingLabData?.transport_modes || []}
+      kpiResults={modalSplitResults}
+      client:load
+    />
   </div>
 </Layout>

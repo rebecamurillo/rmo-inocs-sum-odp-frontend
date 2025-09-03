@@ -67,7 +67,7 @@ body {
 }
 
 label {
-  @apply block text-sm font-medium leading-6 text-dark font-bold;
+  @apply block text-base font-bold leading-6 text-dark;
 }
 
 /* small utility for muted text that follows theme variables */

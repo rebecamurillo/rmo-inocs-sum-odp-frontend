@@ -9,3 +9,4 @@ export * from "./form";
 export * from "./TransportModesList";
 export * from "./LivingLabKPIs";
 export * from "./KpiTypeBadge";
+export * from "./TransportTypeBadge";

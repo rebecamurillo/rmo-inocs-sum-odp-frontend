@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableHead,
@@ -6,29 +7,37 @@ import {
   TableHeader,
   TableRow,
 } from "../react-catalyst-ui-kit";
-import type { IKpi, ILivingLabKpiResult } from "../../types";
-import { LivingLabKpiResultForm } from "./form";
+import type { IKpi, IIKpiResultBeforeAfter } from "../../types";
+import { BeforeAndAfterDates, LivingLabKpiResultForm } from "./form";
 import { KpiTypeBadge } from "./KpiTypeBadge";
 
 type Props = {
   kpis: IKpi[];
   livingLabId: number;
-  livingLabKpis: ILivingLabKpiResult[];
+  kpiResults: IIKpiResultBeforeAfter[];
 };
 
 export function LivingLabKPIs({
   kpis = [],
   livingLabId,
-  livingLabKpis = [],
+  kpiResults: livingLabKpis = [],
 }: Props) {
   if (!kpis || kpis.length === 0) {
     return <div>No KPIs available.</div>;
   }
 
   const livingLabKpiMap = new Map(livingLabKpis.map((kpi) => [kpi.id, kpi]));
+  // Data collection date input state (YYYY-MM-DD)
+  const today = new Date().toISOString().slice(0, 10);
+  const [beforeDate, setBeforeDate] = useState<string>(today);
+  const [afterDate, setAfterDate] = useState<string>(today);
 
   return (
-    <div>
+    <div className="flex flex-col gap-8">
+      <BeforeAndAfterDates
+        onChangeBeforeDate={setBeforeDate}
+        onChangeAfterDate={setAfterDate}
+      />
       <Table
         dense
         striped
@@ -58,6 +67,7 @@ export function LivingLabKPIs({
                   livingLabId={livingLabId}
                   kpiId={kpi.id}
                   initial={livingLabKpiMap.get(kpi.id)?.result_before}
+                  defaultDate={beforeDate}
                 />
               </TableCell>
               <TableCell className="w-34">
@@ -65,6 +75,7 @@ export function LivingLabKPIs({
                   livingLabId={livingLabId}
                   kpiId={kpi.id}
                   initial={livingLabKpiMap.get(kpi.id)?.result_after}
+                  defaultDate={afterDate}
                 />
               </TableCell>
             </TableRow>

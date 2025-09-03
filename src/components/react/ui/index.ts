@@ -2,6 +2,7 @@ export * from "./CTAHero";
 export * from "./CTASection";
 export * from "./RButton";
 export * from "./InfoAlert";
+export * from "./InfoCard";
 export * from "./CTACard";
 export * from "./Tabs";
 export * from "./Badge";

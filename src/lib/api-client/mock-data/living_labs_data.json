@@ -332,42 +332,42 @@
       {
         "id": 1,
         "name": "Private Car",
-        "status": "in_service"
+        "status": "IN_SERVICE"
       },
       {
         "id": 2,
         "name": "Motorcycle / Scooter",
-        "status": "new"
+        "status": "NEW"
       },
       {
         "id": 3,
         "name": "Carsharing",
-        "status": "in_service"
+        "status": "IN_SERVICE"
       },
       {
         "id": 4,
         "name": "Bicycle (private)",
-        "status": "in_service"
+        "status": "IN_SERVICE"
       },
       {
         "id": 5,
         "name": "E-scooter (shared)",
-        "status": "optimization_scheduled"
+        "status": "OPTIMIZATION_SCHEDULED"
       },
       {
         "id": 6,
         "name": "Walking",
-        "status": "in_service"
+        "status": "IN_SERVICE"
       },
       {
         "id": 7,
         "name": "Bus",
-        "status": "in_service"
+        "status": "IN_SERVICE"
       },
       {
         "id": 8,
         "name": "Tram / Light Rail",
-        "status": "in_service"
+        "status": "IN_SERVICE"
       }
     ]
   },
@@ -587,12 +587,54 @@
       {
         "id": 16,
         "key": "measure_016",
-        "name": "Introduction of new PT infrastructures/lines (ex. e-buses, LRT)"
+        "name": "Introduction of NEW PT infrastructures/lines (ex. e-buses, LRT)"
       },
       {
         "id": 17,
         "key": "measure_017",
         "name": "Streets retrofitting/introduction of priority lanes"
+      }
+    ],
+    "transport_modes": [
+      {
+        "id": 1,
+        "name": "Private Car",
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 2,
+        "name": "Motorcycle / Scooter",
+        "status": "NEW"
+      },
+      {
+        "id": 3,
+        "name": "Carsharing",
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 4,
+        "name": "Bicycle (private)",
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 5,
+        "name": "E-scooter (shared)",
+        "status": "OPTIMIZATION_SCHEDULED"
+      },
+      {
+        "id": 6,
+        "name": "Walking",
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 7,
+        "name": "Bus",
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 8,
+        "name": "Tram / Light Rail",
+        "status": "IN_SERVICE"
       }
     ]
   },
@@ -819,12 +861,12 @@
       {
         "id": 15,
         "key": "measure_015",
-        "name": "Introduction of new NSM services (ex. bike-sharing)"
+        "name": "Introduction of NEW NSM services (ex. bike-sharing)"
       },
       {
         "id": 16,
         "key": "measure_016",
-        "name": "Introduction of new PT infrastructures/lines (ex. e-buses, LRT)"
+        "name": "Introduction of NEW PT infrastructures/lines (ex. e-buses, LRT)"
       },
       {
         "id": 18,
@@ -1081,12 +1123,12 @@
       {
         "id": 15,
         "key": "measure_015",
-        "name": "Introduction of new NSM services (ex. bike-sharing)"
+        "name": "Introduction of NEW NSM services (ex. bike-sharing)"
       },
       {
         "id": 16,
         "key": "measure_016",
-        "name": "Introduction of new PT infrastructures/lines (ex. e-buses, LRT)"
+        "name": "Introduction of NEW PT infrastructures/lines (ex. e-buses, LRT)"
       },
       {
         "id": 17,
@@ -1555,7 +1597,7 @@
       {
         "id": 15,
         "key": "measure_015",
-        "name": "Introduction of new NSM services (ex. bike-sharing)"
+        "name": "Introduction of NEW NSM services (ex. bike-sharing)"
       }
     ]
   },
@@ -1612,12 +1654,12 @@
       {
         "id": 15,
         "key": "measure_015",
-        "name": "Introduction of new NSM services (ex. bike-sharing)"
+        "name": "Introduction of NEW NSM services (ex. bike-sharing)"
       },
       {
         "id": 16,
         "key": "measure_016",
-        "name": "Introduction of new PT infrastructures/lines (ex. e-buses, LRT)"
+        "name": "Introduction of NEW PT infrastructures/lines (ex. e-buses, LRT)"
       }
     ]
   },
@@ -2030,7 +2072,7 @@
       {
         "id": 15,
         "key": "measure_015",
-        "name": "Introduction of new NSM services (ex. bike-sharing)"
+        "name": "Introduction of NEW NSM services (ex. bike-sharing)"
       }
     ]
   }

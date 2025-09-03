@@ -4,9 +4,11 @@ import measures from "./mock-data/measures.json";
 import transportModes from "./mock-data/transport_modes.json";
 import type {
   IKpi,
-  ILivingLabKpiResult,
-  LivingLab,
+  IIKpiResultBeforeAfter,
+  ILivingLab,
   Measure,
+  ITransportMode,
+  ITransportModeLivingLab,
 } from "../../types";
 
 export default class ApiClient {
@@ -36,7 +38,7 @@ export default class ApiClient {
     return (await res.json()) as T;
   }
 
-  async getLivingLabWithKpisAndMeasures(id: number): Promise<LivingLab> {
+  async getLivingLabAndData(id: number): Promise<ILivingLab> {
     //return this.get(`/livinglabs/${encodeURIComponent(id)}`);
 
     const lab = livinglabs.find((lab) => lab.id === id);
@@ -44,9 +46,17 @@ export default class ApiClient {
       const kpiData = kpis.find((k) => k.id === kpi.id) as IKpi;
       return {
         ...kpiData,
-        result_before: { value: kpi.value_before, date: "01/01/2024" },
-        result_after: { value: kpi.value_after, date: "08/01/2026" },
-      } as ILivingLabKpiResult;
+        result_before: {
+          value: kpi.value_before,
+          date: "01/01/2024",
+          id: Math.random(),
+        },
+        result_after: {
+          value: kpi.value_after,
+          date: "08/01/2026",
+          id: Math.random(),
+        },
+      } as IIKpiResultBeforeAfter;
     });
     const populatedMeasures = lab?.measures?.map((measure) => {
       const measureData = measures.find((m) => m.id === measure.id) as Measure;
@@ -55,7 +65,13 @@ export default class ApiClient {
 
     const populatedTransportModes = lab?.transport_modes?.map((mode) => {
       const modeData = transportModes.find((m) => m.id === mode.id);
-      return { ...mode, ...modeData };
+      return {
+        ...mode,
+        ...modeData,
+        transport_mode_id: modeData?.id,
+        living_lab_id: lab.id,
+        id: Math.random(), // mock unique id
+      } as ITransportModeLivingLab;
     });
 
     return {
@@ -63,7 +79,7 @@ export default class ApiClient {
       transport_modes: populatedTransportModes ?? [],
       kpi_results: populatedKpis ?? [],
       measures: populatedMeasures ?? [],
-    } as LivingLab;
+    } as ILivingLab;
   }
 
   async getMeasures(): Promise<Measure[]> {
@@ -72,9 +88,26 @@ export default class ApiClient {
     return measures;
   }
 
-  async getKPIs(): Promise<IKpi[]> {
+  async getKPIs({ kpi_number }: { kpi_number?: string }): Promise<IKpi[]> {
     //return this.get(`/kpis`);
 
+    if (kpi_number) {
+      const parentKpi = kpis.filter(
+        (kpi) => kpi.kpi_number === kpi_number
+      ) as IKpi[];
+      const childrenKpis = kpis.filter(
+        (kpi) => kpi.parent_kpi_id === parentKpi[0]?.id
+      ) as IKpi[];
+
+      return [...parentKpi, ...childrenKpis];
+    }
+
     return kpis as IKpi[];
+  }
+
+  async getTransportModes(): Promise<ITransportMode[]> {
+    //return this.get(`/transport_modes`);
+
+    return transportModes as ITransportMode[];
   }
 }

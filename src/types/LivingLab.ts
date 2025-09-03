@@ -1,8 +1,8 @@
-import type { IKpi, IKpiResult } from "./KPIs";
+import type { IIKpiResultBeforeAfter, IKpi, IKpiResult } from "./KPIs";
 import type { Measure } from "./Measure";
-import type { TransportMode } from "./TransportMode";
+import type { ITransportMode, ITransportModeLivingLab } from "./TransportMode";
 
-export interface LivingLab {
+export interface ILivingLab {
   /**
    * Unique living lab id (e.g. "lab_munich")
    */
@@ -11,7 +11,7 @@ export interface LivingLab {
    * Human readable name (e.g. "Munich")
    */
   name: string;
-  kpi_results: ILivingLabKpiResult[];
+  kpi_results: IIKpiResultBeforeAfter[];
   /**
    * Measures list — may be empty
    */
@@ -19,12 +19,7 @@ export interface LivingLab {
   /**
    * Transport modes list — may be empty
    */
-  transport_modes: TransportMode[];
+  transport_modes: ITransportModeLivingLab[];
   // allow additional unknown fields if present in future
   [key: string]: unknown;
-}
-
-export interface ILivingLabKpiResult extends IKpi {
-  result_before?: IKpiResult | null;
-  result_after?: IKpiResult | null;
 }

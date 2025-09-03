@@ -45,7 +45,7 @@ export function CTACard({
       onClick={onClick}
     >
       <h4 className="text-primary">{title}</h4>
-      <p className="text-sm text-gray-600">{description}</p>
+      <p className="text-sm text-gray-600 whitespace-pre-line">{description.replace(/\\/g, '\n')}</p>
 
       <RButton
         href={href}

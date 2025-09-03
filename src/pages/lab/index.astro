@@ -9,26 +9,33 @@ const user = {
   name: "John Doe",
   email: "john.doe@example.com",
 };
-const kpis = await api.getKPIs();
-const livingLab = await api.getLivingLabWithKpisAndMeasures("lab_munich");
+const kpis = await api.getKPIs({});
+const livingLab = await api.getLivingLabAndData(2);
+
 const counters = {
   kpisBefore: {
-    total: livingLab.kpis?.length || 0,
+    total:
+      livingLab.kpi_results?.filter((kpi) => kpi.result_before)?.length || 0,
     global:
-      livingLab.kpis?.filter((kpi) => kpi.value_before && kpi.type === "GLOBAL")
-        .length || 0,
+      livingLab.kpi_results?.filter(
+        (kpi) => kpi.result_before && kpi.type === "GLOBAL"
+      ).length || 0,
     local:
-      livingLab.kpis?.filter((kpi) => kpi.value_before && kpi.type === "LOCAL")
-        .length || 0,
+      livingLab.kpi_results?.filter(
+        (kpi) => kpi.result_before && kpi.type === "LOCAL"
+      ).length || 0,
   },
   kpisAfter: {
-    total: livingLab.kpis?.length || 0,
+    total:
+      livingLab.kpi_results?.filter((kpi) => kpi.result_after)?.length || 0,
     global:
-      livingLab.kpis?.filter((kpi) => kpi.value_after && kpi.type === "GLOBAL")
-        .length || 0,
+      livingLab.kpi_results?.filter(
+        (kpi) => kpi.result_after && kpi.type === "GLOBAL"
+      ).length || 0,
     local:
-      livingLab.kpis?.filter((kpi) => kpi.value_after && kpi.type === "LOCAL")
-        .length || 0,
+      livingLab.kpi_results?.filter(
+        (kpi) => kpi.result_after && kpi.type === "LOCAL"
+      ).length || 0,
   },
   measures: {
     total: livingLab.measures?.length || 0,
@@ -59,14 +66,14 @@ const transportCounter = counters.transport;
 const progressItems = [
   {
     title: "KPIs before",
-    subtitle: `${countersKpiBefore?.total || 0} entries`,
+    subtitle: `${countersKpiBefore?.total || 0}/${kpis.length} entries`,
     info1: `${countersKpiBefore?.local || 0} local`,
     info2: `${countersKpiBefore?.global || 0} global`,
     className: "border-info bg-info/60",
   },
   {
     title: "KPIs after",
-    subtitle: `${countersKpiAfter?.total || 0} entries`,
+    subtitle: `${countersKpiAfter?.total || 0}/${kpis.length} entries`,
     info1: `${countersKpiAfter?.local || 0} local`,
     info2: `${countersKpiAfter?.global || 0} global`,
     className: "border-info/60 bg-info/20",
@@ -127,9 +134,9 @@ if (transportCounter.total === 0) {
 const steps = [
   {
     id: "modal-split-before",
-    title: "1. Modal split (before)",
+    title: "1. Modal split",
     description:
-      "Enter the baseline modal share (cars, bikes, PT, walking, etc.) before any measures were implemented.",
+      "Enter the modal share (cars, bikes, PT, walking, etc.) before any measures were implemented. \nAfter the measures have been implemented, update the modal share values.",
     completed:
       kpis?.length === countersKpiBefore?.total && countersKpiBefore?.total > 0,
     inProgress: kpis?.length > 0 && kpis?.length < countersKpiBefore?.total,
@@ -138,15 +145,15 @@ const steps = [
   },
   {
     id: "kpis-before",
-    title: "2. KPIs (before)",
+    title: "2. KPIs",
     description:
-      "Complete the KPI survey or upload data collected before the implementation period.",
+      "Complete the KPI survey and submit KPIs collected before the implementation period.\nAfter the measures have been implemented, run a new survey and collect new KPIs for comparison.",
     completed:
       kpis?.length === countersKpiBefore?.total && countersKpiBefore?.total > 0,
     inProgress:
       countersKpiBefore?.total > 0 && countersKpiBefore?.total < kpis?.length,
     cta: "Edit KPIs",
-    href: "/lab/kpis-before",
+    href: "/lab/kpis",
   },
   {
     id: "measures",
@@ -156,29 +163,6 @@ const steps = [
     completed: countersMeasures?.total > 0,
     cta: "Edit measures",
     href: "/lab/measures",
-  },
-  {
-    id: "modal-split-after",
-    title: "4. Modal split (after)",
-    description:
-      "Enter the modal share (cars, bikes, PT, walking, etc.) after the measures have been implemented.",
-    completed: false,
-    locked: true,
-    cta: "Edit modal split",
-    href: "/lab/modal-split-after",
-  },
-  {
-    id: "kpis-after",
-    title: "5. KPIs (after)",
-    description:
-      "This will open once your implementation period is complete. You will need to re-submit KPIs for comparison.",
-    completed:
-      kpis?.length === countersKpiAfter?.total && countersKpiAfter?.total > 0,
-    inProgress:
-      countersKpiAfter?.total > 0 && countersKpiAfter?.total < kpis?.length,
-    locked: true,
-    cta: "Edit KPIs",
-    href: "/lab/kpis-after",
   },
 ];
 ---
@@ -214,10 +198,11 @@ const steps = [
                 description={step.description}
                 completed={step.completed}
                 inProgress={step.inProgress}
-                locked={step.locked}
+                locked={false}
                 cta={step.cta}
                 href={step.href}
                 className={index === 2 ? "col-span-2" : ""}
+                client:load
               />
             ))
           }

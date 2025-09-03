@@ -20,7 +20,7 @@ export interface TransportBadgeProps {
   color?:
     | "primary-light"
     | "secondary"
-    | "accent"
+    | "warning"
     | "dark"
     | "light"
     | "transparent";

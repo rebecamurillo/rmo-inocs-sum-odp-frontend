@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PencilSquareIcon,
   CheckCircleIcon,
@@ -9,16 +9,22 @@ import { Field, Input, Label } from "../../react-catalyst-ui-kit";
 import { formatDate } from "../../../lib/mappers";
 
 type Props = {
-  livingLabId: number;
-  kpiId: number;
   initial?: IKpiResult | null;
-  onChange?: (result: Pick<IKpiResult, "id" | "value" | "date">) => void;
+  kpiId: number;
+  livingLabId: number;
+  transportModeId?: number;
+  defaultDate?: string;
+  onChange?: (
+    result: Pick<IKpiResult, "id" | "value" | "date" | "transport_mode_id">
+  ) => void;
 };
 
 export function LivingLabKpiResultForm({
-  livingLabId,
   kpiId,
   initial,
+  livingLabId,
+  transportModeId,
+  defaultDate,
   onChange,
 }: Props) {
   const _setValue = (value?: number | undefined) => {
@@ -30,9 +36,14 @@ export function LivingLabKpiResultForm({
   const [value, setValue] = useState<number | undefined>(
     _setValue(initial?.value)
   );
-  const [date, setDate] = useState<string>(formatDate(initial?.date));
+  const [date, setDate] = useState<string>(
+    formatDate(initial?.date ?? defaultDate)
+  );
 
-  const openEdit = () => setEditing(true);
+  useEffect(() => {
+    setValue(_setValue(initial?.value));
+    setDate(formatDate(initial?.date ?? defaultDate));
+  }, [initial, defaultDate]);
 
   const handleSave = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -40,8 +51,10 @@ export function LivingLabKpiResultForm({
     let id = initial?.id;
     if (id) {
       //TODO update with id PUT /api/living-lab/${livingLabId}/kpi/${kpiId}/result/${id}
+      //set transportModeId if provided
     } else {
       //TODO create POST /api/living-lab/${livingLabId}/kpi/${kpiId}/result
+      //set transportModeId if provided
       id = Date.now();
     }
 
@@ -49,6 +62,7 @@ export function LivingLabKpiResultForm({
       id,
       value: Number(value),
       date: date,
+      transport_mode_id: transportModeId,
     });
     setEditing(false);
   };
@@ -64,12 +78,12 @@ export function LivingLabKpiResultForm({
       <div className="flex items-start gap-1  w-34">
         <div className="flex flex-col flex-1">
           <p>{value ?? "-"}</p>
-          <small>{date}</small>
+          {value && date && <span className="text-[12px]">{date}</span>}
         </div>
         <button
           type="button"
           aria-label="Edit"
-          onClick={openEdit}
+          onClick={() => setEditing(true)}
           className="inline-flex items-center"
         >
           <PencilSquareIcon className="h-5 w-5 text-[--color-primary]" />
@@ -89,7 +103,7 @@ export function LivingLabKpiResultForm({
           type="number"
           name="value"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => setValue(Number(e.target.value))}
           className="mt-0 m-O"
         />
       </Field>

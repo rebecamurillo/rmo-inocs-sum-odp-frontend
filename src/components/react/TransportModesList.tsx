@@ -1,172 +1,155 @@
 import React, { useState } from "react";
-import { TransportModeForm } from "./form/TransportModeForm";
-// using plain HTML table with Tailwind classes (react-catalyst-ui-kit does not export a Table here)
-import { RButton } from "./ui";
+import { TransportModeLivingLabForm } from "./form/TransportModeLivingLabForm";
 import {
-  TransportModeStatus,
-  TransportModeType,
-  type TransportMode,
+  type ITransportMode,
+  type IIKpiResultBeforeAfter,
+  type IKpi,
+  type ITransportModeLivingLab,
 } from "../../types";
-import { TrashIcon, PencilIcon } from "@heroicons/react/20/solid";
+import { BeforeAndAfterDates, LivingLabKpiResultForm } from "./form";
+import { TransportTypeBadge } from "./TransportTypeBadge";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "../react-catalyst-ui-kit";
 
 interface Props {
-  modes: TransportMode[];
+  modes: ITransportMode[];
+  kpis: IKpi[];
+  livingLabId: number;
+  livingLabTransportModes: ITransportModeLivingLab[];
+  kpiResults: IIKpiResultBeforeAfter[];
 }
 
-/**
- * TransportModesList
- * - shows a table of transport modes and modal-split columns
- * - allows adding a new entry (opens form at top)
- * - allows editing a row (toggles form under the row)
- */
-export function TransportModesList({ modes = [] }: Props) {
-  const [rows, setRows] = useState<TransportMode[]>(modes || []);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
+export function TransportModesList({
+  modes = [],
+  kpis = [],
+  livingLabId,
+  livingLabTransportModes = [],
+  kpiResults = [],
+}: Props) {
+  const today = new Date().toISOString().slice(0, 10);
+  const [beforeDate, setBeforeDate] = useState<string>(today);
+  const [afterDate, setAfterDate] = useState<string>(today);
 
-  const handleAddClick = () => setShowCreateForm(true);
+  const livingLabTransportModesMap = new Map(
+    livingLabTransportModes.map((mode) => [mode.transport_mode_id, mode])
+  );
 
-  const handleCreate = (data: TransportMode) => {
-    //temporarily add id for new rows, while data is mocked
-    setRows((r) => [...r, { ...data, id: Date.now() }]);
-  };
-
-  const handleUpdate = (data: TransportMode) => {
-    setRows((prev) => prev.map((r) => (r.id === data.id ? data : r)));
-    setExpanded((e) => ({ ...e, [data.id!]: false }));
-  };
-
-  const handleDelete = (id: number) => {
-    setRows((prev) => prev.filter((r) => r.id !== id));
-    setExpanded((e) => {
-      const newExpanded = { ...e };
-      delete newExpanded[id];
-      return newExpanded;
-    });
-  };
-
-  const handleCancel = (id?: number) => {
-    if (id) {
-      setExpanded((e) => ({ ...e, [id]: false }));
-    }
-    setShowCreateForm(false);
-  };
-
-  const toggleRow = (id: number) => {
-    setExpanded((e) => ({ ...e, [id]: true }));
-  };
+  const [livingLabKpiMap, setLivingLabKpiMap] = useState<
+    Map<number, IIKpiResultBeforeAfter>
+  >(new Map(kpiResults.map((result) => [result.id, result])));
 
   return (
     <div className="bg-white shadow rounded-md">
-      <div className="p-4 flex items-center justify-between">
-        <h3 className="text-lg font-medium">Transport modes</h3>
-        <RButton variant="primary" onClick={handleAddClick}>
-          + Add mode
-        </RButton>
-      </div>
-
-      {showCreateForm && (
-        <div className="p-4 border-t">
-          <TransportModeForm
-            value={{
-              id: 0,
-              name: "",
-              description: "",
-              type: TransportModeType.NSM,
-              status: TransportModeStatus.IN_SERVICE,
-              trips: 0,
-              passengerKm: 0,
-              vehicleKm: 0,
-            }}
-            onCreate={handleCreate}
-            onUpdate={() => {}}
-            onCancel={handleCancel}
-          />
-        </div>
-      )}
+      <BeforeAndAfterDates
+        onChangeBeforeDate={setBeforeDate}
+        onChangeAfterDate={setAfterDate}
+      />
 
       <div className="p-4 overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-                Type
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-                Name / Description
-              </th>
-              <th className="px-4 py-2 text-right text-sm font-semibold text-gray-700">
-                Trips
-              </th>
-              <th className="px-4 py-2 text-right text-sm font-semibold text-gray-700">
-                Passenger Km
-              </th>
-              <th className="px-4 py-2 text-right text-sm font-semibold text-gray-700">
-                Vehicle Km
-              </th>
-              <th className="px-4 py-2 text-right text-sm font-semibold text-gray-700">
-                Actions
-              </th>
-            </tr>
-          </thead>
+        <Table
+          dense
+          striped
+          className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]"
+        >
+          <TableHead>
+            <TableRow>
+              <TableHeader className="whitespace-normal break-words">
+                Name
+              </TableHeader>
+              <TableHeader className="whitespace-normal break-words">
+                Status
+              </TableHeader>
+              {kpis.map((kpi) => (
+                <TableHeader
+                  key={kpi.id}
+                  className="font-extrabold whitespace-normal break-words text-primary"
+                >
+                  {kpi.name}
+                </TableHeader>
+              ))}
+            </TableRow>
+          </TableHead>
           <tbody className="bg-white divide-y divide-gray-100">
-            {rows.map((m) => (
-              <React.Fragment key={m.id}>
-                <tr>
-                  <td className="px-4 py-3 align-top text-sm">{m.type}</td>
-                  <td className="px-4 py-3 align-top text-sm">
-                    <div className="font-medium">{m.name}</div>
-                    {m.description && (
-                      <div className="text-sm text-gray-500">
-                        {m.description}
-                      </div>
+            {modes.map((m) => (
+              <TableRow key={m.id}>
+                <TableCell className="max-w-52 flex flex-col break-words">
+                  <TransportTypeBadge type={m.type} />
+                  <label className="whitespace-normal break-words">
+                    {m.name}
+                  </label>
+                  {m.description && (
+                    <small className="italic w-48 whitespace-normal break-words">
+                      {m.description}
+                    </small>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <TransportModeLivingLabForm
+                    value={livingLabTransportModesMap.get(m.id)}
+                    transportModeId={m.id}
+                    livingLabId={livingLabId}
+                  />
+                </TableCell>
+                {kpis.map((kpi) => (
+                  <TableCell key={kpi.id} className="">
+                    {livingLabKpiMap.get(kpi.id)?.result_before
+                      ?.transport_mode_id === m.id && (
+                      <small>Value before</small>
                     )}
-                  </td>
-                  <td className="px-4 py-3 align-top text-sm text-right">
-                    {m.trips ?? "-"}
-                  </td>
-                  <td className="px-4 py-3 align-top text-sm text-right">
-                    {m.passengerKm ?? "-"}
-                  </td>
-                  <td className="px-4 py-3 align-top text-sm text-right">
-                    {m.vehicleKm ?? "-"}
-                  </td>
-                  <td className="px-4 py-3 align-top text-sm text-right">
-                    <div className="flex justify-end gap-4">
-                      <RButton
-                        variant="link"
-                        className="text-primary"
-                        onClick={() => m.id && toggleRow(m.id)}
-                      >
-                        <PencilIcon className="h-5 w-5" aria-hidden="true" />
-                      </RButton>
-                      <RButton
-                        variant="link"
-                        className="text-red-600 py-0 px-0"
-                        onClick={() => m.id && handleDelete(m.id)}
-                      >
-                        <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                      </RButton>
-                    </div>
-                  </td>
-                </tr>
-
-                {m?.id !== undefined && expanded[m?.id] && (
-                  <tr className="bg-gray-50">
-                    <td colSpan={6} className="p-4">
-                      <TransportModeForm
-                        value={m}
-                        onUpdate={handleUpdate}
-                        onCreate={() => {}}
-                        onCancel={handleCancel}
-                      />
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
+                    <LivingLabKpiResultForm
+                      livingLabId={livingLabId}
+                      kpiId={kpi.id}
+                      initial={livingLabKpiMap.get(kpi.id)?.result_before}
+                      transportModeId={m.id}
+                      defaultDate={beforeDate}
+                      onChange={(result) => {
+                        setLivingLabKpiMap((prev) => {
+                          const newMap = new Map(prev);
+                          const prevValue = prev.get(kpi.id);
+                          newMap.set(kpi.id, {
+                            ...prevValue,
+                            result_before: {
+                              // ...kpi,
+                              ...prevValue?.result_before,
+                              ...result,
+                              // kpidefinition_id: kpi.id,
+                              // living_lab_id: livingLabId,
+                              // kpi_number: kpi.kpi_number,
+                              // name: kpi.name,
+                              // type: kpi.type,
+                              // progression_target: kpi.progression_target,
+                            },
+                          });
+                          return newMap;
+                        });
+                      }}
+                    />
+                    {livingLabKpiMap.get(kpi.id)?.result_before
+                      ?.transport_mode_id === m.id && (
+                      <>
+                        <hr />
+                        <small>Value after</small>
+                        <LivingLabKpiResultForm
+                          transportModeId={m.id}
+                          livingLabId={livingLabId}
+                          kpiId={kpi.id}
+                          initial={livingLabKpiMap.get(kpi.id)?.result_after}
+                          defaultDate={afterDate}
+                        />
+                      </>
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
     </div>
   );

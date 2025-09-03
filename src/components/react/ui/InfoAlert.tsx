@@ -3,6 +3,7 @@ import {
   InformationCircleIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
+  QuestionMarkCircleIcon,
 } from "@heroicons/react/20/solid";
 import { RButton } from "./RButton";
 export type AlertVariant =
@@ -11,11 +12,18 @@ export type AlertVariant =
   | "danger"
   | "info"
   | "neutral";
-
+export type AlertIconVariant =
+  | "info"
+  | "question"
+  | "success"
+  | "warning"
+  | "danger"
+  | "neutral";
 export type InfoAlertProps = {
   title?: React.ReactNode;
   children: React.ReactNode;
   variant?: AlertVariant;
+  icon?: AlertIconVariant;
   actionText?: string;
   onAction?: () => void;
   className?: string;
@@ -28,7 +36,7 @@ const variantClasses: Record<
   success: {
     bg: "bg-success/50",
     border: "border-green-200",
-    text: "text-success",
+    text: "text-primary",
     buttonBg: "border-success hover:border-success/90 text-primary",
   },
   warning: {
@@ -59,6 +67,7 @@ const variantClasses: Record<
 
 const heroIconsVariants = {
   info: <InformationCircleIcon className="h-10 w-10" />,
+  question: <QuestionMarkCircleIcon className="h-10 w-10" />,
   success: <CheckCircleIcon className="h-10 w-10" />,
   warning: <ExclamationTriangleIcon className="h-10 w-10" />,
   danger: <ExclamationTriangleIcon className="h-10 w-10" />,
@@ -67,6 +76,7 @@ const heroIconsVariants = {
 
 export function InfoAlert({
   title,
+  icon,
   children,
   variant = "info",
   actionText,
@@ -82,7 +92,7 @@ export function InfoAlert({
       aria-live="polite"
     >
       <div className="flex items-start gap-2">
-        <div className={`${v.text}`}>{heroIconsVariants[variant]}</div>
+        <div className={`${v.text}`}>{heroIconsVariants[icon ?? variant]}</div>
 
         <div className="flex-1 gap-0">
           {title && <h5 className={`${v.text}`}>{title}</h5>}
