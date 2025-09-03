@@ -7,3 +7,5 @@ export * from "./ODPTimeline";
 export * from "./ui";
 export * from "./form";
 export * from "./TransportModesList";
+export * from "./LivingLabKPIs";
+export * from "./KpiTypeBadge";

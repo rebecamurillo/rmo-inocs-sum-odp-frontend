@@ -1,6 +1,13 @@
 import React from "react";
 
-export type BadgeColor = "primary-light" | "secondary" | "accent" | "dark" | "light" | "transparent";
+export type BadgeColor =
+  | "primary"
+  | "primary-light"
+  | "secondary"
+  | "accent"
+  | "dark"
+  | "light"
+  | "transparent";
 export type BadgeSize = "sm" | "md" | "lg";
 
 export interface BadgeProps {
@@ -14,6 +21,7 @@ export interface BadgeProps {
 }
 
 const COLOR_CLASSES: Record<BadgeColor, string> = {
+  primary: "bg-primary text-primary-light border-primary-ligh",
   "primary-light": "bg-primary-light text-primary border-primary",
   secondary: "bg-secondary text-primary border-primary",
   accent: "bg-warning text-primary border-primary",
@@ -64,4 +72,3 @@ export function Badge({
   );
 }
 
-export default Badge;

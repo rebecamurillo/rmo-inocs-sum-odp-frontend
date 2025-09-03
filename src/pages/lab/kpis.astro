@@ -1,0 +1,29 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { LivingLabKPIs } from "../../components/react";
+import ApiClient from "../../lib/api-client/ApiClient";
+
+//TODO : get mocked data for transport modes and modal split (KPI 15)
+// init json file for a living lab, from WP1 reports
+const api = new ApiClient();
+
+const labId = 1;
+const kpis = await api.getKPIs();
+const livingLabKpis = await api.getLivingLabWithKpisAndMeasures(labId);
+---
+
+<Layout>
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <h2>Share your Key Performance Indicators - KPI</h2>
+    <p class="text-sm text-gray-600 mb-6">
+      Find the relevant KPIs for seamless urban mobility.
+    </p>
+
+    <LivingLabKPIs
+      kpis={kpis}
+      livingLabId={labId}
+      livingLabKpis={livingLabKpis?.kpi_results || []}
+      client:load
+    />
+  </div>
+</Layout>

@@ -1,5 +1,5 @@
 import React from "react";
-import Badge from "./ui/Badge";
+import { Badge } from "./ui/Badge";
 
 export type TransportType =
   | "bus"
@@ -17,7 +17,13 @@ export interface TransportBadgeProps {
   iconSrc?: string; // string path fallback
   size?: "sm" | "md" | "lg"; // controls padding/text/icon size
   className?: string;
-  color?: "primary-light" | "secondary" | "accent" | "dark" | "light" | "transparent";
+  color?:
+    | "primary-light"
+    | "secondary"
+    | "accent"
+    | "dark"
+    | "light"
+    | "transparent";
 }
 
 const DEFAULT_ICONS: Record<string, string> = {

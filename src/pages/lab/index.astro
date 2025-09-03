@@ -10,7 +10,7 @@ const user = {
   email: "john.doe@example.com",
 };
 const kpis = await api.getKPIs();
-const livingLab = await api.getLivingLab("lab_munich");
+const livingLab = await api.getLivingLabWithKpisAndMeasures("lab_munich");
 const counters = {
   kpisBefore: {
     total: livingLab.kpis?.length || 0,
