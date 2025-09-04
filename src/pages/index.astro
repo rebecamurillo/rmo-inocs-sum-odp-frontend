@@ -7,10 +7,29 @@ import {
   TransportBadge,
   MobilityMeasures,
   ODPTimeline,
+  LivingLabsMapSection,
 } from "../components/react";
 import heroImage from "../assets/img/sum-hero.png";
 import mcdaImage from "../assets/img/sum-mcda.png";
 import impactImage from "../assets/img/sum-measure-kpi-impact.png";
+import ApiClient from "../lib/api-client/ApiClient";
+const api = new ApiClient();
+
+const kpis = await api.getKPIs({});
+const livingLabsData = await api.getLivingLabsAndData();
+
+const labs = livingLabsData.map((lab) => ({
+  id: lab.id,
+  name: lab.name,
+  coordinates: { lat: lab.lat, lng: lab.lng },
+  radius: lab.radius ?? 100,
+  status: lab.status,
+  totalMeasures: lab.measures.length,
+  kpisBefore: lab.kpi_results.filter((kpi) => kpi.result_before).length,
+  kpisAfter: lab.kpi_results.filter((kpi) => kpi.result_after).length,
+  transportModes: lab.transport_modes.length,
+  sustainablePercentage: 0.4,
+}));
 ---
 
 <Layout>
@@ -38,6 +57,7 @@ import impactImage from "../assets/img/sum-measure-kpi-impact.png";
       <TransportBadge type="scooter" size="lg" color="warning" />
     </div>
 
+    <LivingLabsMapSection labs={labs} client:only="react" />
     <StatsSection
       titleHighlight="SEAMLESS"
       title="Shared Urban Mobility"

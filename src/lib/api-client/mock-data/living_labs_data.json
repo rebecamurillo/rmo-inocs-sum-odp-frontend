@@ -2,6 +2,9 @@
   {
     "id": 1,
     "name": "Munich",
+    "lat": "48.1351",
+    "lng": "11.5820",
+    "radius": 20,
     "kpi_results": [
       {
         "id": 1,
@@ -374,6 +377,9 @@
   {
     "id": 2,
     "name": "Geneva",
+    "lat": "46.2044",
+    "lng": "6.1432",
+    "radius": 15,
     "kpi_results": [
       {
         "id": 1,
@@ -641,6 +647,9 @@
   {
     "id": 3,
     "name": "Jerusalem",
+    "lat": "31.7683",
+    "lng": "35.2137",
+    "radius": 25,
     "kpi_results": [
       {
         "id": 2,
@@ -888,6 +897,9 @@
   {
     "id": 4,
     "name": "Penteli",
+    "lat": "38.0451",
+    "lng": "23.8625",
+    "radius": 10,
     "kpi_results": [
       {
         "id": 1,
@@ -1140,6 +1152,9 @@
   {
     "id": 5,
     "name": "Rotterdam",
+    "lat": "51.9225",
+    "lng": "4.47917",
+    "radius": 18,
     "kpi_results": [
       {
         "id": 6,
@@ -1373,6 +1388,9 @@
   {
     "id": 6,
     "name": "Krakow",
+    "lat": "50.0647",
+    "lng": "19.9450",
+    "radius": 12,
     "kpi_results": [
       {
         "id": 1,
@@ -1604,6 +1622,9 @@
   {
     "id": 7,
     "name": "Fredrikstad",
+    "lat": "59.2181",
+    "lng": "10.9298",
+    "radius": 14,
     "kpi_results": [],
     "measures": [
       {
@@ -1666,6 +1687,9 @@
   {
     "id": 8,
     "name": "Larnaca",
+    "lat": "34.9229",
+    "lng": "33.6233",
+    "radius": 11,
     "kpi_results": [
       {
         "id": 1,
@@ -1839,6 +1863,9 @@
   {
     "id": 9,
     "name": "Coimbra",
+    "lat": "40.2033",
+    "lng": "-8.4103",
+    "radius": 13,
     "kpi_results": [
       {
         "id": 1,

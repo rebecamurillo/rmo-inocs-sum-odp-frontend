@@ -10,3 +10,4 @@ export * from "./TransportModesList";
 export * from "./LivingLabKPIs";
 export * from "./KpiTypeBadge";
 export * from "./TransportTypeBadge";
+export * from "./LivingLabsMapSection";

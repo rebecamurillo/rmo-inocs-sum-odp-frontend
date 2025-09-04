@@ -58,7 +58,6 @@ export function getFormattedPercent(value?: number | null) {
   return `${(value * 100).toFixed(2)}%`;
 }
 
-
 // formatRatio: show numeric ratio with "x", default 1 decimal (e.g. "0.5x")
 export function formatRatio(value?: number | null, digits = 1) {
   if (value === undefined || value === null || Number.isNaN(value)) return "—";

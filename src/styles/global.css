@@ -47,11 +47,11 @@ h6 {
 }
 
 p {
-  @apply text-base text-pretty sm:text-lg;
+  @apply text-sm text-pretty sm:text-base;
 }
 
 small {
-  @apply text-sm;
+  @apply text-xs;
 }
 
 ul {

@@ -11,6 +11,12 @@ export interface ILivingLab {
    * Human readable name (e.g. "Munich")
    */
   name: string;
+  description?: string;
+  lat?: string;
+  lng?: string;
+  radius?: number;
+  area?: number;
+  population?: number;
   kpi_results: IIKpiResultBeforeAfter[];
   /**
    * Measures list — may be empty

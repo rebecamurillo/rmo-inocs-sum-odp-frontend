@@ -38,10 +38,7 @@ export default class ApiClient {
     return (await res.json()) as T;
   }
 
-  async getLivingLabAndData(id: number): Promise<ILivingLab> {
-    //return this.get(`/livinglabs/${encodeURIComponent(id)}`);
-
-    const lab = livinglabs.find((lab) => lab.id === id);
+  populateLivingLabData(lab: any) {
     const populatedKpis = lab?.kpi_results
       ?.map((kpi) => {
         const kpiData = kpis.find((k) => k.id === kpi.id) as IKpi;
@@ -94,6 +91,19 @@ export default class ApiClient {
       kpi_results: populatedKpis ?? [],
       measures: populatedMeasures ?? [],
     } as ILivingLab;
+  }
+
+  async getLivingLabsAndData(): Promise<ILivingLab[]> {
+    //return this.get(`/livinglabs`);
+
+    return livinglabs?.map((lab) => this.populateLivingLabData(lab));
+  }
+
+  async getLivingLabAndData(id: number): Promise<ILivingLab> {
+    //return this.get(`/livinglabs/${encodeURIComponent(id)}`);
+
+    const lab = livinglabs.find((lab) => lab.id === id);
+    return this.populateLivingLabData(lab);
   }
 
   async getMeasures(): Promise<Measure[]> {
