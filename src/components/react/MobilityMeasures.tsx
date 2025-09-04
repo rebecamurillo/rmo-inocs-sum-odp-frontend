@@ -177,7 +177,7 @@ function MeasuresSection({
             key={m.title}
             title={m.title}
             description={hideDescription ? "" : m.description}
-            imageUrl={m.imageUrl}
+            imageUrl={import.meta.env.BASE_URL + m.imageUrl}
             href={m.href}
             className={m.className}
           />

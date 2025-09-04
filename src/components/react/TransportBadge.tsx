@@ -62,7 +62,7 @@ export function TransportBadge({
       />
     ) : DEFAULT_ICONS[type] ? (
       <img
-        src={DEFAULT_ICONS[type]}
+        src={import.meta.env.BASE_URL + DEFAULT_ICONS[type]}
         alt={`${String(type)} icon`}
         className="h-full w-full"
       />
