@@ -20,4 +20,5 @@ export default defineConfig({
   site: "https://inria.github.io",
   base: "/inocs-sum-odp-frontend",
   output: "static",
+  build: { assets: "assets" }, // replaces the default "_astro"
 });
