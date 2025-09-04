@@ -20,7 +20,7 @@ export default function SignupForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    window.location.href = "/lab/edit";
+    window.location.href = import.meta.env.BASE_URL + "/lab/edit";
   }
 
   return (
