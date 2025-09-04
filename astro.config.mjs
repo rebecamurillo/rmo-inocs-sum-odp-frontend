@@ -16,4 +16,8 @@ export default defineConfig({
       include: ["@material-tailwind/react"],
     },
   },
+  //TEMP config for static demo with Github pages
+  site: "https://inria.github.io",
+  base: "/inocs-sum-odp-frontend",
+  output: "static",
 });
