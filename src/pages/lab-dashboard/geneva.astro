@@ -1,0 +1,30 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { LivingLabKPIs, InfoAlert } from "../../components/react";
+import ApiClient from "../../lib/api-client/ApiClient";
+import { KpiCard } from "../../components/react/KpiCards";
+
+//TODO : get mocked data for transport modes and modal split (KPI 15)
+// init json file for a living lab, from WP1 reports
+const api = new ApiClient();
+
+const labId = 2;
+const kpis = await api.getKPIs({});
+const livingLabKpis = await api.getLivingLabAndData(labId);
+---
+
+<Layout>
+  <div class="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-8">
+    <h2><strong>{livingLabKpis?.name}</strong>Living lab data dashboard</h2>
+    <h3>Key Performance Indicators (KPIs)</h3>
+    <p>Explore the KPIs related to the living lab.</p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {
+        livingLabKpis?.kpi_results.map((kpiResult) => (
+          <KpiCard kpiResults={kpiResult} client:load />
+        ))
+      }
+    </div>
+  </div>
+</Layout>
