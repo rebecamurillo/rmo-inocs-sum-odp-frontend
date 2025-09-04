@@ -42,22 +42,36 @@ export default class ApiClient {
     //return this.get(`/livinglabs/${encodeURIComponent(id)}`);
 
     const lab = livinglabs.find((lab) => lab.id === id);
-    const populatedKpis = lab?.kpi_results?.map((kpi) => {
-      const kpiData = kpis.find((k) => k.id === kpi.id) as IKpi;
-      return {
-        ...kpiData,
-        result_before: {
-          value: kpi.value_before,
-          date: "01/01/2024",
-          id: Math.random(),
-        },
-        result_after: {
-          value: kpi.value_after,
-          date: "08/01/2026",
-          id: Math.random(),
-        },
-      } as IIKpiResultBeforeAfter;
-    });
+    const populatedKpis = lab?.kpi_results
+      ?.map((kpi) => {
+        const kpiData = kpis.find((k) => k.id === kpi.id) as IKpi;
+        return {
+          ...kpiData,
+          result_before: {
+            value: kpi.value_before,
+            date: "01/01/2024",
+            id: Math.random(),
+          },
+          result_after: {
+            value: kpi.value_after,
+            date: "08/01/2026",
+            id: Math.random(),
+          },
+        } as IIKpiResultBeforeAfter;
+      })
+      .sort((a, b) => {
+        const parseKpiNumber = (num: string) =>
+          num.split(".").map((n) => parseInt(n, 10));
+        if (!a.kpi_number || !b.kpi_number) return 0;
+        const aParts = parseKpiNumber(a.kpi_number);
+        const bParts = parseKpiNumber(b.kpi_number);
+        for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+          const aVal = aParts[i] ?? 0;
+          const bVal = bParts[i] ?? 0;
+          if (aVal !== bVal) return aVal - bVal;
+        }
+        return 0;
+      });
     const populatedMeasures = lab?.measures?.map((measure) => {
       const measureData = measures.find((m) => m.id === measure.id) as Measure;
       return { ...measure, ...measureData };
@@ -91,6 +105,7 @@ export default class ApiClient {
   async getKPIs({ kpi_number }: { kpi_number?: string }): Promise<IKpi[]> {
     //return this.get(`/kpis`);
 
+    let kpisData = kpis as IKpi[];
     if (kpi_number) {
       const parentKpi = kpis.filter(
         (kpi) => kpi.kpi_number === kpi_number
@@ -99,10 +114,10 @@ export default class ApiClient {
         (kpi) => kpi.parent_kpi_id === parentKpi[0]?.id
       ) as IKpi[];
 
-      return [...parentKpi, ...childrenKpis];
+      kpisData = [...parentKpi, ...childrenKpis] as IKpi[];
     }
 
-    return kpis as IKpi[];
+    return kpisData.sort((a, b) => (a.kpi_number > b.kpi_number ? 1 : -1));
   }
 
   async getTransportModes(): Promise<ITransportMode[]> {

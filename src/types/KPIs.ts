@@ -28,6 +28,7 @@ export interface IKpiResult extends IKpi {
 
 export enum EnumKpiMetricType {
   PERCENTAGE = "percentage",
+  RATIO = "ratio",
   ABSOLUTE = "absolute",
   CUSTOM_UNIT = "custom_unit",
   SCORE = "score",

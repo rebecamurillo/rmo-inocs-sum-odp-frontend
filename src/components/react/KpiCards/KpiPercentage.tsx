@@ -17,6 +17,11 @@ import {
   COLOR_SUCCESS,
   COLOR_SUCCESS_OPACITY_50,
 } from "../../../types";
+import {
+  formatMonthYear,
+  getChangePercent,
+  getFormattedPercent,
+} from "../../../lib/mappers";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -35,42 +40,6 @@ type Props = {
 function fmtNumber(v?: number | null, digits = 2) {
   if (v === undefined || v === null || Number.isNaN(v)) return "—";
   return v.toFixed(digits);
-}
-
-function formatMonthYear(dateStr?: string | null) {
-  if (!dateStr) return "";
-  const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleString(undefined, { month: "long", year: "numeric" });
-}
-
-function getChangePercent(
-  before?: number | null,
-  after?: number | null,
-  progressionTarget?: number | null
-) {
-  if (
-    before === undefined ||
-    before === null ||
-    after === undefined ||
-    after === null
-  )
-    return "";
-  if (before === 0) return "";
-  const diff = after - before;
-  const percent = (diff / Math.abs(before)) * 100;
-  let sign = "";
-  if (progressionTarget === 1) {
-    sign = percent > 0 ? "+" : percent < 0 ? "-" : "";
-  } else if (progressionTarget === 0) {
-    sign = percent < 0 ? "+" : percent > 0 ? "-" : "";
-  }
-  return `${sign}${Math.abs(percent).toFixed(2)}%`;
-}
-
-function getFormattedPercent(value?: number | null) {
-  if (value === undefined || value === null || Number.isNaN(value)) return "—";
-  return `${(value * 100).toFixed(2)}%`;
 }
 
 export function KpiPercentage({ kpiResults }: Props) {
@@ -148,9 +117,9 @@ export function KpiPercentage({ kpiResults }: Props) {
           >
             {change === null ? "" : `${change}`}
           </div>
-          <div className="text-xs text-muted">
+          <span className="text-xs text-muted">
             {before?.date ? `since ${new Date(before.date).getFullYear()}` : ""}
-          </div>
+          </span>
         </div>
       </div>
       <div className="flex flex-col w-full">
