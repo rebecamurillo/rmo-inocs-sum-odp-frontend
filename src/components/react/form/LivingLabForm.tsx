@@ -26,7 +26,7 @@ export default function LivingLabForm() {
     // Keep output minimal so it's easy to replace with fetch/axios when needed.
     // eslint-disable-next-line no-console
     console.log("Living Lab payload:", payload);
-    alert("Living Lab data captured — check console for payload (mock)");
+    window.location.href = import.meta.env.BASE_URL + "/lab";
   }
 
   return (
@@ -101,7 +101,12 @@ export default function LivingLabForm() {
       </div>
 
       <div className="flex gap-4">
-        <RButton type="submit" variant="primary" text="Save Living Lab" />
+        <RButton
+          type="submit"
+          variant="primary"
+          text="Save Living Lab"
+          href={import.meta.env.BASE_URL + "/lab"}
+        />
         <RButton
           type="button"
           variant="secondary"

@@ -101,7 +101,6 @@ export default class ApiClient {
 
   async getLivingLabAndData(id: number): Promise<ILivingLab> {
     //return this.get(`/livinglabs/${encodeURIComponent(id)}`);
-
     const lab = livinglabs.find((lab) => lab.id === id);
     return this.populateLivingLabData(lab);
   }
