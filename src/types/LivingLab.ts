@@ -17,6 +17,8 @@ export interface ILivingLab {
   radius?: number;
   area?: number;
   population?: number;
+}
+export interface ILivingLabPopulated extends ILivingLab {
   kpi_results: IIKpiResultBeforeAfter[];
   /**
    * Measures list — may be empty

@@ -5,10 +5,11 @@ import transportModes from "./mock-data/transport_modes.json";
 import type {
   IKpi,
   IIKpiResultBeforeAfter,
-  ILivingLab,
+  ILivingLabPopulated,
   Measure,
   ITransportMode,
   ITransportModeLivingLab,
+  ILivingLab,
 } from "../../types";
 
 export default class ApiClient {
@@ -90,16 +91,22 @@ export default class ApiClient {
       transport_modes: populatedTransportModes ?? [],
       kpi_results: populatedKpis ?? [],
       measures: populatedMeasures ?? [],
-    } as ILivingLab;
+    } as ILivingLabPopulated;
   }
 
-  async getLivingLabsAndData(): Promise<ILivingLab[]> {
+  async getLivingLabs(): Promise<ILivingLab[]> {
+    //return this.get(`/livinglabs`);
+
+    return livinglabs;
+  }
+
+  async getLivingLabsAndData(): Promise<ILivingLabPopulated[]> {
     //return this.get(`/livinglabs`);
 
     return livinglabs?.map((lab) => this.populateLivingLabData(lab));
   }
 
-  async getLivingLabAndData(id: number): Promise<ILivingLab> {
+  async getLivingLabAndData(id: number): Promise<ILivingLabPopulated> {
     //return this.get(`/livinglabs/${encodeURIComponent(id)}`);
     const lab = livinglabs.find((lab) => lab.id === id);
     return this.populateLivingLabData(lab);

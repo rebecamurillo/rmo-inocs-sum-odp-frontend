@@ -1,27 +1,80 @@
 ---
 import "../styles/global.css";
----
+import { SidebarMenu, SiteNavBar } from "../components/react/ui";
+import ApiClient from "../lib/api-client/ApiClient";
+const BASE_URL = import.meta.env.BASE_URL;
+interface Props {
+  role: "visitor" | "editor" | "admin";
+}
 
+const { role = "visitor" } = Astro.props;
+const api = new ApiClient();
+const labs = await api.getLivingLabs();
+const labsItems = labs.map((lab) => ({
+  href: BASE_URL + `/lab-dashboard/${lab.id}`,
+  label: lab.name,
+}));
+---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href={import.meta.env.BASE_URL + "/favicon.ico"}
+    />
+    <meta name="generator" content={Astro.generator} />
+    <title>SUM Open Data Platform</title>
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={import.meta.env.BASE_URL + "/apple-touch-icon.png"}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href={import.meta.env.BASE_URL + "/favicon-32x32.png"}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href={import.meta.env.BASE_URL + "/favicon-16x16.png"}
+    />
+    <link
+      rel="manifest"
+      href={import.meta.env.BASE_URL + "/site.webmanifest"}
+    />
+  </head>
+  <body>
+    {
+      role === "visitor" && (
+        <div class="flex flex-col">
+          <SiteNavBar livingLabs={labsItems} client:load /> <slot />
+        </div>
+      )
+    }
+    {
+      role === "editor" && (
+        <div class="flex flex-row">
+          <SidebarMenu client:load />
+          <slot />
+        </div>
+      )
+    }
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 </style>

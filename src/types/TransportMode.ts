@@ -1,5 +1,5 @@
 import type { IIKpiResultBeforeAfter } from "./KPIs";
-import type { ILivingLab } from "./LivingLab";
+import type { ILivingLabPopulated } from "./LivingLab";
 
 export interface ITransportMode {
   id: number;
@@ -17,7 +17,7 @@ export interface ITransportModeLivingLab {
   transport_mode_id: number;
   transport_mode?: ITransportMode;
   living_lab_id: number;
-  living_lab?: ILivingLab;
+  living_lab?: ILivingLabPopulated;
   status: EnumTransportModeStatus;
 }
 
