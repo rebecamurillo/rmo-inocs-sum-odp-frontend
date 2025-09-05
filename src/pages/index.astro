@@ -24,7 +24,7 @@ const labs = livingLabsData.map((lab) => ({
   id: lab.id,
   name: lab.name,
   coordinates: { lat: lab.lat, lng: lab.lng },
-  radius: lab.radius ?? 100,
+  radius: lab.radius ?? 50,
   status: lab.status,
   totalMeasures: lab.measures.length,
   kpisBefore: lab.kpi_results.filter((kpi) => kpi.result_before).length,
@@ -59,7 +59,6 @@ const labs = livingLabsData.map((lab) => ({
       <TransportBadge type="scooter" size="lg" color="warning" />
     </div>
 
-    <LivingLabsMapSection labs={labs} client:only="react" />
     <StatsSection
       titleHighlight="SEAMLESS"
       title="Shared Urban Mobility"
@@ -83,6 +82,8 @@ const labs = livingLabsData.map((lab) => ({
         },
       ]}
     />
+    <LivingLabsMapSection labs={labs} client:only="react" />
+
     <CTASection
       title="Monitoring measures around New Shared Mobility"
       description="From pre-implementation surveys to real-world impact analysis, here's how data flows through the SUM project."

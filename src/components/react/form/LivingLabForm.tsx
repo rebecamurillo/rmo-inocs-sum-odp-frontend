@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "../../react-catalyst-ui-kit/typescript/input";
 import { Label } from "../../react-catalyst-ui-kit/typescript/fieldset";
 import { RButton } from "../ui/RButton";
 import { getUrl } from "../../../lib/helpers";
+import { MapViewer, type MarkerData } from "../MapViewer";
 
 export default function LivingLabForm() {
   const [name, setName] = useState("");
@@ -11,6 +12,13 @@ export default function LivingLabForm() {
   const [radius, setRadius] = useState("");
   const [area, setArea] = useState("");
   const [population, setPopulation] = useState("");
+
+  const [mapMarker, setMapMarker] = useState<MarkerData | null>(null);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([50, 10]);
+  const [mapZoom, setMapZoom] = useState<number>(4);
+
+  // derive a key from center so MapViewer remounts whenever center changes
+  const mapKey = mapCenter ? `${mapCenter[0]},${mapCenter[1]}` : "no-center";
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,9 +34,21 @@ export default function LivingLabForm() {
     // For now we just log the captured values. Replace with real API call later.
     // Keep output minimal so it's easy to replace with fetch/axios when needed.
     // eslint-disable-next-line no-console
-    console.log("Living Lab payload:", payload);
     window.location.href = getUrl("/lab");
   }
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      setMapMarker({
+        id: "lab-marker",
+        name,
+        coordinates: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+        radius: radius ? parseFloat(radius) * 1000 : undefined, // convert km to meters
+      });
+      setMapCenter([parseFloat(latitude), parseFloat(longitude)]);
+      setMapZoom(8);
+    }
+  }, [latitude, longitude, radius]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -99,6 +119,16 @@ export default function LivingLabForm() {
             placeholder="e.g. 500000"
           />
         </div>
+      </div>
+
+      <div className="h-[400px] rounded shadow ">
+        <MapViewer
+          key={mapKey}
+          markers={mapMarker ? [mapMarker] : []}
+          center={mapCenter}
+          zoom={mapZoom ?? 8}
+          className="h-full w-full z-0"
+        />
       </div>
 
       <div className="flex gap-4">

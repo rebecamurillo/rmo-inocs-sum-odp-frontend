@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RButton } from "./ui";
 import { getUrl } from "../../lib/helpers";
+import { MapViewer, type MarkerData } from "./MapViewer";
 
 type LivingLab = {
   id: string;
@@ -21,30 +22,19 @@ type Props = {
 
 export function LivingLabsMapSection({ labs }: Props) {
   const [selectedLab, setSelectedLab] = useState<LivingLab | null>(null);
-
-  // state to hold dynamically imported components
-  const [leafletComponents, setLeafletComponents] = useState<any | null>(null);
-
+  const [mapCenter, setMapCenter] = useState<[number, number]>([50, 10]);
+  const [mapZoom, setMapZoom] = useState<number>(4);
+  const mapKey = mapCenter ? `${mapCenter[0]},${mapCenter[1]}` : "no-center";
   useEffect(() => {
-    let mounted = true;
-    // load react-leaflet components and CSS on the client only
-    async function loadLeaflet() {
-      if (typeof window === "undefined") return;
-      try {
-        const comps = await import("react-leaflet");
-        // dynamically load css so server doesn't try to process it at build time
-        await import("leaflet/dist/leaflet.css");
-        if (mounted) setLeafletComponents(comps);
-      } catch (e) {
-        // optional: handle or log load failure
-        if (mounted) setLeafletComponents(null);
-      }
+    if (
+      selectedLab &&
+      selectedLab.coordinates?.lat &&
+      selectedLab.coordinates?.lng
+    ) {
+      setMapCenter([selectedLab.coordinates.lat, selectedLab.coordinates.lng]);
+      setMapZoom(6);
     }
-    loadLeaflet();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  }, [selectedLab]);
 
   const getStatusColor = (status: LivingLab["status"]) => {
     switch (status) {
@@ -57,8 +47,17 @@ export function LivingLabsMapSection({ labs }: Props) {
     }
   };
 
+  // convert labs to MarkerData for MapViewer
+  const markers: MarkerData[] = labs.map((lab) => ({
+    id: lab.id,
+    name: lab.name,
+    coordinates: lab.coordinates,
+    radius: lab.radius * 1000, // convert km to meters
+    meta: { lab },
+  }));
+
   return (
-    <section className="bg-light py-12 px-4 sm:px-8">
+    <section className="py-12 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="mb-8">
@@ -75,49 +74,22 @@ export function LivingLabsMapSection({ labs }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Map */}
           <div className="lg:col-span-2 h-[600px] rounded shadow overflow-hidden">
-            {/* <div className=""> */}
-            {!leafletComponents && (
-              <div className="flex items-center justify-center h-full w-full bg-gray-100 text-gray-600">
-                Loading map...
-              </div>
-            )}
+            <MapViewer
+              key={mapKey}
+              markers={markers}
+              center={mapCenter}
+              zoom={mapZoom}
+              className="h-full w-full z-0"
+              onMarkerClick={(m) => {
+                // prefer passing the original lab if available in meta
+                if (m.meta && m.meta.lab) setSelectedLab(m.meta.lab);
+                else {
+                  const found = labs.find((l) => l.id === m.id);
+                  if (found) setSelectedLab(found);
+                }
+              }}
+            />
 
-            {leafletComponents &&
-              (() => {
-                const { MapContainer, TileLayer, Marker, Popup, Circle } =
-                  leafletComponents as any;
-                return (
-                  <MapContainer
-                    center={[48.85, 2.35]}
-                    zoom={5}
-                    scrollWheelZoom={false}
-                    className="h-full w-full z-0"
-                  >
-                    <TileLayer
-                      attribution='&copy; <a href="https://osm.org">OpenStreetMap</a>'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-
-                    {labs.map((lab) => (
-                      <>
-                        <Marker
-                          key={lab.id}
-                          position={[lab.coordinates.lat, lab.coordinates.lng]}
-                          eventHandlers={{
-                            click: () => setSelectedLab(lab),
-                          }}
-                        />
-                        <Circle
-                          center={[lab.coordinates.lat, lab.coordinates.lng]}
-                          radius={lab.radius}
-                          pathOptions={{ color: "#2563eb", fillOpacity: 0.2 }}
-                        />
-                      </>
-                    ))}
-                  </MapContainer>
-                );
-              })()}
-            {/* </div> */}
             {/* Slide-up Detail Panel */}
             {selectedLab && (
               <div className=" lg:mr-80 bg-white rounded-lg p-3 shadow border border-primary sticky bottom-0 left-0 z-50">
@@ -177,9 +149,6 @@ export function LivingLabsMapSection({ labs }: Props) {
                   >
                     🔍 Explore {selectedLab.name} Living Lab
                   </RButton>
-                  {/* <button className="bg-secondary text-white px-4 py-2 rounded hover:bg-dark transition">
-                    ➕ More About This Lab
-                  </button> */}
                 </div>
               </div>
             )}
