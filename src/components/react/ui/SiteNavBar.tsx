@@ -10,24 +10,47 @@ import {
   DropdownButton,
   DropdownMenu,
   Link,
+  DropdownItem,
+  DropdownLabel,
 } from "../../react-catalyst-ui-kit";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
-type MenuItem = { href: string; label: string };
+type MenuItem = { href?: string; label: string; subItems?: MenuItem[] };
 const BASE_URL = import.meta.env.BASE_URL;
+const HOME_URL = BASE_URL + "/";
 interface Props {
   livingLabs: MenuItem[];
 }
 export function SiteNavBar({ livingLabs }: Props) {
-  const dataItems: MenuItem[] = [
-    { href: "#", label: "KPIs" },
-    { href: "#", label: "Measures" },
-    { href: "#", label: "Modal split" },
+  const items = [
+    {
+      label: "Home",
+      href: HOME_URL,
+    },
+    {
+      label: "Living Labs",
+      subItems: livingLabs,
+    },
+    {
+      label: "Data",
+      subItems: [
+        { href: "#", label: "KPIs" },
+        { href: "#", label: "Measures" },
+        { href: "#", label: "Modal split" },
+      ],
+    },
+    {
+      label: "Analysis Tools",
+      subItems: [
+        { href: "#", label: "Measures impact" },
+        { href: "#", label: "Multi‑criteria decision tool" },
+      ],
+    },
   ];
 
   const analysisTools: MenuItem[] = [
-    { href: "/tools/measures-impact", label: "Measures impact" },
-    { href: "/tools/multicriteria", label: "Multi‑criteria decision tool" },
+    { href: "#", label: "Measures impact" },
+    { href: "#", label: "Multi‑criteria decision tool" },
   ];
 
   // state to track which submenu is open
@@ -60,19 +83,7 @@ export function SiteNavBar({ livingLabs }: Props) {
 
   return (
     <Navbar>
-      {/* left: brand / account */}
-      {/* <Dropdown>
-        <DropdownButton as={NavbarItem} aria-label="Account">
-          <Avatar src="/tailwind-logo.svg" />
-          <NavbarLabel>SUM Project</NavbarLabel>
-          <ChevronDownIcon />
-        </DropdownButton>
-        <DropdownMenu anchor="bottom start" className="min-w-48">
-
-        </DropdownMenu>
-      </Dropdown> 
-      */}
-      <Link href="/" aria-label="Home">
+      <Link href={HOME_URL} aria-label="Home">
         <img
           src={BASE_URL + "/sum_logo.jpg"}
           alt="SUM Logo"
@@ -81,94 +92,37 @@ export function SiteNavBar({ livingLabs }: Props) {
       </Link>
 
       <NavbarSpacer />
-
       <NavbarSection className="px-10">
-        {/* Home (no submenu) */}
-        <NavbarItem href="/" className="px-4 text-primary">
-          Home
-        </NavbarItem>
-
-        {/* Living Labs */}
-        <div className="relative" ref={livingRef}>
-          <button
-            onClick={() =>
-              setOpenMenu((s) => (s === "living" ? null : "living"))
-            }
-            aria-expanded={openMenu === "living"}
-            className="flex items-center px-4 py-2 hover:bg-gray-100 rounded"
-          >
-            <span className="mr-2 text-primary">Living labs</span>
-            <ChevronDownIcon className="w-4 h-4" />
-          </button>
-
-          {openMenu === "living" && (
-            <div className="absolute left-0 mt-2 w-56 bg-white border rounded shadow-md z-50">
-              <ul className="py-1 flex flex-col">
-                {livingLabs.map((it) => (
-                  <li key={it.href}>
-                    <a href={it.href} className="p-2 text-sm hover:bg-gray-100">
-                      {it.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {/* Data */}
-        <div className="relative" ref={dataRef}>
-          <button
-            onClick={() => setOpenMenu((s) => (s === "data" ? null : "data"))}
-            aria-expanded={openMenu === "data"}
-            className="flex items-center px-4 py-2 hover:bg-gray-100 rounded"
-          >
-            <span className="mr-2 text-primary">Data</span>
-            <ChevronDownIcon className="w-4 h-4" />
-          </button>
-
-          {openMenu === "data" && (
-            <div className="absolute left-0 mt-2 bg-white border rounded shadow-md z-50">
-              <ul className="py-1 flex flex-col">
-                {dataItems.map((it) => (
-                  <li key={it.href}>
-                    <a href={it.href} className="p-2 text-sm hover:bg-gray-100">
-                      {it.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {/* Analysis tools */}
-        <div className="relative" ref={analysisRef}>
-          <button
-            onClick={() =>
-              setOpenMenu((s) => (s === "analysis" ? null : "analysis"))
-            }
-            aria-expanded={openMenu === "analysis"}
-            className="flex items-center px-4 py-2 hover:bg-gray-100 rounded"
-          >
-            <span className="mr-2 text-primary">Analysis tools</span>
-            <ChevronDownIcon className="w-4 h-4" />
-          </button>
-
-          {openMenu === "analysis" && (
-            <div className="absolute left-0 mt-2 w-64 bg-white border rounded shadow-md z-50">
-              <ul className="py-1 flex flex-col">
-                {analysisTools.map((it) => (
-                  <li key={it.href}>
-                    <a href={it.href} className="p-2 text-sm hover:bg-gray-100">
-                      {it.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+        {items.map((item) => (
+          <>
+            {item.subItems?.length !== undefined && (
+              <Dropdown key={item.label}>
+                <DropdownButton as={NavbarItem} aria-label="Account menu">
+                  <NavbarLabel className="text-primary">
+                    {item.label}
+                  </NavbarLabel>
+                  <ChevronDownIcon />
+                </DropdownButton>
+                <DropdownMenu
+                  className="min-w-64 bg-white"
+                  anchor="bottom start"
+                >
+                  {item?.subItems?.length > 0 &&
+                    item.subItems?.map((sub) => (
+                      <DropdownItem key={sub.label} href={sub.href}>
+                        <DropdownLabel>{sub.label}</DropdownLabel>
+                      </DropdownItem>
+                    ))}
+                </DropdownMenu>
+              </Dropdown>
+            )}
+            {item.href && (
+              <NavbarItem href={item.href}>
+                <NavbarLabel className="text-primary">{item.label}</NavbarLabel>
+              </NavbarItem>
+            )}
+          </>
+        ))}
       </NavbarSection>
     </Navbar>
   );
