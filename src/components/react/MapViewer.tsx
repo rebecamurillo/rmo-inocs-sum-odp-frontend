@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { COLOR_WARNING } from "../../types";
+import { COLOR_PRIMARY, COLOR_WARNING } from "../../types";
 
 export type MarkerData = {
   id: string;
@@ -29,6 +29,7 @@ export function MapViewer({
 }: Props) {
   const [leafletComponents, setLeafletComponents] = useState<any | null>(null);
   const [markersState, setMarkersState] = useState<MarkerData[]>(markers);
+  const [leaflet, setLeaflet] = useState<any | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -36,8 +37,12 @@ export function MapViewer({
       if (typeof window === "undefined") return;
       try {
         const comps = await import("react-leaflet");
+        const L = await import("leaflet");
         await import("leaflet/dist/leaflet.css");
-        if (mounted) setLeafletComponents(comps);
+        if (mounted) {
+          setLeafletComponents(comps);
+          setLeaflet(L);
+        }
       } catch (e) {
         if (mounted) setLeafletComponents(null);
       }
@@ -64,6 +69,26 @@ export function MapViewer({
   const { MapContainer, TileLayer, Marker, Circle, Popup } =
     leafletComponents as any;
 
+  const myIcon = () =>
+    leaflet.divIcon({
+      html: `
+                  <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: ${COLOR_PRIMARY};
+                    font-size: 1rem;
+                    width: 1rem;
+                    height: 1rem;
+                    margin-left: -0.20rem;
+                    margin-top: -0.30rem;
+                    border-radius: 50% 50% 50% 0;
+                    transform: rotate(-45deg);
+                  ">
+                  </div>
+                `,
+    });
+
   return (
     <MapContainer
       center={center}
@@ -76,30 +101,32 @@ export function MapViewer({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {markersState?.map((m) => (
-        <React.Fragment key={m.id}>
-          <Marker
-            position={[m.coordinates.lat, m.coordinates.lng]}
-            eventHandlers={{
-              click: () => onMarkerClick && onMarkerClick(m),
-            }}
-          >
-            {m.name && (
-              <Popup>
-                <strong>{m.name}</strong>
-              </Popup>
-            )}
-          </Marker>
+      {leaflet &&
+        markersState?.map((m) => (
+          <React.Fragment key={m.id}>
+            <Marker
+              position={[m.coordinates.lat, m.coordinates.lng]}
+              icon={myIcon()}
+              eventHandlers={{
+                click: () => onMarkerClick && onMarkerClick(m),
+              }}
+            >
+              {m.name && (
+                <Popup>
+                  <strong>{m.name}</strong>
+                </Popup>
+              )}
+            </Marker>
 
-          {typeof m.radius === "number" && (
-            <Circle
-              center={[m.coordinates.lat, m.coordinates.lng]}
-              radius={m.radius}
-              pathOptions={{ color: COLOR_WARNING, fillOpacity: 0.2 }}
-            />
-          )}
-        </React.Fragment>
-      ))}
+            {typeof m.radius === "number" && (
+              <Circle
+                center={[m.coordinates.lat, m.coordinates.lng]}
+                radius={m.radius}
+                pathOptions={{ color: COLOR_WARNING, fillOpacity: 0.2 }}
+              />
+            )}
+          </React.Fragment>
+        ))}
     </MapContainer>
   );
 }
