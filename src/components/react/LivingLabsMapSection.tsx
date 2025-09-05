@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { RButton } from "./ui";
+import { getUrl } from "../../lib/helpers";
 
 type LivingLab = {
   id: string;
@@ -172,10 +173,7 @@ export function LivingLabsMapSection({ labs }: Props) {
                 <div className="mt-2 flex flex-wrap gap-1 justify-center">
                   <RButton
                     variant="primary"
-                    href={
-                      import.meta.env.BASE_URL +
-                      `/lab-dashboard/${selectedLab.id}`
-                    }
+                    href={getUrl(`/lab-dashboard/${selectedLab.id}`)}
                   >
                     🔍 Explore {selectedLab.name} Living Lab
                   </RButton>

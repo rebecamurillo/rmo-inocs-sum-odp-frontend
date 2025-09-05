@@ -21,7 +21,7 @@ import {
   formatMonthYear,
   getChangePercent,
   getFormattedPercent,
-} from "../../../lib/mappers";
+} from "../../../lib/helpers";
 ChartJS.register(
   CategoryScale,
   LinearScale,

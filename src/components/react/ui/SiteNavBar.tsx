@@ -14,10 +14,10 @@ import {
   DropdownLabel,
 } from "../../react-catalyst-ui-kit";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { getUrl } from "../../../lib/helpers";
 
 type MenuItem = { href?: string; label: string; subItems?: MenuItem[] };
-const BASE_URL = import.meta.env.BASE_URL;
-const HOME_URL = BASE_URL + "/";
+const HOME_URL = getUrl("/");
 interface Props {
   livingLabs: MenuItem[];
 }
@@ -85,7 +85,7 @@ export function SiteNavBar({ livingLabs }: Props) {
     <Navbar>
       <Link href={HOME_URL} aria-label="Home">
         <img
-          src={BASE_URL + "/sum_logo.jpg"}
+          src={getUrl("/sum_logo.jpg")}
           alt="SUM Logo"
           className="w-40 mx-4"
         />

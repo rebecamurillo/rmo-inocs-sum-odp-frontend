@@ -13,6 +13,8 @@ import heroImage from "../assets/img/sum-hero.png";
 import mcdaImage from "../assets/img/sum-mcda.png";
 import impactImage from "../assets/img/sum-measure-kpi-impact.png";
 import ApiClient from "../lib/api-client/ApiClient";
+import { getUrl } from "../lib/helpers";
+
 const api = new ApiClient();
 
 const kpis = await api.getKPIs({});
@@ -39,7 +41,7 @@ const labs = livingLabsData.map((lab) => ({
     subtitle="A first-of-its-kind, Pan-European Open Data Platform tracking the impact of push and pull measures on New Shared Mobility and Public Transport across 9+ Living Labs."
     primary={{
       text: "Add your city",
-      href: import.meta.env.BASE_URL + "/lab/signup",
+      href: getUrl("/lab/signup"),
     }}
     secondary={{
       text: "Explore the Living Labs",

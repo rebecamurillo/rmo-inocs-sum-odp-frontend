@@ -1,3 +1,4 @@
+import { getUrl } from "../../lib/helpers";
 import { InfoCard } from "./ui/InfoCard";
 
 type Measure = {
@@ -177,7 +178,7 @@ function MeasuresSection({
             key={m.title}
             title={m.title}
             description={hideDescription ? "" : m.description}
-            imageUrl={import.meta.env.BASE_URL + m.imageUrl}
+            imageUrl={getUrl(m.imageUrl)}
             href={m.href}
             className={m.className}
           />

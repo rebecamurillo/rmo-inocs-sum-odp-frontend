@@ -2,7 +2,8 @@
 import "../styles/global.css";
 import { SidebarMenu, SiteNavBar } from "../components/react/ui";
 import ApiClient from "../lib/api-client/ApiClient";
-const BASE_URL = import.meta.env.BASE_URL;
+import { getUrl } from "../lib/helpers";
+
 interface Props {
   role: "visitor" | "editor" | "admin";
 }
@@ -11,7 +12,7 @@ const { role = "visitor" } = Astro.props;
 const api = new ApiClient();
 const labs = await api.getLivingLabs();
 const labsItems = labs.map((lab) => ({
-  href: BASE_URL + `/lab-dashboard/${lab.id}`,
+  href: getUrl(`/lab-dashboard/${lab.id}`),
   label: lab.name,
 }));
 ---
@@ -21,35 +22,28 @@ const labsItems = labs.map((lab) => ({
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href={import.meta.env.BASE_URL + "/favicon.ico"}
-    />
+    <link rel="icon" type="image/x-icon" href={getUrl("/favicon.ico")} />
     <meta name="generator" content={Astro.generator} />
     <title>SUM Open Data Platform</title>
 
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href={import.meta.env.BASE_URL + "/apple-touch-icon.png"}
+      href={getUrl("/apple-touch-icon.png")}
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href={import.meta.env.BASE_URL + "/favicon-32x32.png"}
+      href={getUrl("/favicon-32x32.png")}
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href={import.meta.env.BASE_URL + "/favicon-16x16.png"}
+      href={getUrl("/favicon-16x16.png")}
     />
-    <link
-      rel="manifest"
-      href={import.meta.env.BASE_URL + "/site.webmanifest"}
-    />
+    <link rel="manifest" href={getUrl("/site.webmanifest")} />
   </head>
   <body>
     {

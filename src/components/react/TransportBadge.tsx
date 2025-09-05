@@ -1,5 +1,6 @@
 import React from "react";
 import { Badge } from "./ui/Badge";
+import { getUrl } from "../../lib/helpers";
 
 export type TransportType =
   | "bus"
@@ -62,7 +63,7 @@ export function TransportBadge({
       />
     ) : DEFAULT_ICONS[type] ? (
       <img
-        src={import.meta.env.BASE_URL + DEFAULT_ICONS[type]}
+        src={getUrl(DEFAULT_ICONS[type])}
         alt={`${String(type)} icon`}
         className="h-full w-full"
       />

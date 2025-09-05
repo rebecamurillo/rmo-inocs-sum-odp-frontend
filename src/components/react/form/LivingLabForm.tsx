@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../../react-catalyst-ui-kit/typescript/input";
 import { Label } from "../../react-catalyst-ui-kit/typescript/fieldset";
 import { RButton } from "../ui/RButton";
+import { getUrl } from "../../../lib/helpers";
 
 export default function LivingLabForm() {
   const [name, setName] = useState("");
@@ -26,7 +27,7 @@ export default function LivingLabForm() {
     // Keep output minimal so it's easy to replace with fetch/axios when needed.
     // eslint-disable-next-line no-console
     console.log("Living Lab payload:", payload);
-    window.location.href = import.meta.env.BASE_URL + "/lab";
+    window.location.href = getUrl("/lab");
   }
 
   return (
@@ -105,7 +106,7 @@ export default function LivingLabForm() {
           type="submit"
           variant="primary"
           text="Save Living Lab"
-          href={import.meta.env.BASE_URL + "/lab"}
+          href={getUrl("/lab")}
         />
         <RButton
           type="button"

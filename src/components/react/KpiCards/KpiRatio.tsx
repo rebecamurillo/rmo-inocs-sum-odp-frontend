@@ -23,7 +23,7 @@ import {
   formatRatio,
   getRatioComparedToCar,
   getChangeFlat,
-} from "../../../lib/mappers/kpi-format";
+} from "../../../lib/helpers";
 
 ChartJS.register(
   CategoryScale,

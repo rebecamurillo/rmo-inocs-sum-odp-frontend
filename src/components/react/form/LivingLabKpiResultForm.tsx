@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/20/solid";
 import type { IKpiResult } from "../../../types/KPIs";
 import { Field, Input, Label } from "../../react-catalyst-ui-kit";
-import { formatDate } from "../../../lib/mappers";
+import { formatDate } from "../../../lib/helpers";
 
 type Props = {
   initial?: IKpiResult | null;

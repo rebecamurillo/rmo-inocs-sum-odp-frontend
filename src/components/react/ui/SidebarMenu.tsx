@@ -2,7 +2,6 @@ import {
   Avatar,
   Dropdown,
   DropdownButton,
-  DropdownDivider,
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
@@ -19,21 +18,21 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   Cog8ToothIcon,
-  PlusIcon,
 } from "@heroicons/react/16/solid";
 import {
   Cog6ToothIcon,
   HomeIcon,
-  MegaphoneIcon,
-  Square2StackIcon,
-  TicketIcon,
-  InboxIcon,
   QuestionMarkCircleIcon,
-  SparklesIcon,
+  EnvelopeIcon,
+  BookOpenIcon,
+  ChartPieIcon,
+  ChartBarSquareIcon,
+  QueueListIcon,
+  PresentationChartLineIcon,
 } from "@heroicons/react/20/solid";
 import { UserIcon } from "@heroicons/react/24/solid";
+import { getUrl } from "../../../lib/helpers";
 
-const BASE_URL = import.meta.env.BASE_URL;
 interface Props {
   menuItems?: Array<{
     label: string;
@@ -61,26 +60,32 @@ interface Props {
   };
 }
 
+const HOME_ITEM = {
+  label: "Go to ODP website",
+  icon: <HomeIcon />,
+  href: getUrl("/"),
+};
+
 const DEFAULT_MENU_ITEMS = [
   {
-    label: "Dashboard",
-    icon: <HomeIcon />,
-    href: BASE_URL + "/lab",
+    label: "Data Overview",
+    icon: <PresentationChartLineIcon />,
+    href: getUrl("/lab"),
   },
   {
     label: "Modal Split",
-    icon: <QuestionMarkCircleIcon />,
-    href: BASE_URL + "/lab/modal-split",
+    icon: <ChartPieIcon />,
+    href: getUrl("/lab/modal-split"),
   },
   {
     label: "KPIs",
-    icon: <QuestionMarkCircleIcon />,
-    href: BASE_URL + "/lab/kpis",
+    icon: <ChartBarSquareIcon />,
+    href: getUrl("/lab/kpis"),
   },
   {
     label: "Measures",
-    icon: <QuestionMarkCircleIcon />,
-    href: BASE_URL + "/lab/measures",
+    icon: <QueueListIcon />,
+    href: getUrl("/lab/measures"),
   },
 ];
 
@@ -92,7 +97,25 @@ const DEFAULT_DROPDOWN_HEADER_ITEMS = [
   {
     label: "Edit",
     icon: <Cog8ToothIcon />,
-    href: BASE_URL + "/lab/edit",
+    href: getUrl("/lab/edit"),
+  },
+];
+
+const HELP_MENU_ITEMS = [
+  {
+    label: "Useful Resources",
+    icon: <BookOpenIcon />,
+    href: getUrl("#"),
+  },
+  {
+    label: "FAQ",
+    icon: <QuestionMarkCircleIcon />,
+    href: getUrl("#"),
+  },
+  {
+    label: "Contact SUM team",
+    icon: <EnvelopeIcon />,
+    href: getUrl("#"),
   },
 ];
 
@@ -106,10 +129,11 @@ export function SidebarMenu({
   return (
     <Sidebar>
       <SidebarHeader>
-        <img src={BASE_URL + "/sum_logo.jpg"} alt="SUM Logo"
-        className="w-40 my-4"
+        <img
+          src={getUrl("/sum_logo.jpg")}
+          alt="SUM Logo"
+          className="w-40 my-4"
         />
-
         {dropdownHeader && (
           <Dropdown>
             <DropdownButton as={SidebarItem} className="mb-2.5">
@@ -133,6 +157,10 @@ export function SidebarMenu({
             )}
           </Dropdown>
         )}
+        <SidebarItem key={HOME_ITEM.label} href={HOME_ITEM.href}>
+          {HOME_ITEM.icon}
+          <SidebarLabel>{HOME_ITEM.label}</SidebarLabel>
+        </SidebarItem>
       </SidebarHeader>
       <SidebarBody>
         {menuItems?.length && menuItems?.length > 0 && (
@@ -147,8 +175,21 @@ export function SidebarMenu({
         )}
         <SidebarSpacer />
       </SidebarBody>
-      {userInfo && (
-        <SidebarFooter>
+
+      <SidebarFooter>
+        {HELP_MENU_ITEMS?.length && HELP_MENU_ITEMS?.length > 0 && (
+          <SidebarSection>
+            {HELP_MENU_ITEMS.map((item) => (
+              <SidebarItem key={item.label} href={item.href}>
+                {item.icon}
+                <SidebarLabel>{item.label}</SidebarLabel>
+              </SidebarItem>
+            ))}
+          </SidebarSection>
+        )}
+        <SidebarSpacer />
+
+        {userInfo && (
           <Dropdown>
             <DropdownButton as={SidebarItem}>
               <span className="flex min-w-0 items-center gap-3">
@@ -184,8 +225,8 @@ export function SidebarMenu({
               </DropdownMenu>
             )}
           </Dropdown>
-        </SidebarFooter>
-      )}
+        )}
+      </SidebarFooter>
     </Sidebar>
   );
 }

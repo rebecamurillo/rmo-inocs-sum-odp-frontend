@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { CTACard, LabDashboardTabs } from "../../components/react";
 import ApiClient from "../../lib/api-client/ApiClient.ts";
+import { getUrl } from "../../lib/helpers";
 
 const api = new ApiClient();
 const user = {
@@ -141,7 +142,7 @@ const steps = [
       kpis?.length === countersKpiBefore?.total && countersKpiBefore?.total > 0,
     inProgress: kpis?.length > 0 && kpis?.length < countersKpiBefore?.total,
     cta: "Edit modal split",
-    href: import.meta.env.BASE_URL + "/lab/modal-split",
+    href: getUrl("/lab/modal-split"),
   },
   {
     id: "kpis-before",
@@ -153,7 +154,7 @@ const steps = [
     inProgress:
       countersKpiBefore?.total > 0 && countersKpiBefore?.total < kpis?.length,
     cta: "Edit KPIs",
-    href: import.meta.env.BASE_URL + "/lab/kpis",
+    href: getUrl("/lab/kpis"),
   },
   {
     id: "measures",
@@ -162,7 +163,7 @@ const steps = [
       "Select or add the push and pull measures your city is implementing.",
     completed: countersMeasures?.total > 0,
     cta: "Edit measures",
-    href: import.meta.env.BASE_URL + "/lab/measures",
+    href: getUrl("/lab/measures"),
   },
 ];
 ---

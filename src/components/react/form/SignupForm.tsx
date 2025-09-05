@@ -8,6 +8,7 @@ import {
 import { Label } from "../../react-catalyst-ui-kit/typescript/fieldset";
 import { Select } from "../../react-catalyst-ui-kit/typescript/select";
 import { RButton } from "../ui/RButton";
+import { getUrl } from "../../../lib/helpers";
 
 type Mode = "create" | "join";
 
@@ -20,7 +21,7 @@ export default function SignupForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    window.location.href = import.meta.env.BASE_URL + "/lab/edit";
+    window.location.href = getUrl("/lab/edit");
   }
 
   return (
