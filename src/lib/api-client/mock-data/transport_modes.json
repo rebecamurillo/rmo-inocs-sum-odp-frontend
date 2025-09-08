@@ -19,14 +19,14 @@
   },
   {
     "id": 4,
-    "name": "Bicycle (private)",
+    "name": "Bicycle",
     "description": "User-owned bicycle for short-to-medium distance trips.",
     "type": "NSM"
   },
   {
     "id": 5,
-    "name": "E-scooter (shared)",
-    "description": "Electric micromobility vehicles available for short, on-demand trips.",
+    "name": "E-scooter",
+    "description": "Electric micromobility vehicles",
     "type": "NSM"
   },
   {
@@ -37,38 +37,44 @@
   },
   {
     "id": 7,
-    "name": "Bus",
-    "description": "Scheduled public transport on roads serving local or regional routes.",
-    "type": "PUBLIC_TRANSPORT"
+    "name": "Micromobility",
+    "description": "",
+    "type": "NSM"
   },
   {
     "id": 8,
-    "name": "Tram / Light Rail",
-    "description": "Electric rail-based public transport operating on urban corridors.",
-    "type": "PUBLIC_TRANSPORT"
+    "name": "Ride hailing",
+    "description": "Flexible shared transit that adapts routes and schedules to demand.",
+    "type": "NSM"
   },
   {
     "id": 9,
-    "name": "Metro / Subway",
-    "description": "High-capacity rapid transit serving dense urban areas.",
-    "type": "PUBLIC_TRANSPORT"
+    "name": "Taxi",
+    "description": "Taxi ride hailing",
+    "type": "NSM"
   },
   {
     "id": 10,
-    "name": "Regional Train",
+    "name": "Train",
     "description": "Rail services connecting cities and suburbs over longer distances.",
     "type": "PUBLIC_TRANSPORT"
   },
   {
     "id": 11,
-    "name": "On-demand Shuttle",
-    "description": "Flexible shared transit that adapts routes and schedules to demand.",
-    "type": "NSM"
+    "name": "Bus",
+    "description": "Scheduled public transport on roads serving local or regional routes.",
+    "type": "PUBLIC_TRANSPORT"
   },
   {
     "id": 12,
-    "name": "Park & Ride",
-    "description": "Parking facilities that connect private cars to public transport hubs.",
+    "name": "Metro / Subway",
+    "description": "High-capacity rapid transit serving dense urban areas.",
+    "type": "PUBLIC_TRANSPORT"
+  },
+  {
+    "id": 13,
+    "name": "Other",
+    "description": "Other means of transport",
     "type": "PRIVATE"
   }
 ]

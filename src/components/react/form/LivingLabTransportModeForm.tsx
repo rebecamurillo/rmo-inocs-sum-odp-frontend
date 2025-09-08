@@ -3,7 +3,7 @@ import { Field, Select } from "../../react-catalyst-ui-kit";
 import { Badge } from "../ui";
 import {
   EnumTransportModeStatus,
-  type ITransportModeLivingLab,
+  type ILivingLabTransportMode,
 } from "../../../types";
 import {
   PencilSquareIcon,
@@ -12,11 +12,11 @@ import {
 } from "@heroicons/react/20/solid";
 
 interface Props {
-  value?: ITransportModeLivingLab;
+  value?: ILivingLabTransportMode;
   transportModeId: number;
   livingLabId: number;
   onCancel?: () => void;
-  onChange?: (data: ITransportModeLivingLab) => void;
+  onChange?: (data: ILivingLabTransportMode) => void;
   onDelete?: (id: number) => void;
 }
 

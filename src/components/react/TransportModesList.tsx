@@ -4,7 +4,7 @@ import {
   type ITransportMode,
   type IIKpiResultBeforeAfter,
   type IKpi,
-  type ITransportModeLivingLab,
+  type ILivingLabTransportMode,
 } from "../../types";
 import { BeforeAndAfterDates, LivingLabKpiResultForm } from "./form";
 import { TransportTypeBadge } from "./TransportTypeBadge";
@@ -21,7 +21,7 @@ interface Props {
   modes: ITransportMode[];
   kpis: IKpi[];
   livingLabId: number;
-  livingLabTransportModes: ITransportModeLivingLab[];
+  livingLabTransportModes: ILivingLabTransportMode[];
   kpiResults: IIKpiResultBeforeAfter[];
 }
 
@@ -36,13 +36,24 @@ export function TransportModesList({
   const [beforeDate, setBeforeDate] = useState<string>(today);
   const [afterDate, setAfterDate] = useState<string>(today);
 
-  const livingLabTransportModesMap = new Map(
-    livingLabTransportModes.map((mode) => [mode.transport_mode_id, mode])
+  const [livingLabTransportModesMap, setLivingLabTransportModesMap] = useState<
+    Map<number, ILivingLabTransportMode>
+  >(
+    new Map(
+      livingLabTransportModes.map((mode) => [mode.transport_mode_id, mode])
+    )
   );
 
   const [livingLabKpiMap, setLivingLabKpiMap] = useState<
-    Map<number, IIKpiResultBeforeAfter>
-  >(new Map(kpiResults.map((result) => [result.id, result])));
+    Map<string, IIKpiResultBeforeAfter>
+  >(
+    new Map(
+      kpiResults.map((resultKpi) => [
+        `${resultKpi.id}_${resultKpi.result_before?.transport_mode_id}`,
+        resultKpi,
+      ])
+    )
+  );
 
   return (
     <div className="bg-white shadow rounded-md">
@@ -94,58 +105,73 @@ export function TransportModesList({
                     value={livingLabTransportModesMap.get(m.id)}
                     transportModeId={m.id}
                     livingLabId={livingLabId}
+                    onChange={(result) => {
+                      setLivingLabTransportModesMap((prev) => {
+                        const newMap = new Map(prev);
+                        const prevValue = prev.get(m.id);
+                        newMap.set(m.id, {
+                          ...prevValue,
+                          ...result,
+                        });
+                        return newMap;
+                      });
+                    }}
                   />
                 </TableCell>
-                {kpis.map((kpi) => (
-                  <TableCell key={kpi.id} className="">
-                    {livingLabKpiMap.get(kpi.id)?.result_before
-                      ?.transport_mode_id === m.id && (
-                      <small>Value before</small>
-                    )}
-                    <LivingLabKpiResultForm
-                      livingLabId={livingLabId}
-                      kpiId={kpi.id}
-                      initial={livingLabKpiMap.get(kpi.id)?.result_before}
-                      transportModeId={m.id}
-                      defaultDate={beforeDate}
-                      onChange={(result) => {
-                        setLivingLabKpiMap((prev) => {
-                          const newMap = new Map(prev);
-                          const prevValue = prev.get(kpi.id);
-                          newMap.set(kpi.id, {
-                            ...prevValue,
-                            result_before: {
-                              // ...kpi,
-                              ...prevValue?.result_before,
-                              ...result,
-                              // kpidefinition_id: kpi.id,
-                              // living_lab_id: livingLabId,
-                              // kpi_number: kpi.kpi_number,
-                              // name: kpi.name,
-                              // type: kpi.type,
-                              // progression_target: kpi.progression_target,
-                            },
+                {livingLabTransportModesMap.get(m.id)?.status &&
+                  kpis.map((kpi) => (
+                    <TableCell key={kpi.id} className="">
+                      {livingLabKpiMap.get(`${kpi.id}_${m.id}`)?.result_before
+                        ?.transport_mode_id === m.id && (
+                        <small>Value before</small>
+                      )}
+                      <LivingLabKpiResultForm
+                        livingLabId={livingLabId}
+                        kpiId={kpi.id}
+                        initial={
+                          livingLabKpiMap.get(`${kpi.id}_${m.id}`)
+                            ?.result_before
+                        }
+                        transportModeId={m.id}
+                        defaultDate={beforeDate}
+                        onChange={(result) => {
+                          setLivingLabKpiMap((prev) => {
+                            const newMap = new Map(prev);
+                            const prevValue = prev.get(`${kpi.id}_${m.id}`);
+                            newMap.set(`${kpi.id}_${m.id}`, {
+                              ...prevValue,
+                              result_before: {
+                                // ...kpi,
+                                ...prevValue?.result_before,
+                                ...result,
+                                // kpidefinition_id: kpi.id,
+                                // living_lab_id: livingLabId,
+                                // kpi_number: kpi.kpi_number,
+                                // name: kpi.name,
+                                // type: kpi.type,
+                                // progression_target: kpi.progression_target,
+                              },
+                            });
+                            return newMap;
                           });
-                          return newMap;
-                        });
-                      }}
-                    />
-                    {livingLabKpiMap.get(kpi.id)?.result_before
-                      ?.transport_mode_id === m.id && (
-                      <>
-                        <hr />
-                        <small>Value after</small>
-                        <LivingLabKpiResultForm
-                          transportModeId={m.id}
-                          livingLabId={livingLabId}
-                          kpiId={kpi.id}
-                          initial={livingLabKpiMap.get(kpi.id)?.result_after}
-                          defaultDate={afterDate}
-                        />
-                      </>
-                    )}
-                  </TableCell>
-                ))}
+                        }}
+                      />
+                      {livingLabKpiMap.get(kpi.id)?.result_before
+                        ?.transport_mode_id === m.id && (
+                        <>
+                          <hr />
+                          <small>Value after</small>
+                          <LivingLabKpiResultForm
+                            transportModeId={m.id}
+                            livingLabId={livingLabId}
+                            kpiId={kpi.id}
+                            initial={livingLabKpiMap.get(kpi.id)?.result_after}
+                            defaultDate={afterDate}
+                          />
+                        </>
+                      )}
+                    </TableCell>
+                  ))}
               </TableRow>
             ))}
           </tbody>

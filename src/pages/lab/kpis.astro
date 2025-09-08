@@ -7,8 +7,13 @@ import ApiClient from "../../lib/api-client/ApiClient";
 // init json file for a living lab, from WP1 reports
 const api = new ApiClient();
 
-const labId = 1;
+const labId = 2;
 const kpis = await api.getKPIs({});
+const modalSplitKpi = kpis.find((kpi) => kpi.kpi_number === "15");
+const filteredKpis = kpis.filter(
+  (kpi) =>
+    kpi.id !== modalSplitKpi?.id && kpi.parent_kpi_id !== modalSplitKpi?.id
+);
 const livingLabKpis = await api.getLivingLabAndData(labId);
 ---
 
@@ -30,7 +35,7 @@ const livingLabKpis = await api.getLivingLabAndData(labId);
     </InfoAlert>
 
     <LivingLabKPIs
-      kpis={kpis}
+      kpis={filteredKpis}
       livingLabId={labId}
       kpiResults={livingLabKpis?.kpi_results || []}
       client:load

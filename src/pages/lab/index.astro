@@ -4,6 +4,7 @@ import { CTACard, LabDashboardTabs } from "../../components/react";
 import ApiClient from "../../lib/api-client/ApiClient.ts";
 import { getUrl } from "../../lib/helpers";
 
+const labId = 2;
 const api = new ApiClient();
 const user = {
   id: "john_doe",
@@ -11,7 +12,7 @@ const user = {
   email: "john.doe@example.com",
 };
 const kpis = await api.getKPIs({});
-const livingLab = await api.getLivingLabAndData(2);
+const livingLab = await api.getLivingLabAndData(labId);
 
 const counters = {
   kpisBefore: {

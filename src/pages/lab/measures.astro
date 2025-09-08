@@ -11,7 +11,7 @@ import ApiClient from "../../lib/api-client/ApiClient";
 // init json file for a living lab, from WP1 reports
 const api = new ApiClient();
 
-const labId = 1;
+const labId = 2;
 const measures = await api.getMeasures();
 const livinglab = await api.getLivingLabAndData(labId);
 ---

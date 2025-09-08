@@ -12,7 +12,7 @@ export interface ITransportModeSplit extends ITransportMode {
   kpi_results?: IIKpiResultBeforeAfter[];
 }
 
-export interface ITransportModeLivingLab {
+export interface ILivingLabTransportMode {
   id: number;
   transport_mode_id: number;
   transport_mode?: ITransportMode;
@@ -22,7 +22,7 @@ export interface ITransportModeLivingLab {
 }
 
 export type ILivingLabTransportModeForm = Pick<
-  ITransportModeLivingLab,
+  ILivingLabTransportMode,
   "status" | "transport_mode_id" | "living_lab_id"
 > & {
   id?: number;

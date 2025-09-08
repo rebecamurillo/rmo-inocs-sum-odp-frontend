@@ -8,7 +8,7 @@ import type {
   ILivingLabPopulated,
   IMeasure,
   ITransportMode,
-  ITransportModeLivingLab,
+  ILivingLabTransportMode,
   ILivingLab,
 } from "../../types";
 
@@ -41,17 +41,21 @@ export default class ApiClient {
 
   populateLivingLabData(lab: any) {
     const populatedKpis = lab?.kpi_results
-      ?.map((kpi) => {
-        const kpiData = kpis.find((k) => k.id === kpi.id) as IKpi;
+      ?.map((kpiResult) => {
+        const kpiData = kpis.find(
+          (k) => k.id === (kpiResult.kpidefinition_id ?? kpiResult.id)
+        ) as IKpi;
         return {
           ...kpiData,
           result_before: {
-            value: kpi.value_before,
+            ...kpiResult,
+            value: kpiResult.value_before,
             date: "01/01/2024",
             id: Math.random(),
           },
           result_after: {
-            value: kpi.value_after,
+            ...kpiResult,
+            value: kpiResult.value_after,
             date: "08/01/2026",
             id: Math.random(),
           },
@@ -83,7 +87,7 @@ export default class ApiClient {
         transport_mode_id: modeData?.id,
         living_lab_id: lab.id,
         id: Math.random(), // mock unique id
-      } as ITransportModeLivingLab;
+      } as ILivingLabTransportMode;
     });
 
     return {

@@ -257,6 +257,96 @@
         "kpi_number": "16",
         "value_before": 16.0,
         "value_after": 18.531749
+      },
+
+      {
+        "id": 521,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 10,
+        "value_before": 0.246,
+        "value_after": 0
+      },
+
+      {
+        "id": 522,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 1,
+        "value_before": 0.186,
+        "value_after": 0
+      },
+      {
+        "id": 523,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 9,
+        "value_before": 0.178,
+        "value_after": 0
+      },
+      {
+        "id": 524,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 11,
+        "value_before": 0.081,
+        "value_after": 0
+      },
+      {
+        "id": 525,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 6,
+        "value_before": 0.064,
+        "value_after": 0
+      },
+      {
+        "id": 526,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 4,
+        "value_before": 0.064,
+        "value_after": 0
+      },
+      {
+        "id": 527,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 2,
+        "value_before": 0.04,
+        "value_after": 0
+      },
+      {
+        "id": 528,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 7,
+        "value_before": 0.04,
+        "value_after": 0
+      },
+      {
+        "id": 529,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 3,
+        "value_before": 0.04,
+        "value_after": 0
+      },
+      {
+        "id": 530,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 8,
+        "value_before": 0.034,
+        "value_after": 0
+      },
+      {
+        "id": 531,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 5,
+        "value_before": 0.027,
+        "value_after": 0
       }
     ],
     "measures": [
@@ -333,43 +423,58 @@
     ],
     "transport_modes": [
       {
-        "id": 1,
-        "name": "Private Car",
+        "id": 10,
+        "transport_mode_id": 10,
         "status": "IN_SERVICE"
       },
       {
-        "id": 2,
-        "name": "Motorcycle / Scooter",
-        "status": "NEW"
+        "id": 1,
+        "transport_mode_id": 1,
+        "status": "IN_SERVICE"
       },
       {
-        "id": 3,
-        "name": "Carsharing",
+        "id": 9,
+        "transport_mode_id": 9,
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 11,
+        "transport_mode_id": 11,
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 6,
+        "transport_mode_id": 6,
         "status": "IN_SERVICE"
       },
       {
         "id": 4,
-        "name": "Bicycle (private)",
+        "transport_mode_id": 4,
+        "status": "IN_SERVICE"
+      },
+      {
+        "id": 2,
+        "transport_mode_id": 2,
+        "status": "OPTIMIZATION_SCHEDULED"
+      },
+      {
+        "id": 7,
+        "transport_mode_id": 7,
+        "status": "OPTIMIZATION_SCHEDULED"
+      },
+      {
+        "id": 3,
+        "transport_mode_id": 3,
+        "status": "NEW"
+      },
+      {
+        "id": 8,
+        "transport_mode_id": 8,
         "status": "IN_SERVICE"
       },
       {
         "id": 5,
-        "name": "E-scooter (shared)",
-        "status": "OPTIMIZATION_SCHEDULED"
-      },
-      {
-        "id": 6,
-        "name": "Walking",
-        "status": "IN_SERVICE"
-      },
-      {
-        "id": 7,
-        "name": "Bus",
-        "status": "IN_SERVICE"
-      },
-      {
-        "id": 8,
-        "name": "Tram / Light Rail",
+        "transport_mode_id": 5,
         "status": "IN_SERVICE"
       }
     ]
@@ -547,6 +652,70 @@
         "kpi_number": "24",
         "value_before": 2.22,
         "value_after": 2.007059
+      },
+      {
+        "id": 521,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 10,
+        "value_before": 0.401,
+        "value_after": 0
+      },
+      {
+        "id": 522,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 4,
+        "value_before": 0.317,
+        "value_after": 0
+      },
+      {
+        "id": 523,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 6,
+        "value_before": 0.152,
+        "value_after": 0
+      },
+      {
+        "id": 524,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 1,
+        "value_before": 0.086,
+        "value_after": 0
+      },
+      {
+        "id": 525,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 3,
+        "value_before": 0.029,
+        "value_after": 0
+      },
+      {
+        "id": 526,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 8,
+        "value_before": 0.009,
+        "value_after": 0
+      },
+      {
+        "id": 527,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 7,
+        "value_before": 0.003,
+        "value_after": 0
+      },
+      {
+        "id": 528,
+        "kpidefinition_id": 52,
+        "kpi_number": "15.a",
+        "transport_mode_id": 5,
+        "value_before": 0.003,
+        "value_after": 0
       }
     ],
     "measures": [
@@ -603,43 +772,44 @@
     ],
     "transport_modes": [
       {
-        "id": 1,
-        "name": "Private Car",
-        "status": "IN_SERVICE"
-      },
-      {
-        "id": 2,
-        "name": "Motorcycle / Scooter",
-        "status": "NEW"
-      },
-      {
-        "id": 3,
-        "name": "Carsharing",
+        "id": 10,
+        "transport_mode_id": 10,
         "status": "IN_SERVICE"
       },
       {
         "id": 4,
-        "name": "Bicycle (private)",
+        "transport_mode_id": 4,
         "status": "IN_SERVICE"
       },
       {
-        "id": 5,
-        "name": "E-scooter (shared)",
-        "status": "OPTIMIZATION_SCHEDULED"
+        "id": 6,
+        "transport_mode_id": 6,
+        "status": "IN_SERVICE"
+      },
+
+      {
+        "id": 1,
+        "transport_mode_id": 1,
+        "status": "IN_SERVICE"
       },
       {
-        "id": 6,
-        "name": "Walking",
+        "id": 3,
+        "transport_mode_id": 3,
+        "status": "NEW"
+      },
+      {
+        "id": 8,
+        "transport_mode_id": 8,
         "status": "IN_SERVICE"
       },
       {
         "id": 7,
-        "name": "Bus",
-        "status": "IN_SERVICE"
+        "transport_mode_id": 7,
+        "status": "OPTIMIZATION_SCHEDULED"
       },
       {
-        "id": 8,
-        "name": "Tram / Light Rail",
+        "id": 5,
+        "transport_mode_id": 5,
         "status": "IN_SERVICE"
       }
     ]
