@@ -109,18 +109,22 @@ export function KpiPercentage({ kpiResults }: Props) {
           <p className="mt-2 text-lg text-muted">{displayDate}</p>
         </div>
 
-        <div className="flex flex-col items-end justify-end mb-1">
-          <div
-            className={`text-lg font-semibold ${
-              change?.startsWith("+") ? "text-success" : "text-danger"
-            }`}
-          >
-            {change === null ? "" : `${change}`}
+        {change?.length > 0 && (
+          <div className="flex flex-col items-end justify-end mb-1">
+            <div
+              className={`text-lg font-semibold ${
+                change?.startsWith("+") ? "text-success" : "text-danger"
+              }`}
+            >
+              {change === null ? "" : `${change}`}
+            </div>
+            <span className="text-xs text-muted">
+              {before?.date
+                ? `since ${new Date(before.date).getFullYear()}`
+                : ""}
+            </span>
           </div>
-          <span className="text-xs text-muted">
-            {before?.date ? `since ${new Date(before.date).getFullYear()}` : ""}
-          </span>
-        </div>
+        )}
       </div>
       <div className="flex flex-col w-full">
         <Line options={chartOptions} data={chartData} className="w-full" />

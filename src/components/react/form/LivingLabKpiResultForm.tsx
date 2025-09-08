@@ -4,7 +4,11 @@ import {
   CheckCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import type { IKpiResult } from "../../../types/KPIs";
+import {
+  EnumKpiMetricType,
+  EnumKpiType,
+  type IKpiResult,
+} from "../../../types/KPIs";
 import { Field, Input, Label } from "../../react-catalyst-ui-kit";
 import { formatDate } from "../../../lib/helpers";
 
@@ -13,6 +17,7 @@ type Props = {
   kpiId: number;
   livingLabId: number;
   transportModeId?: number;
+  kpiMetric?: string;
   defaultDate?: string;
   onChange?: (
     result: Pick<IKpiResult, "id" | "value" | "date" | "transport_mode_id">
@@ -24,6 +29,7 @@ export function LivingLabKpiResultForm({
   initial,
   livingLabId,
   transportModeId,
+  kpiMetric,
   defaultDate,
   onChange,
 }: Props) {
@@ -73,11 +79,19 @@ export function LivingLabKpiResultForm({
     setEditing(false);
   };
 
+  const getValueByType = (value?: number) => {
+    if (value && kpiMetric && kpiMetric === EnumKpiMetricType.PERCENTAGE) {
+      return `${Math.round(value * 100)}%`;
+    }
+
+    return value;
+  };
+
   if (!editing) {
     return (
       <div className="flex items-start gap-1  w-34">
         <div className="flex flex-col flex-1">
-          <p>{value ?? "-"}</p>
+          <p>{getValueByType(value) ?? "-"}</p>
           {value && date && <span className="text-[12px]">{date}</span>}
         </div>
         <button

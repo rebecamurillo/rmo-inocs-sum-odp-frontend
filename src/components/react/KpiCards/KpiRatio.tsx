@@ -121,35 +121,39 @@ export default function KpiRatio({ kpiResults }: Props) {
           </h3>
           <p>{displayDate}</p>
         </div>
-
-        <div className="flex flex-col items-end justify-end mb-1">
-          <div
-            className={`text-lg font-semibold ${
-              change?.startsWith("+") ? "text-success" : "text-danger"
-            }`}
-          >
-            {change === null ? "" : `${change}`}
+        {change?.length > 0 && (
+          <div className="flex flex-col items-end justify-end mb-1">
+            <div
+              className={`text-lg font-semibold ${
+                change?.startsWith("+") ? "text-success" : "text-danger"
+              }`}
+            >
+              {change === null ? "" : `${change}`}
+            </div>
+            <span className="text-xs">
+              {before?.date
+                ? `since ${new Date(before.date).getFullYear()}`
+                : ""}
+            </span>
           </div>
-          <span className="text-xs">
-            {before?.date ? `since ${new Date(before.date).getFullYear()}` : ""}
-          </span>
-        </div>
+        )}
       </div>
 
       <div className="flex flex-col w-full">
-        <small className="text-xs">
-          NSM and/or public transport is{" "}
-          <span
-            className={`font-semibold ${
-              comparison.isLess ? "text-blue-500" : "text-success"
-            }`}
-          >
-            {comparison.highlight}
-          </span>{" "}
-          {comparison.isLess ? "less accessible" : "more accessible"} than
-          private cars
-        </small>
-
+        {change?.length > 0 && (
+          <small className="text-xs">
+            NSM and/or public transport is{" "}
+            <span
+              className={`font-semibold ${
+                comparison.isLess ? "text-blue-500" : "text-success"
+              }`}
+            >
+              {comparison.highlight}
+            </span>{" "}
+            {comparison.isLess ? "less accessible" : "more accessible"} than
+            private cars
+          </small>
+        )}
         <div className="w-full">
           <Line options={chartOptions} data={chartData} className="w-full" />
         </div>

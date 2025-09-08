@@ -549,7 +549,7 @@
     "parent_kpi_id": 51,
     "name": "Modal Split in trips",
     "progression_target": 1,
-    "metric": "custom_unit",
+    "metric": "percentage",
     "value_min": 0,
     "value_max": null,
     "type": "GLOBAL"

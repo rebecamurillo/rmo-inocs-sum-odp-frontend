@@ -121,13 +121,17 @@ export function TransportModesList({
                 {livingLabTransportModesMap.get(m.id)?.status &&
                   kpis.map((kpi) => (
                     <TableCell key={kpi.id} className="">
-                      {livingLabKpiMap.get(`${kpi.id}_${m.id}`)?.result_before
-                        ?.transport_mode_id === m.id && (
-                        <small>Value before</small>
-                      )}
+                      {livingLabKpiMap.get(`${kpi.id}_${m.id}`)
+                        ?.result_before && <small>Value before</small>}
+                      metric is{" "}
+                      {
+                        livingLabKpiMap.get(`${kpi.id}_${m.id}`)?.result_before
+                          ?.metric
+                      }
                       <LivingLabKpiResultForm
                         livingLabId={livingLabId}
                         kpiId={kpi.id}
+                        kpiMetric={kpi.metric}
                         initial={
                           livingLabKpiMap.get(`${kpi.id}_${m.id}`)
                             ?.result_before
@@ -156,16 +160,20 @@ export function TransportModesList({
                           });
                         }}
                       />
-                      {livingLabKpiMap.get(kpi.id)?.result_before
-                        ?.transport_mode_id === m.id && (
+                      {livingLabKpiMap.get(`${kpi.id}_${m.id}`)
+                        ?.result_before && (
                         <>
                           <hr />
                           <small>Value after</small>
                           <LivingLabKpiResultForm
                             transportModeId={m.id}
                             livingLabId={livingLabId}
+                            kpiMetric={kpi.metric}
                             kpiId={kpi.id}
-                            initial={livingLabKpiMap.get(kpi.id)?.result_after}
+                            initial={
+                              livingLabKpiMap.get(`${kpi.id}_${m.id}`)
+                                ?.result_after
+                            }
                             defaultDate={afterDate}
                           />
                         </>

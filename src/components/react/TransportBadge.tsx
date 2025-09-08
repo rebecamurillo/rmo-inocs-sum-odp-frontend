@@ -31,6 +31,7 @@ const DEFAULT_ICONS: Record<string, string> = {
   bus: "/icons/bus.svg",
   bike: "/icons/cycling.svg",
   car: "/icons/car.svg",
+  "car-sharing": "/icons/car.svg",
   "e-car": "/icons/e-car.svg",
   "e-bus": "/icons/e-bus.svg",
   metro: "/icons/metro.svg",
