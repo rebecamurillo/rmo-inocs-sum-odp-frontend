@@ -21,7 +21,7 @@ export interface ITransportModeLivingLab {
   status: EnumTransportModeStatus;
 }
 
-export type ITransportModeLivingLabForm = Pick<
+export type ILivingLabTransportModeForm = Pick<
   ITransportModeLivingLab,
   "status" | "transport_mode_id" | "living_lab_id"
 > & {

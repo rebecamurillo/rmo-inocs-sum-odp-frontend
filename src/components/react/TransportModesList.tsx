@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TransportModeLivingLabForm } from "./form/TransportModeLivingLabForm";
+import { LivingLabTransportModeForm } from "./form/LivingLabTransportModeForm";
 import {
   type ITransportMode,
   type IIKpiResultBeforeAfter,
@@ -90,7 +90,7 @@ export function TransportModesList({
                   )}
                 </TableCell>
                 <TableCell>
-                  <TransportModeLivingLabForm
+                  <LivingLabTransportModeForm
                     value={livingLabTransportModesMap.get(m.id)}
                     transportModeId={m.id}
                     livingLabId={livingLabId}

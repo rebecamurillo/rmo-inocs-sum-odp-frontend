@@ -20,7 +20,7 @@ interface Props {
   onDelete?: (id: number) => void;
 }
 
-export function TransportModeLivingLabForm({
+export function LivingLabTransportModeForm({
   value,
   transportModeId,
   livingLabId,
