@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import {
-  Avatar,
   Navbar,
   NavbarItem,
   NavbarLabel,
@@ -12,6 +11,13 @@ import {
   Link,
   DropdownItem,
   DropdownLabel,
+  StackedLayout,
+  Sidebar,
+  SidebarBody,
+  SidebarItem,
+  SidebarLabel,
+  SidebarSection,
+  SidebarDivider,
 } from "../../react-catalyst-ui-kit";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { getUrl } from "../../../lib/helpers";
@@ -20,8 +26,9 @@ type MenuItem = { href?: string; label: string; subItems?: MenuItem[] };
 const HOME_URL = getUrl("/");
 interface Props {
   livingLabs: MenuItem[];
+  children?: React.ReactNode;
 }
-export function SiteNavBar({ livingLabs }: Props) {
+export function SiteNavBar({ livingLabs, children }: Props) {
   const items = [
     {
       label: "Home",
@@ -82,48 +89,94 @@ export function SiteNavBar({ livingLabs }: Props) {
   }, []);
 
   return (
-    <Navbar>
-      <Link href={HOME_URL} aria-label="Home">
-        <img
-          src={getUrl("/sum_logo.jpg")}
-          alt="SUM Logo"
-          className="w-40 mx-4"
-        />
-      </Link>
+    <StackedLayout
+      navbar={
+        <Navbar>
+          <Link href={HOME_URL} aria-label="Home">
+            <img
+              src={getUrl("/sum_logo.jpg")}
+              alt="SUM Logo"
+              className="w-40 mx-4"
+            />
+          </Link>
 
-      <NavbarSpacer />
-      <NavbarSection className="px-10">
-        {items.map((item) => (
-          <>
-            {item.subItems?.length !== undefined && (
-              <Dropdown key={item.label}>
-                <DropdownButton as={NavbarItem} aria-label="Account menu">
-                  <NavbarLabel className="text-primary">
-                    {item.label}
-                  </NavbarLabel>
-                  <ChevronDownIcon />
-                </DropdownButton>
-                <DropdownMenu
-                  className="min-w-64 bg-white"
-                  anchor="bottom start"
-                >
-                  {item?.subItems?.length > 0 &&
-                    item.subItems?.map((sub) => (
-                      <DropdownItem key={sub.label} href={sub.href}>
-                        <DropdownLabel>{sub.label}</DropdownLabel>
-                      </DropdownItem>
-                    ))}
-                </DropdownMenu>
-              </Dropdown>
-            )}
-            {item.href && (
-              <NavbarItem href={item.href}>
-                <NavbarLabel className="text-primary">{item.label}</NavbarLabel>
-              </NavbarItem>
-            )}
-          </>
-        ))}
-      </NavbarSection>
-    </Navbar>
+          <NavbarSpacer />
+
+          {/* desktop navbar items (hidden on smaller screens) */}
+          <NavbarSection className="px-10 max-lg:hidden">
+            {items.map((item) => (
+              <React.Fragment key={item.label}>
+                {item.subItems?.length !== undefined && (
+                  <Dropdown>
+                    <DropdownButton
+                      as={NavbarItem}
+                      aria-label={`${item.label} menu`}
+                    >
+                      <NavbarLabel className="text-primary">
+                        {item.label}
+                      </NavbarLabel>
+                      <ChevronDownIcon />
+                    </DropdownButton>
+                    <DropdownMenu
+                      className="min-w-64 bg-white"
+                      anchor="bottom start"
+                    >
+                      {item?.subItems?.length > 0 &&
+                        item.subItems?.map((sub) => (
+                          <DropdownItem key={sub.label} href={sub.href}>
+                            <DropdownLabel>{sub.label}</DropdownLabel>
+                          </DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                  </Dropdown>
+                )}
+                {item.href && (
+                  <NavbarItem href={item.href}>
+                    <NavbarLabel className="text-primary">
+                      {item.label}
+                    </NavbarLabel>
+                  </NavbarItem>
+                )}
+              </React.Fragment>
+            ))}
+          </NavbarSection>
+        </Navbar>
+      }
+      sidebar={
+        <Sidebar>
+          <SidebarBody>
+            <SidebarSection>
+              {items.map((item) => (
+                <React.Fragment key={item.label}>
+                  {item.subItems ? (
+                    <>
+                      <SidebarItem>
+                        <SidebarLabel className="font-bold">
+                          {item.label}
+                        </SidebarLabel>
+                      </SidebarItem>
+                      {item.subItems.map((sub) => (
+                        <SidebarItem
+                          key={sub.label}
+                          href={sub.href}
+                          className="pl-4"
+                        >
+                          {sub.label}
+                        </SidebarItem>
+                      ))}
+                    </>
+                  ) : (
+                    <SidebarItem href={item.href}>{item.label}</SidebarItem>
+                  )}
+                  <SidebarDivider />
+                </React.Fragment>
+              ))}
+            </SidebarSection>
+          </SidebarBody>
+        </Sidebar>
+      }
+    >
+      {children}
+    </StackedLayout>
   );
 }
