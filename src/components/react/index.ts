@@ -12,3 +12,4 @@ export * from "./KpiTypeBadge";
 export * from "./TransportTypeBadge";
 export * from "./LivingLabsMapSection";
 export * from "./MapViewer";
+export * from "./LivingLabMeasures";

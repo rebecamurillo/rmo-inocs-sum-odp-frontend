@@ -1,0 +1,76 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import {
+  LivingLabKPIs,
+  InfoAlert,
+  LivingLabMeasures,
+} from "../../components/react";
+import ApiClient from "../../lib/api-client/ApiClient";
+
+//TODO : get mocked data for transport modes and modal split (KPI 15)
+// init json file for a living lab, from WP1 reports
+const api = new ApiClient();
+
+const labId = 1;
+const measures = await api.getMeasures();
+const livinglab = await api.getLivingLabAndData(labId);
+---
+
+<Layout role="editor">
+  <div class="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-8">
+    <h2>What measures is your living lab implementing ?</h2>
+    <p>Review the measures for Seamless Urban Mobility and New Shared Modes</p>
+
+    <InfoAlert title="What is a ‘measure’ ?" icon="question" variant="info">
+      <small
+        >A measure is a broad type of action that is implemented to contribute
+        to the achievement of one or more policy objectives in a SUMP, or to
+        overcome one or more identified problems. Examples range from land use,
+        infrastructure, regulation, management and service measures to
+        behavioural, information provision and pricing measures.
+        <br />
+        <strong
+          >In the context of the Open Data Platform, we focus on measures aiming
+          to introduce or improve the use of new shared mobility.</strong
+        >
+      </small>
+    </InfoAlert>
+
+    <InfoAlert
+      title="What are PUSH measures ?"
+      icon="question"
+      variant="success"
+      actionText="Access documentation"
+    >
+      <small
+        >Measures that discourage private-car use through restrictive policies
+        or financial penalties
+      </small>
+    </InfoAlert>
+
+    <LivingLabMeasures
+      livingLabId={labId}
+      measures={measures.filter((m) => m.type === "PUSH")}
+      title="Select the PUSH Measures to be implemented in your living lab"
+      client:load
+    />
+
+    <InfoAlert
+      title="What are PULL measures ?"
+      icon="question"
+      variant="success"
+      actionText="Access documentation"
+    >
+      <small>
+        Measures that encourage users to switch to sustainable transport
+      </small>
+    </InfoAlert>
+
+    <LivingLabMeasures
+      livingLabId={labId}
+      measures={measures.filter((m) => m.type === "PULL")}
+      title="Select the PULL Measures to be implemented in your living lab"
+      client:load
+    />
+  </div>
+</Layout>

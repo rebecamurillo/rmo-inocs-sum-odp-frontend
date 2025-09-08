@@ -17,8 +17,8 @@ import { getUrl } from "../lib/helpers";
 
 const api = new ApiClient();
 
-const kpis = await api.getKPIs({});
 const livingLabsData = await api.getLivingLabsAndData();
+const measures = await api.getMeasures();
 
 const labs = livingLabsData.map((lab) => ({
   id: lab.id,
@@ -101,7 +101,12 @@ const labs = livingLabsData.map((lab) => ({
       linkText="Know more about the measures"
       linkHref="#"
     >
-      <MobilityMeasures hideDescription={true} cols={4} />
+      <MobilityMeasures
+        pullMeasures={measures.filter((m) => m.type === "PULL")}
+        pushMeasures={measures.filter((m) => m.type === "PUSH")}
+        hideDescription={true}
+        cols={4}
+      />
     </CTASection>
   </div>
 

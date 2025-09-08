@@ -1,5 +1,5 @@
 import type { IIKpiResultBeforeAfter, IKpi, IKpiResult } from "./KPIs";
-import type { Measure } from "./Measure";
+import type { IMeasure } from "./Measure";
 import type { ITransportMode, ITransportModeLivingLab } from "./TransportMode";
 
 export interface ILivingLab {
@@ -23,7 +23,7 @@ export interface ILivingLabPopulated extends ILivingLab {
   /**
    * Measures list — may be empty
    */
-  measures: Measure[];
+  measures: IMeasure[];
   /**
    * Transport modes list — may be empty
    */

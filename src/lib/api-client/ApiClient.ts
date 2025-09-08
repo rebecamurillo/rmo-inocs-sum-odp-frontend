@@ -6,7 +6,7 @@ import type {
   IKpi,
   IIKpiResultBeforeAfter,
   ILivingLabPopulated,
-  Measure,
+  IMeasure,
   ITransportMode,
   ITransportModeLivingLab,
   ILivingLab,
@@ -71,7 +71,7 @@ export default class ApiClient {
         return 0;
       });
     const populatedMeasures = lab?.measures?.map((measure) => {
-      const measureData = measures.find((m) => m.id === measure.id) as Measure;
+      const measureData = measures.find((m) => m.id === measure.id) as IMeasure;
       return { ...measure, ...measureData };
     });
 
@@ -112,7 +112,7 @@ export default class ApiClient {
     return this.populateLivingLabData(lab);
   }
 
-  async getMeasures(): Promise<Measure[]> {
+  async getMeasures(): Promise<IMeasure[]> {
     //return this.get(`/measures`);
 
     return measures;
