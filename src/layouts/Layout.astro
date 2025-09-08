@@ -55,10 +55,9 @@ const labsItems = labs.map((lab) => ({
     }
     {
       role === "editor" && (
-        <div class="flex flex-row">
-          <SidebarMenu client:load />
+        <SidebarMenu client:load>
           <slot />
-        </div>
+        </SidebarMenu>
       )
     }
   </body>

@@ -13,6 +13,7 @@ import {
   SidebarLabel,
   SidebarSection,
   SidebarSpacer,
+  StackedLayout,
 } from "../../react-catalyst-ui-kit";
 import {
   ChevronDownIcon,
@@ -34,20 +35,8 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import { getUrl } from "../../../lib/helpers";
 
 interface Props {
-  menuItems?: Array<{
-    label: string;
-    icon: React.ReactNode;
-    href: string;
-  }>;
-  dropdownHeader?: {
-    label: string;
-    icon: React.ReactNode;
-  };
-  dropdownHeaderItems?: Array<{
-    label: string;
-    icon: React.ReactNode;
-    href: string;
-  }>;
+  children?: React.ReactNode;
+
   userMenuItems?: Array<{
     label: string;
     icon: React.ReactNode;
@@ -119,14 +108,8 @@ const HELP_MENU_ITEMS = [
   },
 ];
 
-export function SidebarMenu({
-  menuItems = DEFAULT_MENU_ITEMS,
-  dropdownHeader = DEFAULT_DROPDOWN_HEADER,
-  dropdownHeaderItems = DEFAULT_DROPDOWN_HEADER_ITEMS,
-  userMenuItems,
-  userInfo,
-}: Props) {
-  return (
+export function SidebarMenu({ children, userMenuItems, userInfo }: Props) {
+  const sidebarContent = (
     <Sidebar>
       <SidebarHeader>
         <img
@@ -134,27 +117,28 @@ export function SidebarMenu({
           alt="SUM Logo"
           className="w-40 my-4"
         />
-        {dropdownHeader && (
+        {DEFAULT_DROPDOWN_HEADER && (
           <Dropdown>
             <DropdownButton as={SidebarItem} className="mb-2.5">
-              {dropdownHeader.icon ? (
-                dropdownHeader.icon
+              {DEFAULT_DROPDOWN_HEADER.icon ? (
+                DEFAULT_DROPDOWN_HEADER.icon
               ) : (
                 <Avatar src="/sum_logo.svg" />
               )}
-              <SidebarLabel>{dropdownHeader.label}</SidebarLabel>
+              <SidebarLabel>{DEFAULT_DROPDOWN_HEADER.label}</SidebarLabel>
               <ChevronDownIcon />
             </DropdownButton>
-            {dropdownHeaderItems?.length && dropdownHeaderItems?.length > 0 && (
-              <DropdownMenu className="min-w-64" anchor="bottom start">
-                {dropdownHeaderItems.map((item) => (
-                  <DropdownItem key={item.label} href={item.href}>
-                    {item.icon}
-                    <DropdownLabel>{item.label}</DropdownLabel>
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            )}
+            {DEFAULT_DROPDOWN_HEADER_ITEMS?.length &&
+              DEFAULT_DROPDOWN_HEADER_ITEMS?.length > 0 && (
+                <DropdownMenu className="min-w-64" anchor="bottom start">
+                  {DEFAULT_DROPDOWN_HEADER_ITEMS.map((item) => (
+                    <DropdownItem key={item.label} href={item.href}>
+                      {item.icon}
+                      <DropdownLabel>{item.label}</DropdownLabel>
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              )}
           </Dropdown>
         )}
         <SidebarItem key={HOME_ITEM.label} href={HOME_ITEM.href}>
@@ -163,9 +147,9 @@ export function SidebarMenu({
         </SidebarItem>
       </SidebarHeader>
       <SidebarBody>
-        {menuItems?.length && menuItems?.length > 0 && (
+        {DEFAULT_MENU_ITEMS?.length && DEFAULT_MENU_ITEMS?.length > 0 && (
           <SidebarSection>
-            {menuItems.map((item) => (
+            {DEFAULT_MENU_ITEMS.map((item) => (
               <SidebarItem key={item.label} href={item.href}>
                 {item.icon}
                 <SidebarLabel>{item.label}</SidebarLabel>
@@ -228,5 +212,15 @@ export function SidebarMenu({
         )}
       </SidebarFooter>
     </Sidebar>
+  );
+
+  return (
+    <StackedLayout
+      navbar={sidebarContent}
+      sidebar={sidebarContent}
+      sidebarOnly={true}
+    >
+      {children}
+    </StackedLayout>
   );
 }

@@ -52,14 +52,20 @@ export function StackedLayout({
   navbar,
   sidebar,
   children,
+  sidebarOnly = false,
 }: React.PropsWithChildren<{
   navbar: React.ReactNode;
   sidebar: React.ReactNode;
+  sidebarOnly: Boolean;
 }>) {
   let [showSidebar, setShowSidebar] = useState(false);
+  const containerClassname = sidebarOnly ? "lg:flex-row items-start" : "";
+  const navbarClassname = sidebarOnly ? "hidden lg:flex" : "";
 
   return (
-    <div className="relative isolate flex min-h-svh w-full flex-col bg-white ">
+    <div
+      className={`relative isolate flex min-h-svh w-full flex-col bg-white ${containerClassname}`}
+    >
       {/* Sidebar on mobile */}
       <MobileSidebar open={showSidebar} close={() => setShowSidebar(false)}>
         {sidebar}
@@ -67,7 +73,7 @@ export function StackedLayout({
 
       {/* Navbar */}
       <header className="flex items-center px-4 bg-white">
-        <div className="min-w-0 flex-1">{navbar}</div>
+        <div className={`min-w-0 flex-1 ${navbarClassname} `}>{navbar}</div>
         <div className="py-2.5 lg:hidden">
           <NavbarItem
             onClick={() => setShowSidebar(true)}
