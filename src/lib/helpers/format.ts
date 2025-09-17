@@ -21,3 +21,10 @@ export function parseDateToInputHtml(date?: string): string {
   if (Number.isNaN(d.getTime())) return String(date);
   return d.toISOString().slice(0, 10);
 }
+
+export function getYearFromDate(date?: string): number | undefined {
+  if (!date) return undefined;
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return undefined;
+  return d.getFullYear();
+}

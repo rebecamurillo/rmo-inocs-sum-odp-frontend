@@ -6,6 +6,7 @@ export interface ITransportMode {
   name: string;
   description?: string;
   type: EnumTransportModeType;
+  color?: string; // hex color code, e.g. #ff0000
 }
 
 export interface ITransportModeSplit extends ITransportMode {

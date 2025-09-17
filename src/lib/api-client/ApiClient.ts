@@ -53,13 +53,12 @@ export default class ApiClient {
             date: "01/01/2024",
             id: Math.random(),
           },
-          result_after: null,
-          // {
-          //   ...kpiResult,
-          //   value: kpiResult.value_after,
-          //   date: "08/01/2026",
-          //   id: Math.random(),
-          // },
+          result_after: {
+            ...kpiResult,
+            value: kpiResult.value_after,
+            date: "08/01/2026",
+            id: Math.random(),
+          },
         } as IIKpiResultBeforeAfter;
       })
       .sort((a, b) => {

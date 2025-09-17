@@ -1,0 +1,120 @@
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie, Doughnut } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+export interface SplitItem {
+  label: string;
+  value: number;
+  color: string;
+}
+
+interface Dataset {
+  label: string;
+  data: SplitItem[];
+}
+
+interface Props {
+  data: Dataset[];
+  colors?: string[];
+}
+
+function normalizePercentages(items: SplitItem[]) {
+  const total = items.reduce((s, it) => s + (Number(it.value) || 0), 0);
+  if (total === 0) {
+    // avoid division by zero: produce equal slices if all zero
+    const len = items.length || 3;
+    return items.map(() => +(100 / len).toFixed(1));
+  }
+  return items.map((it) => +((Number(it.value) || 0) * 100).toFixed(1));
+}
+
+export default function ModalSplitChart({ data }: Props) {
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        boxWidth: 5,
+        position: "right" as const,
+        align: "center" as const,
+        display: false, // custom legend below for clearer percent display
+      },
+      tooltip: {
+        callbacks: {
+          label(context) {
+            const idx = context.dataIndex ?? 0;
+            const raw = context.dataset.data[idx] as number;
+            const pct = percents[idx];
+            return `${context.label}: ${raw} (${pct}%)`;
+          },
+        },
+      },
+    },
+  };
+
+  const getChartDataAndOptions = (dataset: Dataset) => {
+    const labels = dataset.data.map((d) => d.label);
+    const values = dataset.data.map((d) => Number(d.value) || 0);
+    const backgroundColor = dataset.data.map((d) => d.color);
+    const percents = normalizePercentages(dataset.data);
+
+    const chartData = {
+      labels,
+      datasets: [
+        {
+          //label: dataset.label,
+          data: values,
+          backgroundColor: backgroundColor,
+          borderColor: backgroundColor,
+          borderWidth: 1,
+        },
+      ],
+    };
+    if (values?.length === 0 || values.every((v) => v === 0)) {
+      return <></>;
+    }
+    return (
+      <div className="flex flex-col gap-2">
+        <h5>{dataset.label}</h5>
+        <div className="flex flex-row gap-2">
+          <div className="h-60 w-2/3">
+            <Doughnut data={chartData} options={options} />
+          </div>
+          <div className="w-1/3 flex flex-col h-60 gap-0">
+            {[...dataset.data]
+              .map((item, i) => ({ ...item, percent: percents[i] }))
+              .sort((a, b) => b.percent - a.percent)
+              .map((item, i) => (
+                <li
+                  key={item.label}
+                  className="flex items-center gap-1 justify-between"
+                >
+                  <span
+                    className="inline-block rounded-[3px] flex-shrink-0 w-3 h-3"
+                    style={{
+                      background: item.color ?? "#ccc",
+                    }}
+                  />
+                  <small className="flex-1">{item.label}</small>
+                  <strong className="min-w-[48px] text-right">
+                    {percents[i]}%
+                  </strong>
+                </li>
+              ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-row gap-8">
+      {data.map((dataset, i) => (
+        <div key={i} className="flex-1">
+          {getChartDataAndOptions(dataset)}
+        </div>
+      ))}
+    </div>
+  );
+}

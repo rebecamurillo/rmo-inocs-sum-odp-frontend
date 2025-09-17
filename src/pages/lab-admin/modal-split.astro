@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { InfoAlert, TransportModesList } from "../../components/react";
+import { InfoAlert, LivingLabModalSplit } from "../../components/react";
 import ApiClient from "../../lib/api-client/ApiClient";
 import { EnumKpiMetricType } from "../../types";
 
@@ -41,7 +41,7 @@ const modalSplitResults = livingLabData.kpi_results?.filter((kpi) =>
       >
     </InfoAlert>
 
-    <TransportModesList
+    <LivingLabModalSplit
       modes={transportModes}
       kpis={modalSplitKpis}
       livingLabId={labId}

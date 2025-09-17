@@ -16,8 +16,9 @@ import {
   TableHeader,
   TableRow,
 } from "../react-catalyst-ui-kit";
-import { Badge } from "./ui";
-import { getKpiValueByMetricType } from "../../lib/helpers";
+import { Badge, Tabs } from "./ui";
+import { getKpiValueByMetricType, getYearFromDate } from "../../lib/helpers";
+import ModalSplitChart, { type SplitItem } from "./KpiCards/ModalSplitChart";
 
 interface Props {
   modes: ITransportMode[];
@@ -27,7 +28,7 @@ interface Props {
   kpiResults: IIKpiResultBeforeAfter[];
 }
 
-export function TransportModesList({
+export function LivingLabModalSplit({
   modes = [],
   kpis = [],
   livingLabId,
@@ -46,7 +47,9 @@ export function TransportModesList({
     )
   );
 
-  const [livingLabKpiMap] = useState<Map<string, IIKpiResultBeforeAfter>>(
+  const [livingLabKpiMap, setLivingLabKpiMap] = useState<
+    Map<string, IIKpiResultBeforeAfter>
+  >(
     new Map(
       kpiResults.map((resultKpi) => [
         `${resultKpi.id}_${resultKpi.result_before?.transport_mode_id}`,
@@ -81,13 +84,64 @@ export function TransportModesList({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getChartValues = (kpiId: number) => {
+    let beforeDate = "";
+    let afterDate = "";
+    const dataBefore: SplitItem[] = [];
+    const dataAfter: SplitItem[] = [];
+    Array.from(livingLabKpiMap.values())
+      .filter((result) => result.id === kpiId)
+      .forEach((result) => {
+        const transportModeId = result.result_before?.transport_mode_id;
+        const mode = modes.find((m) => m.id === transportModeId);
+        beforeDate = result.result_before?.date || "";
+        afterDate = result.result_after?.date || "";
+        if (result.result_before?.value)
+          dataBefore.push({
+            label: mode?.name || `Mode ${transportModeId}`,
+            value: result.result_before?.value || 0,
+            color: mode?.color || "#ccc",
+          });
+        if (result.result_after?.value)
+          dataAfter.push({
+            label: mode?.name || `Mode ${transportModeId}`,
+            value: result.result_after?.value || 0,
+            color: mode?.color || "#ccc",
+          });
+      });
+
+    return [
+      {
+        label: `${kpis.find((k) => k.id === kpiId)?.name} (${getYearFromDate(
+          beforeDate
+        )})`,
+        data: dataBefore,
+      },
+      {
+        label: `${kpis.find((k) => k.id === kpiId)?.name} (${
+          afterDate ? getYearFromDate(afterDate) : ""
+        })`,
+        data: dataAfter as SplitItem[],
+      },
+    ];
+  };
+
   return (
-    <div className="bg-white shadow rounded-md">
+    <div className="bg-white shadow rounded-md flex flex-col gap-6">
       <BeforeAndAfterDates
         onChangeBeforeDate={setBeforeDate}
         onChangeAfterDate={setAfterDate}
       />
-
+      <Tabs
+        align="right"
+        tabs={
+          kpis.map((kpi) => ({
+            id: `modal-split-${kpi.id}`,
+            label: <p>{kpi.name}</p>,
+            content: <ModalSplitChart data={getChartValues(kpi.id)} />,
+          })) ?? []
+        }
+      ></Tabs>
       <div className="p-4 overflow-x-auto">
         <Table
           grid
@@ -193,6 +247,21 @@ export function TransportModesList({
                               (before ?? 0) - (prevBefore ?? 0);
                             const deltaAfter = (after ?? 0) - (prevAfter ?? 0);
 
+                            setLivingLabKpiMap((prevMap) => {
+                              const updatedMap = new Map(prevMap);
+                              updatedMap.set(key, {
+                                id: kpi.id,
+                                result_before: {
+                                  transport_mode_id: m.id,
+                                  value: before,
+                                },
+                                result_after: {
+                                  transport_mode_id: m.id,
+                                  value: after,
+                                },
+                              });
+                              return updatedMap;
+                            });
                             // update totals for this KPI
                             setKpiTotals((prev) => {
                               const updated = new Map(prev);
@@ -209,6 +278,46 @@ export function TransportModesList({
                             });
                           }}
                         />
+                        {/* render modal split charts when KPI metric indicates modal split and values parse */}
+                        {/* {(() => {
+                          const entry = livingLabKpiMap.get(
+                            `${kpi.id}_${m.id}`
+                          );
+                          const beforeVal = entry?.result_before?.value ?? null;
+                          const afterVal = entry?.result_after?.value ?? null;
+                          const beforeItems = parseToSplitItems(beforeVal);
+                          const afterItems = parseToSplitItems(afterVal);
+
+                          // Render only when parsed data exists (either before or after)
+                          if (!beforeItems && !afterItems) return null;
+
+                          return (
+                            <div className="flex flex-row gap-4 ml-4 items-start">
+                              {beforeItems && (
+                                <div className="w-56">
+                                  <div className="text-sm font-medium text-gray-600 mb-1">
+                                    Before
+                                  </div>
+                                  <ModalSplitChart
+                                    data={beforeItems}
+                                    height={140}
+                                  />
+                                </div>
+                              )}
+                              {afterItems && (
+                                <div className="w-56">
+                                  <div className="text-sm font-medium text-gray-600 mb-1">
+                                    After
+                                  </div>
+                                  <ModalSplitChart
+                                    data={afterItems}
+                                    height={140}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()} */}
                       </div>
                     </TableCell>
                   ))}

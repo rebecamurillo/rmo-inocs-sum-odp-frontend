@@ -265,7 +265,7 @@
         "kpi_number": "15.a",
         "transport_mode_id": 10,
         "value_before": 0.246,
-        "value_after": 0
+        "value_after": 0.3
       },
 
       {
@@ -274,7 +274,7 @@
         "kpi_number": "15.a",
         "transport_mode_id": 1,
         "value_before": 0.186,
-        "value_after": 0
+        "value_after": 0.4
       },
       {
         "id": 523,
@@ -282,7 +282,7 @@
         "kpi_number": "15.a",
         "transport_mode_id": 9,
         "value_before": 0.178,
-        "value_after": 0
+        "value_after": 0.2
       },
       {
         "id": 524,
