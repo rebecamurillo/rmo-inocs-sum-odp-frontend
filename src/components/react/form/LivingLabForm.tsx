@@ -34,7 +34,7 @@ export default function LivingLabForm() {
     // For now we just log the captured values. Replace with real API call later.
     // Keep output minimal so it's easy to replace with fetch/axios when needed.
     // eslint-disable-next-line no-console
-    window.location.href = getUrl("/lab");
+    window.location.href = getUrl("/lab-admin");
   }
 
   useEffect(() => {
@@ -136,7 +136,7 @@ export default function LivingLabForm() {
           type="submit"
           variant="primary"
           text="Save Living Lab"
-          href={getUrl("/lab")}
+          href={getUrl("/lab-admin")}
         />
         <RButton
           type="button"

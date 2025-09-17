@@ -1,4 +1,5 @@
 import React from "react";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 
 export type BadgeColor =
   | "primary"
@@ -34,8 +35,8 @@ const COLOR_CLASSES: Record<BadgeColor, string> = {
 };
 
 const SIZE_CLASSES: Record<BadgeSize, string> = {
-  sm: "px-2 py-0.5 text-xs",
-  md: "px-3 py-1 text-sm",
+  sm: "p-0.5 text-xs",
+  md: "p-1 text-sm",
   lg: "px-4 py-1.5 text-base",
 };
 
@@ -61,7 +62,7 @@ export function Badge({
 
   const [displayTooltip, setDisplayTooltip] = React.useState(false);
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block cursor-pointer ">
       <span
         className={`inline-flex items-center gap-2 rounded-full font-medium ${colorClass} ${sizeClass} ${className}`}
         role={role}
@@ -74,9 +75,12 @@ export function Badge({
             {icon}
           </span>
         ) : null}
-        <span>{children}</span>
+        {children}
+        {!!tooltip?.length ? (
+          <QuestionMarkCircleIcon className={`h-4 w-4 text-warning`} />
+        ) : null}
       </span>
-      {tooltip && (
+      {!!tooltip?.length && (
         <div
           role="tooltip"
           className={`w-40 absolute z-10 invisible inline-block p-2 text-xs text-primary transition-opacity duration-300 bg-light/80 rounded-lg shadow-xs opacity-0 tooltip ${

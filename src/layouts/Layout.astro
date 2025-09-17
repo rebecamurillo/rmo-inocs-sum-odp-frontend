@@ -12,7 +12,7 @@ const { role = "visitor" } = Astro.props;
 const api = new ApiClient();
 const labs = await api.getLivingLabs();
 const labsItems = labs.map((lab) => ({
-  href: getUrl(`/lab-dashboard/${lab.id}`),
+  href: getUrl(`/living-lab-city/${lab.id}`),
   label: lab.name,
 }));
 ---

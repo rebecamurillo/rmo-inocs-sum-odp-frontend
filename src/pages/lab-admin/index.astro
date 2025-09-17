@@ -143,7 +143,7 @@ const steps = [
       kpis?.length === countersKpiBefore?.total && countersKpiBefore?.total > 0,
     inProgress: kpis?.length > 0 && kpis?.length < countersKpiBefore?.total,
     cta: "Edit modal split",
-    href: getUrl("/lab/modal-split"),
+    href: getUrl("/lab-admin/modal-split"),
   },
   {
     id: "kpis-before",
@@ -155,7 +155,7 @@ const steps = [
     inProgress:
       countersKpiBefore?.total > 0 && countersKpiBefore?.total < kpis?.length,
     cta: "Edit KPIs",
-    href: getUrl("/lab/kpis"),
+    href: getUrl("/lab-admin/kpis"),
   },
   {
     id: "measures",
@@ -164,7 +164,7 @@ const steps = [
       "Select or add the push and pull measures your city is implementing.",
     completed: countersMeasures?.total > 0,
     cta: "Edit measures",
-    href: getUrl("/lab/measures"),
+    href: getUrl("/lab-admin/measures"),
   },
 ];
 ---

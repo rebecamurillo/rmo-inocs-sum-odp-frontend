@@ -68,6 +68,7 @@ export function LivingLabKPIs({
                   kpiId={kpi.id}
                   initial={livingLabKpiMap.get(kpi.id)?.result_before}
                   defaultDate={beforeDate}
+                  placeholder="Before value"
                 />
               </TableCell>
               <TableCell className="w-34">
@@ -76,6 +77,7 @@ export function LivingLabKPIs({
                   kpiId={kpi.id}
                   initial={livingLabKpiMap.get(kpi.id)?.result_after}
                   defaultDate={afterDate}
+                  placeholder="After value"
                 />
               </TableCell>
             </TableRow>

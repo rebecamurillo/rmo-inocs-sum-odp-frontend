@@ -3,6 +3,7 @@ import {
   PencilSquareIcon,
   CheckCircleIcon,
   XMarkIcon,
+  PlusCircleIcon,
 } from "@heroicons/react/20/solid";
 import {
   EnumKpiMetricType,
@@ -10,7 +11,11 @@ import {
   type IKpiResult,
 } from "../../../types/KPIs";
 import { Field, Input, Label } from "../../react-catalyst-ui-kit";
-import { formatDate } from "../../../lib/helpers";
+import {
+  formatDateToMothYear,
+  getKpiValueByMetricType,
+  parseDateToInputHtml,
+} from "../../../lib/helpers";
 
 type Props = {
   initial?: IKpiResult | null;
@@ -19,9 +24,13 @@ type Props = {
   transportModeId?: number;
   kpiMetric?: string;
   defaultDate?: string;
+  defaultValue?: number;
   onChange?: (
     result: Pick<IKpiResult, "id" | "value" | "date" | "transport_mode_id">
   ) => void;
+  min?: number;
+  max?: number;
+  placeholder?: string;
 };
 
 export function LivingLabKpiResultForm({
@@ -30,29 +39,34 @@ export function LivingLabKpiResultForm({
   livingLabId,
   transportModeId,
   kpiMetric,
-  defaultDate,
+  defaultDate = "",
+  defaultValue,
   onChange,
+  min,
+  max,
+  placeholder = "Enter value",
 }: Props) {
+  //TODO adapt to metric type
   const _setValue = (value?: number | undefined) => {
-    return initial?.value !== undefined && initial?.value !== null
-      ? Math.round(Number(initial.value) * 100) / 100
+    return value !== undefined && value !== null
+      ? Math.round(Number(value) * 100) / 100
       : undefined;
   };
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState<number | undefined>(
     _setValue(initial?.value)
   );
-  const [date, setDate] = useState<string>(
-    formatDate(initial?.date ?? defaultDate)
-  );
+  const [date, setDate] = useState<string>(initial?.date ?? defaultDate);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setValue(_setValue(initial?.value));
-    setDate(formatDate(initial?.date ?? defaultDate));
-  }, [initial, defaultDate]);
+  // useEffect(() => {
+  //   setValue(_setValue(initial?.value));
+  //   setDate(initial?.date ?? defaultDate);
+  // }, [initial, defaultDate]);
 
   const handleSave = (e?: React.FormEvent) => {
     e?.preventDefault();
+    if (!value || !validateValue(value) || !validateDate(date)) return;
 
     let id = initial?.id;
     if (id) {
@@ -79,29 +93,59 @@ export function LivingLabKpiResultForm({
     setEditing(false);
   };
 
-  const getValueByType = (value?: number) => {
-    if (value && kpiMetric && kpiMetric === EnumKpiMetricType.PERCENTAGE) {
-      return `${Math.round(value * 100)}%`;
+  const validateValue = (val: number) => {
+    if (min !== undefined && val < min) {
+      setError(`Value must be at least ${min}`);
+      return false;
+    } else if (max !== undefined && val > max) {
+      setError(`Value must be at most ${max}`);
+      return false;
+    } else {
+      setError(null);
     }
-
-    return value;
+    return true;
+  };
+  const validateDate = (d: string) => {
+    if (d && isNaN(new Date(d).getTime())) {
+      setError("Invalid date");
+      return false;
+    } else {
+      setError(null);
+    }
+    return true;
+  };
+  const validateAndSetValue = (val: number) => {
+    validateValue(val);
+    setValue(val);
   };
 
+  const setDefaultAndOpenEditing = () => {
+    if (value === undefined && defaultValue !== undefined) {
+      setValue(_setValue(defaultValue));
+    }
+    setEditing(true);
+  };
   if (!editing) {
     return (
-      <div className="flex items-start gap-1  w-34">
-        <div className="flex flex-col flex-1">
-          <p>{getValueByType(value) ?? "-"}</p>
-          {value && date && <span className="text-[12px]">{date}</span>}
+      <div className="flex flex-col flex-1 items-start justify-start content-start">
+        <div className="flex flex-row gap-1 items-start min-h-[1.25rem]">
+          <p className="flex items-center">
+            {getKpiValueByMetricType(value, kpiMetric) || <span>&nbsp;</span>}
+          </p>
+          <button
+            type="button"
+            aria-label="Edit"
+            onClick={setDefaultAndOpenEditing}
+            className="inline-flex items-center"
+          >
+            {value ? (
+              <PencilSquareIcon className="h-4 w-4 text-primary" />
+            ) : (
+              <PlusCircleIcon className="h-4 w-4 text-secondary" />
+            )}
+          </button>
         </div>
-        <button
-          type="button"
-          aria-label="Edit"
-          onClick={() => setEditing(true)}
-          className="inline-flex items-center"
-        >
-          <PencilSquareIcon className="h-5 w-5 text-[--color-primary]" />
-        </button>
+        {value && date && <small>{formatDateToMothYear(date)}</small>}
       </div>
     );
   }
@@ -109,25 +153,28 @@ export function LivingLabKpiResultForm({
   return (
     <form
       onSubmit={handleSave}
-      className="flex flex-col items-start space-x-3 gap-2 w-34"
+      className="flex flex-col items-start space-x-3 gap-2 w-28"
     >
-      <Field className="w-32">
-        <Label>Value</Label>
+      <Field className="w-28">
         <Input
+          placeholder={placeholder}
           type="number"
           name="value"
           value={value}
-          onChange={(e) => setValue(Number(e.target.value))}
+          onChange={(e) => validateAndSetValue(Number(e.target.value))}
           className="mt-0 m-O"
+          step={kpiMetric === EnumKpiMetricType.PERCENTAGE ? 0.01 : 0.1}
+          min={kpiMetric === EnumKpiMetricType.PERCENTAGE ? 0 : undefined}
+          max={kpiMetric === EnumKpiMetricType.PERCENTAGE ? 1 : undefined}
         />
+        <small className="text-red-600">{error}</small>
       </Field>
 
-      <Field className="w-32">
-        <Label>Date</Label>
+      <Field className="w-28">
         <Input
           type="date"
           name="date"
-          value={date}
+          value={parseDateToInputHtml(date)}
           onChange={(e) => setDate(e.target.value)}
         />
       </Field>
@@ -139,7 +186,7 @@ export function LivingLabKpiResultForm({
           onClick={handleSave}
           className="inline-flex items-center"
         >
-          <CheckCircleIcon className="h-5 w-5 text-success" />
+          <CheckCircleIcon className="h-4 w-4 text-success" />
         </button>
         <button
           type="button"
@@ -147,7 +194,7 @@ export function LivingLabKpiResultForm({
           onClick={handleClose}
           className="inline-flex items-center"
         >
-          <XMarkIcon className="h-5 w-5 text-dark" />
+          <XMarkIcon className="h-4 w-4 text-dark" />
         </button>
       </div>
     </form>

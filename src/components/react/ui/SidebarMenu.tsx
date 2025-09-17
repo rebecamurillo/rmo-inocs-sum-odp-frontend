@@ -59,22 +59,22 @@ const DEFAULT_MENU_ITEMS = [
   {
     label: "Data Overview",
     icon: <PresentationChartLineIcon />,
-    href: getUrl("/lab"),
+    href: getUrl("/lab-admin"),
   },
   {
     label: "Modal Split",
     icon: <ChartPieIcon />,
-    href: getUrl("/lab/modal-split"),
+    href: getUrl("/lab-admin/modal-split"),
   },
   {
     label: "KPIs",
     icon: <ChartBarSquareIcon />,
-    href: getUrl("/lab/kpis"),
+    href: getUrl("/lab-admin/kpis"),
   },
   {
     label: "Measures",
     icon: <QueueListIcon />,
-    href: getUrl("/lab/measures"),
+    href: getUrl("/lab-admin/measures"),
   },
 ];
 
@@ -86,7 +86,7 @@ const DEFAULT_DROPDOWN_HEADER_ITEMS = [
   {
     label: "Edit",
     icon: <Cog8ToothIcon />,
-    href: getUrl("/lab/edit"),
+    href: getUrl("/lab-admin/edit"),
   },
 ];
 

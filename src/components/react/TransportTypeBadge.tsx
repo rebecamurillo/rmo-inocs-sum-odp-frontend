@@ -36,7 +36,7 @@ export function TransportTypeBadge({
       color={config[type].color}
       className=""
       aria-label={`${type} KPI badge`}
-      tooltip={config[type].description}
+      // tooltip={config[type].description}
     >
       {config[type].shortLabel}
     </Badge>

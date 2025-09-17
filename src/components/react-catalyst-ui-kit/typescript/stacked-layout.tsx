@@ -56,7 +56,7 @@ export function StackedLayout({
 }: React.PropsWithChildren<{
   navbar: React.ReactNode;
   sidebar: React.ReactNode;
-  sidebarOnly: Boolean;
+  sidebarOnly?: Boolean;
 }>) {
   let [showSidebar, setShowSidebar] = useState(false);
   const containerClassname = sidebarOnly ? "lg:flex-row items-start" : "";
@@ -73,7 +73,7 @@ export function StackedLayout({
 
       {/* Navbar */}
       <header className="flex items-center px-4 bg-white">
-        <div className={`min-w-0 flex-1 ${navbarClassname} `}>{navbar}</div>
+        <div className={`min-w-0 max-w-52 flex-1 ${navbarClassname} `}>{navbar}</div>
         <div className="py-2.5 lg:hidden">
           <NavbarItem
             onClick={() => setShowSidebar(true)}

@@ -145,7 +145,7 @@ export function LivingLabsMapSection({ labs }: Props) {
                 <div className="mt-2 flex flex-wrap gap-1 justify-center">
                   <RButton
                     variant="primary"
-                    href={getUrl(`/lab-dashboard/${selectedLab.id}`)}
+                    href={getUrl(`/living-lab-city/${selectedLab.id}`)}
                   >
                     🔍 Explore {selectedLab.name} Living Lab
                   </RButton>

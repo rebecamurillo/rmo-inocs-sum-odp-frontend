@@ -5,6 +5,7 @@ import {
   EnumTransportModeStatus,
   type ILivingLabTransportMode,
 } from "../../../types";
+import { useEffect, useRef } from "react";
 import {
   PencilSquareIcon,
   CheckCircleIcon,
@@ -32,6 +33,7 @@ export function LivingLabTransportModeForm({
   const [status, setStatus] = useState<EnumTransportModeStatus>(
     value?.status ?? EnumTransportModeStatus.NOT_AVAILABLE
   );
+  const prevStatusRef = useRef<EnumTransportModeStatus>(status);
   const [id, setId] = useState<number | undefined>(value?.id);
 
   const badgeConfig = {
@@ -53,22 +55,19 @@ export function LivingLabTransportModeForm({
     },
   };
 
-  const onFieldUpdate = (value: EnumTransportModeStatus) => {
-    setStatus(value);
-  };
-
-  const handleSave = () => {
-    if (id) {
+  const handleSave = (status: EnumTransportModeStatus) => {
+    let _id = id;
+    if (_id) {
       //TODO call update PUT /api/living-labs/${livingLabId}/transport-modes/${transportModeId}/${id}
     } else {
       //TODO call create POST /api/living-labs/${livingLabId}/transport-modes/${transportModeId}
-      const id = Math.floor(Math.random() * 1000000); // temporary id until backend is ready
-      setId(id);
+      _id = Math.floor(Math.random() * 1000000); // temporary id until backend is ready
+      setId(_id);
     }
-    //wait for previous api calls, then
-    if (id && status) {
+
+    if (_id && status) {
       onChange?.({
-        id,
+        id: _id,
         status,
         transport_mode_id: transportModeId,
         living_lab_id: livingLabId,
@@ -77,57 +76,62 @@ export function LivingLabTransportModeForm({
     }
   };
 
-  const handleClose = () => {
-    // revert local changes and notify parent
-    setStatus(value?.status ?? EnumTransportModeStatus.NOT_AVAILABLE);
-    onCancel?.();
-    setEditing(false);
-  };
+  useEffect(() => {
+    if (prevStatusRef.current !== status) {
+      handleSave(status);
+    }
+    prevStatusRef.current = status;
+  }, [status]);
 
-  if (!editing) {
-    return (
-      <div className="flex justify-end items-end gap-1 w-40">
-        <Badge
-          size="sm"
-          color={badgeConfig[status]?.color}
-          className=""
-          aria-label={`${status} status in living lab`}
-        >
-          {badgeConfig[status]?.shortLabel}
-        </Badge>
-        <button
-          type="button"
-          aria-label="Edit"
-          onClick={() => setEditing(true)}
-          className="inline-flex items-center"
-        >
-          <PencilSquareIcon className="h-5 w-5 text-[--color-primary]" />
-        </button>
-      </div>
-    );
-  }
+  // const handleClose = () => {
+  //   // revert local changes and notify parent
+  //   setStatus(value?.status ?? EnumTransportModeStatus.NOT_AVAILABLE);
+  //   onCancel?.();
+  //   setEditing(false);
+  // };
+
+  // if (!editing) {
+  //   return (
+  //     <div className="flex justify-end items-end gap-1 w-40">
+  //       <Badge
+  //         size="sm"
+  //         color={badgeConfig[status]?.color}
+  //         className=""
+  //         aria-label={`${status} status in living lab`}
+  //       >
+  //         {badgeConfig[status]?.shortLabel}
+  //       </Badge>
+  //       <button
+  //         type="button"
+  //         aria-label="Edit"
+  //         onClick={() => setEditing(true)}
+  //         className="inline-flex items-center"
+  //       >
+  //         <PencilSquareIcon className="h-5 w-5 text-primary" />
+  //       </button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <form
-      onSubmit={handleSave}
+      // onSubmit={handleSave}
       className="flex flex-col items-start space-x-3 gap-2 w-40"
     >
       <Field className="w-36">
         <Select
           name="status"
           value={status}
-          onChange={(e) =>
-            onFieldUpdate(e.target.value as EnumTransportModeStatus)
-          }
+          onChange={(e) => setStatus(e.target.value as EnumTransportModeStatus)}
         >
           {Object.values(EnumTransportModeStatus).map((option) => (
             <option key={option} value={option}>
-              {option}
+              {badgeConfig[option]?.shortLabel}
             </option>
           ))}
         </Select>
       </Field>
-      <div className="flex flex-row justify-end items-end w-full space-x-2">
+      {/* <div className="flex flex-row justify-end items-end w-full space-x-2">
         <button
           type="submit"
           aria-label="Save"
@@ -144,7 +148,7 @@ export function LivingLabTransportModeForm({
         >
           <XMarkIcon className="h-5 w-5 text-dark" />
         </button>
-      </div>
+      </div> */}
     </form>
   );
 }

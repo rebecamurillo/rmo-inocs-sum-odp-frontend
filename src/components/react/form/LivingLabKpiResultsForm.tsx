@@ -1,0 +1,84 @@
+import { useEffect, useState, type ReactNode } from "react";
+import LivingLabKpiResultForm from "./LivingLabKpiResultForm";
+import {
+  ArrowTrendingDownIcon,
+  ArrowTrendingUpIcon,
+  EqualsIcon,
+} from "@heroicons/react/20/solid";
+
+type Props = {
+  livingLabId: number;
+  kpiId: number;
+  kpiMetric: string;
+  transportModeId?: number;
+  initialBefore?: any;
+  initialAfter?: any;
+  defaultBeforeDate?: string;
+  defaultAfterDate?: string;
+  onChange?: (before: number | null, after: number | null) => void;
+};
+
+export default function LivingLabKpiResultsForm({
+  livingLabId,
+  kpiId,
+  kpiMetric,
+  transportModeId,
+  initialBefore,
+  initialAfter,
+  defaultBeforeDate,
+  defaultAfterDate,
+  onChange,
+}: Props) {
+  const [before, setBefore] = useState<number | null>(initialBefore?.value);
+  const [after, setAfter] = useState<number | null>(initialAfter?.value);
+
+  function getChangeIcon(a: number | null, b: number | null): ReactNode {
+    if (b === null || a === null || b === undefined || a === undefined)
+      return null;
+
+    const diff = b - a;
+    if (diff === 0) return <EqualsIcon className="h-5 w-5 text-gray-500" />;
+    return diff > 0 ? (
+      <ArrowTrendingUpIcon className="h-5 w-5 text-success" />
+    ) : (
+      <ArrowTrendingDownIcon className="h-5 w-5 text-danger" />
+    );
+  }
+
+  return (
+    <div className="flex flex-row">
+      <LivingLabKpiResultForm
+        livingLabId={livingLabId}
+        kpiId={kpiId}
+        kpiMetric={kpiMetric}
+        transportModeId={transportModeId}
+        initial={initialBefore}
+        defaultDate={defaultBeforeDate}
+        placeholder="Before value"
+        onChange={(result) => {
+          setBefore(result?.value ?? null);
+          if (onChange) onChange(result?.value, after);
+        }}
+      />
+      <div className="flex items-center mx-2">
+        {getChangeIcon(before, after)}
+      </div>
+      {initialBefore?.value && (
+        <LivingLabKpiResultForm
+          livingLabId={livingLabId}
+          kpiId={kpiId}
+          kpiMetric={kpiMetric}
+          transportModeId={transportModeId}
+          initial={initialAfter}
+          defaultValue={initialBefore?.value}
+          defaultDate={defaultAfterDate}
+          placeholder="After value"
+          onChange={(result) => {
+            setAfter(result?.value ?? null);
+            if (onChange) onChange(before, result?.value);
+          }}
+        />
+      )}
+    </div>
+  );
+}

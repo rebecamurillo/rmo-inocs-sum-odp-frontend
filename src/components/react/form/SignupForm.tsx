@@ -21,7 +21,7 @@ export default function SignupForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    window.location.href = getUrl("/lab/edit");
+    window.location.href = getUrl("/lab-admin/edit");
   }
 
   return (
