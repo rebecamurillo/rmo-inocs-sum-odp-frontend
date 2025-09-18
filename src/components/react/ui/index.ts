@@ -10,3 +10,4 @@ export * from "./ItemCard";
 export * from "./Timeline";
 export * from "./SidebarMenu";
 export * from "./SiteNavBar";
+export * from "./ExpansionPanel";

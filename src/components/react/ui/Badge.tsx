@@ -21,6 +21,7 @@ export interface BadgeProps {
   role?: string;
   "aria-label"?: string;
   tooltip?: string;
+  displayTooltipIcon?: boolean;
 }
 
 const COLOR_CLASSES: Record<BadgeColor, string> = {
@@ -54,6 +55,7 @@ export function Badge({
   className = "",
   role,
   tooltip,
+  displayTooltipIcon = true,
   "aria-label": ariaLabel,
 }: BadgeProps) {
   const colorClass = COLOR_CLASSES[color] ?? COLOR_CLASSES.secondary;
@@ -76,7 +78,7 @@ export function Badge({
           </span>
         ) : null}
         {children}
-        {!!tooltip?.length ? (
+        {displayTooltipIcon && !!tooltip?.length ? (
           <QuestionMarkCircleIcon className={`h-4 w-4 text-warning`} />
         ) : null}
       </span>

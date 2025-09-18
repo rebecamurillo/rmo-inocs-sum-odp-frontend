@@ -1,5 +1,6 @@
 import livinglabs from "./mock-data/living_labs_data.json";
 import kpis from "./mock-data/kpis.json";
+import categories from "./mock-data/categories.json";
 import measures from "./mock-data/measures.json";
 import transportModes from "./mock-data/transport_modes.json";
 import type {
@@ -11,6 +12,7 @@ import type {
   ILivingLabTransportMode,
   ILivingLab,
 } from "../../types";
+import type { ICategory } from "../../types/Category";
 
 export default class ApiClient {
   private baseUrl: string;
@@ -150,6 +152,14 @@ export default class ApiClient {
       }
       return 0;
     });
+  }
+
+  async getCategories(
+    type: "KPI_SIEF" | "ITEM" | "KPI_IMPACT"
+  ): Promise<ICategory[]> {
+    //return this.get(`/categories?type=${encodeURIComponent(type)}`);
+
+    return categories.filter((cat) => cat.type === type) as ICategory[];
   }
 
   async getTransportModes(): Promise<ITransportMode[]> {

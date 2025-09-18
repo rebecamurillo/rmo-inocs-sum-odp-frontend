@@ -15,6 +15,7 @@ const filteredKpis = kpis.filter(
     kpi.id !== modalSplitKpi?.id && kpi.parent_kpi_id !== modalSplitKpi?.id
 );
 const livingLabKpis = await api.getLivingLabAndData(labId);
+const categories = await api.getCategories("KPI_SIEF");
 ---
 
 <Layout role="editor">
@@ -35,6 +36,7 @@ const livingLabKpis = await api.getLivingLabAndData(labId);
     </InfoAlert>
 
     <LivingLabKPIs
+      categories={categories}
       kpis={filteredKpis}
       livingLabId={labId}
       kpiResults={livingLabKpis?.kpi_results || []}

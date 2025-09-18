@@ -1,3 +1,4 @@
+import type { ICategory } from "./Category";
 import type { ITransportMode } from "./TransportMode";
 
 //Kpi interface is a compilation of tables KPIRESULT, and KPIDEFINITIONS
@@ -15,6 +16,7 @@ export interface IKpi {
   metric_description?: string;
   min_value?: number;
   max_value?: number;
+  categories?: ICategory[]; // Many-to-many relation with categories
 }
 
 export interface IKpiResult extends IKpi {
