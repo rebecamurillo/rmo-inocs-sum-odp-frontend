@@ -1,4 +1,3 @@
-import React from "react";
 import { Badge, type BadgeSize } from "./ui/Badge";
 
 export type KpiScopes = "GLOBAL" | "LOCAL";
@@ -15,7 +14,7 @@ export function KpiTypeBadge({
   return (
     <Badge
       size={size}
-      color={type === "GLOBAL" ? "primary-light" : "secondary"}
+      color={type === "GLOBAL" ? "light" : "dark"}
       className={""}
       aria-label={`${type} KPI badge`}
     >

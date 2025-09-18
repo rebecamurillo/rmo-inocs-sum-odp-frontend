@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import LivingLabKpiResultForm from "./LivingLabKpiResultForm";
 import {
   ArrowTrendingDownIcon,
@@ -18,7 +18,7 @@ type Props = {
   onChange?: (before: number | null, after: number | null) => void;
 };
 
-export default function LivingLabKpiResultsForm({
+export function LivingLabKpiResultsForm({
   livingLabId,
   kpiId,
   kpiMetric,
@@ -46,39 +46,43 @@ export default function LivingLabKpiResultsForm({
   }
 
   return (
-    <div className="flex flex-row">
-      <LivingLabKpiResultForm
-        livingLabId={livingLabId}
-        kpiId={kpiId}
-        kpiMetric={kpiMetric}
-        transportModeId={transportModeId}
-        initial={initialBefore}
-        defaultDate={defaultBeforeDate}
-        placeholder="Before value"
-        onChange={(result) => {
-          setBefore(result?.value ?? null);
-          if (onChange) onChange(result?.value, after);
-        }}
-      />
-      <div className="flex items-center mx-2">
-        {getChangeIcon(before, after)}
-      </div>
-      {initialBefore?.value && (
+    <div className="flex flex-row w-full items-center">
+      <div className="flex-1">
         <LivingLabKpiResultForm
           livingLabId={livingLabId}
           kpiId={kpiId}
           kpiMetric={kpiMetric}
           transportModeId={transportModeId}
-          initial={initialAfter}
-          defaultValue={initialBefore?.value}
-          defaultDate={defaultAfterDate}
-          placeholder="After value"
+          initial={initialBefore}
+          defaultDate={defaultBeforeDate}
+          placeholder="Before value"
           onChange={(result) => {
-            setAfter(result?.value ?? null);
-            if (onChange) onChange(before, result?.value);
+            setBefore(result?.value ?? null);
+            if (onChange) onChange(result?.value, after);
           }}
         />
-      )}
+      </div>
+      <div className="flex items-center justify-center mx-4">
+        {getChangeIcon(before, after)}
+      </div>
+      <div className="flex-1">
+        {initialBefore?.value && (
+          <LivingLabKpiResultForm
+            livingLabId={livingLabId}
+            kpiId={kpiId}
+            kpiMetric={kpiMetric}
+            transportModeId={transportModeId}
+            initial={initialAfter}
+            defaultValue={initialBefore?.value}
+            defaultDate={defaultAfterDate}
+            placeholder="After value"
+            onChange={(result) => {
+              setAfter(result?.value ?? null);
+              if (onChange) onChange(before, result?.value);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }

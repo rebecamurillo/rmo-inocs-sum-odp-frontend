@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   PencilSquareIcon,
   CheckCircleIcon,
   XMarkIcon,
   PlusCircleIcon,
 } from "@heroicons/react/20/solid";
-import {
-  EnumKpiMetricType,
-  EnumKpiType,
-  type IKpiResult,
-} from "../../../types/KPIs";
-import { Field, Input, Label } from "../../react-catalyst-ui-kit";
+import { EnumKpiMetricType, type IKpiResult } from "../../../types/KPIs";
+import { Field, Input } from "../../react-catalyst-ui-kit";
 import {
   formatDateToMothYear,
   getKpiValueByMetricType,
@@ -94,17 +90,36 @@ export function LivingLabKpiResultForm({
   };
 
   const validateValue = (val: number) => {
-    if (min !== undefined && val < min) {
-      setError(`Value must be at least ${min}`);
+    if (
+      kpiMetric === EnumKpiMetricType.PERCENTAGE &&
+      min !== undefined &&
+      min !== null &&
+      val < min
+    ) {
+      setError(`Min value is ${min}, lower values are not accepted`);
       return false;
-    } else if (max !== undefined && val > max) {
-      setError(`Value must be at most ${max}`);
+    } else if (
+      kpiMetric === EnumKpiMetricType.PERCENTAGE &&
+      max !== undefined &&
+      max !== null &&
+      val > max
+    ) {
+      setError(`Max value is ${max}, higher values are not accepted`);
       return false;
+    } else if (min !== undefined && min !== null && val < min) {
+      setError(
+        `Min value observed is ${min}, are you sure your value is correct ?`
+      );
+    } else if (max !== undefined && max !== null && val > max) {
+      setError(
+        `Max value observed is ${max}, are you sure your value is correct ?`
+      );
     } else {
       setError(null);
     }
     return true;
   };
+
   const validateDate = (d: string) => {
     if (d && isNaN(new Date(d).getTime())) {
       setError("Invalid date");

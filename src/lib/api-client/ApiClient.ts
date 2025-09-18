@@ -137,7 +137,19 @@ export default class ApiClient {
       kpisData = [...parentKpi, ...childrenKpis] as IKpi[];
     }
 
-    return kpisData.sort((a, b) => (a.kpi_number > b.kpi_number ? 1 : -1));
+    return kpisData.sort((a, b) => {
+      const parseKpiNumber = (num: string) =>
+        num.split(".").map((n) => parseInt(n, 10));
+      if (!a.kpi_number || !b.kpi_number) return 0;
+      const aParts = parseKpiNumber(a.kpi_number);
+      const bParts = parseKpiNumber(b.kpi_number);
+      for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+        const aVal = aParts[i] ?? 0;
+        const bVal = bParts[i] ?? 0;
+        if (aVal !== bVal) return aVal - bVal;
+      }
+      return 0;
+    });
   }
 
   async getTransportModes(): Promise<ITransportMode[]> {

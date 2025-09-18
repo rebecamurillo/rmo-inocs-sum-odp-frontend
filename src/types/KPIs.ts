@@ -13,6 +13,8 @@ export interface IKpi {
   progression_target: number;
   metric: EnumKpiMetricType;
   metric_description?: string;
+  min_value?: number;
+  max_value?: number;
 }
 
 export interface IKpiResult extends IKpi {

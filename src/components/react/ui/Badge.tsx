@@ -24,11 +24,11 @@ export interface BadgeProps {
 }
 
 const COLOR_CLASSES: Record<BadgeColor, string> = {
-  primary: "bg-primary text-primary-light border-primary-ligh",
+  primary: "bg-primary text-light border-primary-ligh",
   info: "bg-primary-light text-primary border-primary",
   secondary: "bg-secondary text-primary border-primary",
   warning: "bg-warning text-primary border-primary",
-  dark: "bg-dark text-primary border-primary",
+  dark: "bg-dark text-light border-primary",
   light: "bg-light text-primary border-primary",
   transparent: "bg-transparent text-primary border-transparent",
   success: "bg-success text-primary border-primary",

@@ -9,6 +9,7 @@ export * from "./form";
 export * from "./LivingLabModalSplit";
 export * from "./LivingLabKPIs";
 export * from "./KpiTypeBadge";
+export * from "./KpiMetricTypeBadge";
 export * from "./TransportTypeBadge";
 export * from "./LivingLabsMapSection";
 export * from "./MapViewer";

@@ -6,8 +6,7 @@ import {
   type IKpi,
   type ILivingLabTransportMode,
 } from "../../types";
-import { BeforeAndAfterDates } from "./form";
-import LivingLabKpiResultsForm from "./form/LivingLabKpiResultsForm";
+import { BeforeAndAfterDates, LivingLabKpiResultsForm } from "./form";
 import { TransportTypeBadge } from "./TransportTypeBadge";
 import {
   Table,
@@ -278,46 +277,6 @@ export function LivingLabModalSplit({
                             });
                           }}
                         />
-                        {/* render modal split charts when KPI metric indicates modal split and values parse */}
-                        {/* {(() => {
-                          const entry = livingLabKpiMap.get(
-                            `${kpi.id}_${m.id}`
-                          );
-                          const beforeVal = entry?.result_before?.value ?? null;
-                          const afterVal = entry?.result_after?.value ?? null;
-                          const beforeItems = parseToSplitItems(beforeVal);
-                          const afterItems = parseToSplitItems(afterVal);
-
-                          // Render only when parsed data exists (either before or after)
-                          if (!beforeItems && !afterItems) return null;
-
-                          return (
-                            <div className="flex flex-row gap-4 ml-4 items-start">
-                              {beforeItems && (
-                                <div className="w-56">
-                                  <div className="text-sm font-medium text-gray-600 mb-1">
-                                    Before
-                                  </div>
-                                  <ModalSplitChart
-                                    data={beforeItems}
-                                    height={140}
-                                  />
-                                </div>
-                              )}
-                              {afterItems && (
-                                <div className="w-56">
-                                  <div className="text-sm font-medium text-gray-600 mb-1">
-                                    After
-                                  </div>
-                                  <ModalSplitChart
-                                    data={afterItems}
-                                    height={140}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })()} */}
                       </div>
                     </TableCell>
                   ))}
