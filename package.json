@@ -6,12 +6,17 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "db:generate": "prisma generate --schema=src/bff/db/prisma/schema.prisma",
+    "db:push": "prisma db push --schema=src/bff/db/prisma/schema.prisma",
+    "db:studio": "prisma studio --schema=src/bff/db/prisma/schema.prisma"
   },
   "dependencies": {
+    "@astrojs/node": "^9.4.4",
     "@astrojs/react": "^4.3.0",
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
+    "@prisma/client": "^6.16.2",
     "@tailwindcss/vite": "^4.1.12",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
@@ -20,6 +25,8 @@
     "clsx": "^2.1.1",
     "leaflet": "^1.9.4",
     "motion": "^12.23.12",
+    "mysql2": "^3.15.0",
+    "prisma": "^6.16.2",
     "react": "^19.0.0-rc.1",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0-rc.1",
