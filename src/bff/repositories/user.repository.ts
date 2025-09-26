@@ -1,5 +1,5 @@
-import prisma from '../db/client';
-import type { User, CreateUserInput, UpdateUserInput } from '../types';
+import prisma from "../db/client";
+import type { User, CreateUserInput, UpdateUserInput, UserDto } from "../types";
 
 export class UserRepository {
   /**
@@ -7,38 +7,43 @@ export class UserRepository {
    */
   async findAll(): Promise<User[]> {
     try {
-      const users = await prisma.user.findMany({
+      const users = await prisma.users.findMany({
         include: {
-          role: true
+          role: true,
         },
         orderBy: {
-          created_at: 'desc'
-        }
+          created_at: "desc",
+        },
       });
-      
+
       return users.map(this.mapPrismaUserToUser);
     } catch (error) {
-      console.error('Error fetching all users:', error);
-      throw new Error('Failed to fetch users');
+      console.error("Error fetching all users:", error);
+      throw new Error("Failed to fetch users");
     }
   }
 
   /**
    * Get user by ID with role populated
    */
-  async findById(id: number): Promise<User | null> {
+  async findById(id: number, safe?: boolean): Promise<User | UserDto | null> {
     try {
-      const user = await prisma.user.findUnique({
+      const _safe = safe !== undefined ? safe : true;
+      const user = await prisma.users.findUnique({
         where: { id },
         include: {
-          role: true
-        }
+          role: true,
+        },
       });
 
-      return user ? this.mapPrismaUserToUser(user) : null;
+      return user
+        ? _safe
+          ? (this.mapPrismaUserToUser(user) as User)
+          : (user as UserDto)
+        : null;
     } catch (error) {
       console.error(`Error fetching user with id ${id}:`, error);
-      throw new Error('Failed to fetch user');
+      throw new Error("Failed to fetch user");
     }
   }
 
@@ -47,17 +52,17 @@ export class UserRepository {
    */
   async findByEmail(email: string): Promise<User | null> {
     try {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.users.findUnique({
         where: { email },
         include: {
-          role: true
-        }
+          role: true,
+        },
       });
 
       return user ? this.mapPrismaUserToUser(user) : null;
     } catch (error) {
       console.error(`Error fetching user with email ${email}:`, error);
-      throw new Error('Failed to fetch user');
+      throw new Error("Failed to fetch user");
     }
   }
 
@@ -66,20 +71,20 @@ export class UserRepository {
    */
   async create(userData: CreateUserInput): Promise<User> {
     try {
-      const user = await prisma.user.create({
+      const user = await prisma.users.create({
         data: {
           ...userData,
-          status: userData.status || 'signup'
+          status: userData.status || "signup",
         },
         include: {
-          role: true
-        }
+          role: true,
+        },
       });
 
       return this.mapPrismaUserToUser(user);
     } catch (error) {
-      console.error('Error creating user:', error);
-      throw new Error('Failed to create user');
+      console.error("Error creating user:", error);
+      throw new Error("Failed to create user");
     }
   }
 
@@ -88,18 +93,18 @@ export class UserRepository {
    */
   async update(id: number, userData: UpdateUserInput): Promise<User | null> {
     try {
-      const user = await prisma.user.update({
+      const user = await prisma.users.update({
         where: { id },
         data: userData,
         include: {
-          role: true
-        }
+          role: true,
+        },
       });
 
       return this.mapPrismaUserToUser(user);
     } catch (error) {
       console.error(`Error updating user with id ${id}:`, error);
-      throw new Error('Failed to update user');
+      throw new Error("Failed to update user");
     }
   }
 
@@ -108,35 +113,37 @@ export class UserRepository {
    */
   async delete(id: number): Promise<boolean> {
     try {
-      await prisma.user.delete({
-        where: { id }
+      await prisma.users.delete({
+        where: { id },
       });
       return true;
     } catch (error) {
       console.error(`Error deleting user with id ${id}:`, error);
-      throw new Error('Failed to delete user');
+      throw new Error("Failed to delete user");
     }
   }
 
   /**
    * Get users by status
    */
-  async findByStatus(status: 'signup' | 'active' | 'disabled'): Promise<User[]> {
+  async findByStatus(
+    status: "signup" | "active" | "disabled"
+  ): Promise<User[]> {
     try {
-      const users = await prisma.user.findMany({
+      const users = await prisma.users.findMany({
         where: { status },
         include: {
-          role: true
+          role: true,
         },
         orderBy: {
-          created_at: 'desc'
-        }
+          created_at: "desc",
+        },
       });
 
       return users.map(this.mapPrismaUserToUser);
     } catch (error) {
       console.error(`Error fetching users with status ${status}:`, error);
-      throw new Error('Failed to fetch users by status');
+      throw new Error("Failed to fetch users by status");
     }
   }
 
@@ -145,20 +152,20 @@ export class UserRepository {
    */
   async findByRoleId(roleId: number): Promise<User[]> {
     try {
-      const users = await prisma.user.findMany({
+      const users = await prisma.users.findMany({
         where: { role_id: roleId },
         include: {
-          role: true
+          role: true,
         },
         orderBy: {
-          created_at: 'desc'
-        }
+          created_at: "desc",
+        },
       });
 
       return users.map(this.mapPrismaUserToUser);
     } catch (error) {
       console.error(`Error fetching users with role_id ${roleId}:`, error);
-      throw new Error('Failed to fetch users by role');
+      throw new Error("Failed to fetch users by role");
     }
   }
 
@@ -170,19 +177,17 @@ export class UserRepository {
       id: prismaUser.id,
       email: prismaUser.email,
       name: prismaUser.name,
-      old_password: prismaUser.old_password,
-      password: prismaUser.password,
-      password_confirmation: prismaUser.password_confirmation,
-      phone: prismaUser.phone,
       picture: prismaUser.picture,
-      role_id: prismaUser.role_id,
       status: prismaUser.status,
       created_at: prismaUser.created_at,
-      role: prismaUser.role ? {
-        id: prismaUser.role.id,
-        name: prismaUser.role.name,
-        description: prismaUser.role.description
-      } : undefined
+      role_id: prismaUser.role_id,
+      role: prismaUser.role
+        ? {
+            id: prismaUser.role.id,
+            name: prismaUser.role.name,
+            description: prismaUser.role.description,
+          }
+        : undefined,
     };
   }
 }

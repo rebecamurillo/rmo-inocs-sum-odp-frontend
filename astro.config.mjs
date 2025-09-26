@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [react()],
   output: "server", // Changed from "static" to enable SSR and API routes
   adapter: node({
-    mode: "standalone"
+    mode: "standalone",
   }),
   vite: {
     plugins: [tailwindcss()],

@@ -7,9 +7,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "db:generate": "prisma generate --schema=src/bff/db/prisma/schema.prisma",
-    "db:push": "prisma db push --schema=src/bff/db/prisma/schema.prisma",
-    "db:studio": "prisma studio --schema=src/bff/db/prisma/schema.prisma"
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:pull": "prisma db pull",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@astrojs/node": "^9.4.4",
@@ -21,6 +23,7 @@
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
     "astro": "^5.13.3",
+    "bcrypt": "^6.0.0",
     "chart.js": "^4.5.0",
     "clsx": "^2.1.1",
     "leaflet": "^1.9.4",

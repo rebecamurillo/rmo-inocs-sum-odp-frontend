@@ -4,7 +4,7 @@ export interface Role {
   description: string;
 }
 
-export interface User {
+export interface UserDto {
   id: number;
   email: string;
   name: string;
@@ -14,10 +14,13 @@ export interface User {
   phone?: string | null;
   picture?: string | null;
   role_id: number;
-  status: 'signup' | 'active' | 'disabled';
+  status: "signup" | "active" | "disabled";
   created_at: Date;
   role?: Role; // Populated role object
 }
+
+export interface User
+  extends Omit<UserDto, "password" | "old_password" | "password_confirmation"> {}
 
 export interface CreateUserInput {
   email: string;
@@ -27,7 +30,7 @@ export interface CreateUserInput {
   phone?: string;
   picture?: string;
   role_id: number;
-  status?: 'signup' | 'active' | 'disabled';
+  status?: "signup" | "active" | "disabled";
 }
 
 export interface UpdateUserInput {
@@ -39,5 +42,5 @@ export interface UpdateUserInput {
   phone?: string;
   picture?: string;
   role_id?: number;
-  status?: 'signup' | 'active' | 'disabled';
+  status?: "signup" | "active" | "disabled";
 }
