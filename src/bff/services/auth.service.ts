@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../repositories/user.repository';
 import type { User, UserDto } from '../types';
 
@@ -24,15 +24,24 @@ export interface LoginResult {
 }
 
 export class AuthService {
-  private userRepository: UserRepository;
+  private _userRepository?: UserRepository;
   private jwtSecret: string;
   private jwtExpiresIn: string;
 
   constructor() {
-    this.userRepository = new UserRepository();
     // In production, use environment variables
     this.jwtSecret = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
     this.jwtExpiresIn = process.env.JWT_EXPIRES_IN || '24h';
+  }
+
+  /**
+   * Lazy-load UserRepository to avoid Prisma initialization during middleware startup
+   */
+  private get userRepository(): UserRepository {
+    if (!this._userRepository) {
+      this._userRepository = new UserRepository();
+    }
+    return this._userRepository;
   }
 
   /**
@@ -106,11 +115,15 @@ export class AuthService {
    * Generate JWT token
    */
   generateToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
-    return jwt.sign(payload, this.jwtSecret, {
-      expiresIn: this.jwtExpiresIn,
-      issuer: 'rmo-inocs-odp',
-      audience: 'rmo-inocs-users'
-    });
+    return jwt.sign(
+      payload as object, 
+      this.jwtSecret, 
+      {
+        expiresIn: this.jwtExpiresIn,
+        issuer: 'rmo-inocs-odp',
+        audience: 'rmo-inocs-users'
+      }
+    );
   }
 
   /**

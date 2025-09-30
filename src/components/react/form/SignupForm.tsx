@@ -116,6 +116,18 @@ export default function SignupForm() {
           }}
         />
       </div>
+
+      <div className="text-center mt-6">
+        <p className="text-sm text-gray-600">
+          Already have an account?{" "}
+          <a
+            href={getUrl("/lab-admin/login")}
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            Sign in to your account
+          </a>
+        </p>
+      </div>
     </form>
   );
 }

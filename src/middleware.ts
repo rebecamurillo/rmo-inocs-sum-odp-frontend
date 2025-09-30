@@ -1,16 +1,15 @@
 import { defineMiddleware } from "astro:middleware";
-import { AuthService } from "./bff/services/auth.service";
-
-const authService = new AuthService();
 
 // Routes that require authentication
 const PROTECTED_ROUTES = ['/lab-admin'];
 
-// Routes that should be accessible without authentication (even under protected paths)
+// Routes that should be accessible without authentication (even under protected paths) 
 const PUBLIC_ROUTES = [
   '/lab-admin/login',
   '/lab-admin/signup'
 ];
+
+let authService: any = null;
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { url, cookies, redirect } = context;
@@ -37,6 +36,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
 
     try {
+      // Lazy-load AuthService to avoid Prisma initialization issues
+      if (!authService) {
+        const { AuthService } = await import('./bff/services/auth.service');
+        authService = new AuthService();
+      }
+
       // Validate token and get user
       const user = await authService.validateTokenAndGetUser(token);
 
@@ -63,6 +68,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
     
     if (token) {
       try {
+        // Lazy-load AuthService
+        if (!authService) {
+          const { AuthService } = await import('./bff/services/auth.service');
+          authService = new AuthService();
+        }
+
         const user = await authService.validateTokenAndGetUser(token);
         if (user) {
           console.log('User already authenticated, redirecting to dashboard');
