@@ -29,3 +29,6 @@ pnpm-debug.log*
 # Prisma
 .env
 prisma/migrations/
+
+# Screenshots for testing
+screenshots/
