@@ -2,6 +2,17 @@
 import Layout from "../../layouts/Layout.astro";
 import ApiClient from "../../lib/api-client/ApiClient";
 import { KpiCard } from "../../components/react/KpiCards";
+import { MapViewer } from "../../components/react/MapViewer";
+import { TransportBadge } from "../../components/react/TransportBadge";
+import ModalSplitChart from "../../components/react/KpiCards/ModalSplitChart";
+import { MobilityMeasures } from "../../components/react/MobilityMeasures";
+import {
+  getNSMTransportModes,
+  separateMeasures,
+  prepareModalSplitData,
+  createMapMarker,
+} from "../../lib/helpers/living-lab";
+
 export function getStaticPaths() {
   return [
     { params: { labId: 1 } },
@@ -16,26 +27,113 @@ export function getStaticPaths() {
   ];
 }
 
-//TODO : get mocked data for transport modes and modal split (KPI 15)
-// init json file for a living lab, from WP1 reports
 const api = new ApiClient();
 
 const { labId } = Astro.params;
-const livingLabKpis = await api.getLivingLabAndData(Number(labId));
+const livingLabData = await api.getLivingLabAndData(Number(labId));
+const allTransportModes = await api.getTransportModes();
+const allMeasures = await api.getMeasures();
+
+// Prepare data for components
+const nsmTransportModes = getNSMTransportModes(livingLabData, allTransportModes);
+const { pushMeasures, pullMeasures } = separateMeasures(
+  livingLabData.measures || []
+);
+const { beforeData, afterData } = prepareModalSplitData(
+  livingLabData,
+  allTransportModes
+);
+const mapMarker = createMapMarker(livingLabData);
 ---
 
 <Layout>
   <div class="lg:mx-20 mx-auto px-4 py-8 flex flex-col gap-8">
-    <h2><strong>{livingLabKpis?.name}</strong>Living lab data dashboard</h2>
-    <h3>Key Performance Indicators (KPIs)</h3>
-    <p>Explore the KPIs related to the living lab.</p>
+    <h2>
+      <strong>{livingLabData?.name}</strong> Living lab data dashboard
+    </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {
-        livingLabKpis?.kpi_results.map((kpiResult) => (
-          <KpiCard kpiResults={kpiResult} client:load />
-        ))
-      }
-    </div>
+    <!-- Map Section -->
+    <section class="flex flex-col gap-4">
+      <h3>Location</h3>
+      <div class="h-96 w-full rounded-lg overflow-hidden shadow-md">
+        <MapViewer
+          center={[mapMarker.coordinates.lat, mapMarker.coordinates.lng]}
+          zoom={10}
+          markers={[mapMarker]}
+          scrollWheelZoom={true}
+          client:load
+        />
+      </div>
+    </section>
+
+    <!-- Transport Modes Section -->
+    {
+      nsmTransportModes.length > 0 && (
+        <section class="flex flex-col gap-4">
+          <h3>New Mobility Services (NSM)</h3>
+          <p>Transport modes available in this living lab:</p>
+          <div class="flex flex-wrap gap-2">
+            {nsmTransportModes.map((mode) => (
+              <TransportBadge
+                title={mode.name}
+                type={mode.name.toLowerCase().replace(/\s+/g, "-") as any}
+                size="md"
+                color="secondary"
+                client:load
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Modal Split Section -->
+    {
+      (beforeData.length > 0 || afterData.length > 0) && (
+        <section class="flex flex-col gap-4">
+          <h3>Modal Split</h3>
+          <p>Distribution of transport modes usage before and after measures:</p>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <ModalSplitChart
+              data={[
+                { label: "Before", data: beforeData },
+                { label: "After", data: afterData },
+              ]}
+              client:load
+            />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Push & Pull Measures Section -->
+    {
+      (pushMeasures.length > 0 || pullMeasures.length > 0) && (
+        <section class="flex flex-col gap-4">
+          <h3>Mobility Measures</h3>
+          <p>Push and pull measures implemented in this living lab:</p>
+          <MobilityMeasures
+            pushMeasures={pushMeasures}
+            pullMeasures={pullMeasures}
+            hideDescription={false}
+            cols={4}
+            client:load
+          />
+        </section>
+      )
+    }
+
+    <!-- KPIs Section -->
+    <section class="flex flex-col gap-4">
+      <h3>Key Performance Indicators (KPIs)</h3>
+      <p>Explore the KPIs related to the living lab.</p>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {
+          livingLabData?.kpi_results.map((kpiResult) => (
+            <KpiCard kpiResults={kpiResult} client:load />
+          ))
+        }
+      </div>
+    </section>
   </div>
 </Layout>
