@@ -3,7 +3,7 @@ import {
   EnumKpiType,
   type IIKpiResultBeforeAfter,
 } from "../../../types";
-import { Badge } from "../ui";
+import { Badge, Tooltip } from "../ui";
 import KpiPercentage from "./KpiPercentage";
 import KpiRatio from "./KpiRatio";
 
@@ -33,16 +33,21 @@ export function KpiCard({ kpiResults }: Props) {
       <div className="absolute -top-1 right-0">
         <Badge size="sm" color="light" className="rounded-2xl">
           KPI {kpiResults.kpi_number}
+          <Tooltip
+            content={kpiResults.description}
+            placement="left"
+            iconClassName="h-3 w-3 text-primary"
+          />
         </Badge>
       </div>
 
-      <div className="text-center mt-1">
+      <div className="flex flex-row text-center mt-1">
         <p>{kpiResults?.name ?? "KPI"}</p>
-        {kpiResults?.description ? (
+        {/* {kpiResults?.description ? (
           <div className="text-sm text-muted mt-2 max-w-xl mx-auto">
             {kpiResults.description}
           </div>
-        ) : null}
+        ) : null} */}
       </div>
 
       {getKpiComponent(kpiResults?.metric)}

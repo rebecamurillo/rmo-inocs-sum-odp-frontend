@@ -5,27 +5,14 @@ import { KpiCard } from "../../components/react/KpiCards";
 import { MapViewer } from "../../components/react/MapViewer";
 import { TransportBadge } from "../../components/react/TransportBadge";
 import ModalSplitChart from "../../components/react/KpiCards/ModalSplitChart";
-import { MobilityMeasures } from "../../components/react/MobilityMeasures";
+import { MeasuresSection } from "../../components/react/MobilityMeasures";
 import {
   getNSMTransportModes,
   separateMeasures,
   prepareModalSplitData,
   createMapMarker,
 } from "../../lib/helpers/living-lab";
-
-export function getStaticPaths() {
-  return [
-    { params: { labId: 1 } },
-    { params: { labId: 2 } },
-    { params: { labId: 3 } },
-    { params: { labId: 4 } },
-    { params: { labId: 5 } },
-    { params: { labId: 6 } },
-    { params: { labId: 7 } },
-    { params: { labId: 8 } },
-    { params: { labId: 9 } },
-  ];
-}
+import { DataDisplayCard } from "../../components/react";
 
 const api = new ApiClient();
 
@@ -35,7 +22,10 @@ const allTransportModes = await api.getTransportModes();
 const allMeasures = await api.getMeasures();
 
 // Prepare data for components
-const nsmTransportModes = getNSMTransportModes(livingLabData, allTransportModes);
+const nsmTransportModes = getNSMTransportModes(
+  livingLabData,
+  allTransportModes
+);
 const { pushMeasures, pullMeasures } = separateMeasures(
   livingLabData.measures || []
 );
@@ -53,46 +43,100 @@ const mapMarker = createMapMarker(livingLabData);
     </h2>
 
     <!-- Map Section -->
-    <section class="flex flex-col gap-4">
-      <h3>Location</h3>
-      <div class="h-96 w-full rounded-lg overflow-hidden shadow-md">
+    <section class="flex flex-col lg:flex-row gap-4">
+      <div class="h-96 w-full lg:w-3/4 rounded-lg overflow-hidden shadow-md">
         <MapViewer
           center={[mapMarker.coordinates.lat, mapMarker.coordinates.lng]}
           zoom={10}
           markers={[mapMarker]}
           scrollWheelZoom={true}
-          client:load
+          client:only="react"
+        />
+      </div>
+      <div class="w-full lg:w-1/4">
+        <DataDisplayCard
+          data={[
+            { label: "Living Lab", value: livingLabData?.name },
+            {
+              label: "Location",
+              //value: `${livingLabData?.city}, ${livingLabData?.country}`,
+            },
+            {
+              label: "Population",
+              value: livingLabData?.population,
+            },
+            {
+              label: "Area (km²)",
+              value: livingLabData.area,
+            },
+            {
+              label: "Density (inhabitants/km²)",
+              value: livingLabData?.density,
+            },
+          ]}
         />
       </div>
     </section>
 
-    <!-- Transport Modes Section -->
-    {
-      nsmTransportModes.length > 0 && (
-        <section class="flex flex-col gap-4">
-          <h3>New Mobility Services (NSM)</h3>
-          <p>Transport modes available in this living lab:</p>
-          <div class="flex flex-wrap gap-2">
-            {nsmTransportModes.map((mode) => (
-              <TransportBadge
-                title={mode.name}
-                type={mode.name.toLowerCase().replace(/\s+/g, "-") as any}
-                size="md"
-                color="secondary"
+    <div class="flex flex-col gap-8 lg:flex-row">
+      <!-- Transport Modes Section -->
+      {
+        nsmTransportModes.length > 0 && (
+          <div class="flex flex-col gap-4">
+            <h3>Shared Mobility Services</h3>
+            <div class="flex flex-wrap gap-2">
+              {nsmTransportModes.map((mode) => (
+                <TransportBadge
+                  name={mode.name}
+                  size="xl"
+                  color="secondary"
+                  client:load
+                />
+              ))}
+            </div>
+          </div>
+        )
+      }
+      <!-- Push & Pull Measures Section -->
+      {
+        (pushMeasures.length > 0 || pullMeasures.length > 0) && (
+          <section class="flex flex-col gap-4">
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+              <MeasuresSection
+                heading="🔴 Push measures"
+                smallText={``}
+                paragraph={``}
+                measures={pushMeasures}
+                hideDescription={true}
+                cols={1}
+                style="list"
                 client:load
               />
-            ))}
-          </div>
-        </section>
-      )
-    }
+
+              <MeasuresSection
+                heading="🟢 Pull measures"
+                smallText={``}
+                paragraph={``}
+                measures={pullMeasures}
+                hideDescription={true}
+                cols={1}
+                style="list"
+                client:load
+              />
+            </div>
+          </section>
+        )
+      }
+    </div>
 
     <!-- Modal Split Section -->
     {
       (beforeData.length > 0 || afterData.length > 0) && (
         <section class="flex flex-col gap-4">
-          <h3>Modal Split</h3>
-          <p>Distribution of transport modes usage before and after measures:</p>
+          <h3 class="text-center">Modal Split</h3>
+          <p>
+            Distribution of transport modes usage before and after measures:
+          </p>
           <div class="bg-white p-6 rounded-lg shadow-md">
             <ModalSplitChart
               data={[
@@ -106,26 +150,9 @@ const mapMarker = createMapMarker(livingLabData);
       )
     }
 
-    <!-- Push & Pull Measures Section -->
-    {
-      (pushMeasures.length > 0 || pullMeasures.length > 0) && (
-        <section class="flex flex-col gap-4">
-          <h3>Mobility Measures</h3>
-          <p>Push and pull measures implemented in this living lab:</p>
-          <MobilityMeasures
-            pushMeasures={pushMeasures}
-            pullMeasures={pullMeasures}
-            hideDescription={false}
-            cols={4}
-            client:load
-          />
-        </section>
-      )
-    }
-
     <!-- KPIs Section -->
     <section class="flex flex-col gap-4">
-      <h3>Key Performance Indicators (KPIs)</h3>
+      <h3 class="text-center">Key Performance Indicators (KPIs)</h3>
       <p>Explore the KPIs related to the living lab.</p>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {
