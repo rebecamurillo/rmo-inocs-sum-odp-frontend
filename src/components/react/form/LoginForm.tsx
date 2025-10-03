@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../../react-catalyst-ui-kit/typescript/input";
 import { RButton } from "../ui/RButton";
 import { getUrl } from "../../../lib/helpers";
+import { signIn } from "auth-astro/client";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -15,24 +16,15 @@ export default function LoginForm() {
     setError("");
 
     try {
-      const response = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          password: password,
-        }),
+      const result = await signIn("credentials", {
+        email: email.trim().toLowerCase(),
+        password,
+        redirect: false, // handle manually
+        redirectTo: "/lab-admin", // where to go on success if redirect: true
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        // Redirect to dashboard on successful login
-        window.location.href = getUrl("/lab-admin");
-      } else {
-        setError(result.error || "Login failed. Please try again.");
+      if (result) {
+        setError("Unable to sign in.");
       }
     } catch (error) {
       console.error("Login error:", error);

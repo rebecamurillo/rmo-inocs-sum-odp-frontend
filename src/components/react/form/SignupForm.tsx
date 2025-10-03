@@ -93,15 +93,7 @@ export default function SignupForm() {
       )}
 
       <div className="flex gap-6">
-        <RButton
-          type="submit"
-          variant="primary"
-          text={
-            mode === "create"
-              ? "Signup and create new Living Lab"
-              : "Signup and join existing Living Lab"
-          }
-        />
+        <RButton type="submit" variant="primary" text="Signup" />
 
         <RButton
           type="button"
