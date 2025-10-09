@@ -28,3 +28,4 @@ specs/
 
 # Prisma
 .env
+prisma/migrations/
