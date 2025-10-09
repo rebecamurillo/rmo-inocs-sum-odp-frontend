@@ -7,12 +7,14 @@ export function Tooltip({
   open = false,
   className = "relative inline-block cursor-pointer",
   iconClassName = "h-4 w-4 text-warning",
+  children,
 }: {
   content: React.ReactNode;
   placement?: "top" | "bottom" | "left" | "right";
   open?: boolean;
   className?: string;
   iconClassName?: string;
+  children?: React.ReactNode;
 }) {
   const [displayTooltip, setDisplayTooltip] = useState(false);
   useEffect(() => {
@@ -28,11 +30,17 @@ export function Tooltip({
 
   return (
     <div className={className}>
-      <QuestionMarkCircleIcon
-        className={` ${iconClassName}`}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      />
+      {children ? (
+        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          {children}
+        </div>
+      ) : (
+        <QuestionMarkCircleIcon
+          className={` ${iconClassName}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        />
+      )}
       <div
         role="tooltip"
         className={`w-40 absolute z-50 inline-block p-2 text-xs text-primary transition-opacity duration-300 bg-light/80 rounded-lg shadow-xs tooltip ${

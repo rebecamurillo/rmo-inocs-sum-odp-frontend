@@ -32,7 +32,7 @@ export function MeasuresSection({
   style = "card",
 }: MeasuresSectionProps) {
   const GRID_CLASS = {
-    1: "grid grid-cols-1 mx-1 lg:mx-4 gap-4",
+    1: "grid grid-cols-1 mx-1 lg:mx-4 gap-1",
     2: "grid grid-cols-2 lg:grid-cols-2 mx-1 lg:mx-4 gap-4",
     4: "grid grid-cols-2 lg:grid-cols-4 mx-1 lg:mx-4 gap-4",
   };
@@ -52,15 +52,12 @@ export function MeasuresSection({
           <div>
             <div className="flex items-center ">
               {hideDescription && m.description ? (
-                <Tooltip
-                  content={m.description}
-                  placement="right"
-                  iconClassName="h-3 w-3 text-primary"
-                />
-              ) : null}
-              <p>
-                <strong>{m.name}</strong>
-              </p>
+                <Tooltip content={m.description} placement="top">
+                  <p>{m.name}</p>
+                </Tooltip>
+              ) : (
+                <p>{m.name}</p>
+              )}
             </div>
             {!hideDescription && m.description ? (
               <small className="mt-0 leading-0">{m.description}</small>

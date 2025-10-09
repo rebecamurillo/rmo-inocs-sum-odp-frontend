@@ -49,13 +49,19 @@ export function separateMeasures(measures: IMeasure[]): {
 export function prepareModalSplitData(
   livingLab: ILivingLabPopulated,
   allTransportModes: ITransportMode[]
-): { beforeData: SplitItem[]; afterData: SplitItem[] } {
+): {
+  before: { label: string; data: SplitItem[] };
+  after: { label: string; data: SplitItem[] };
+} {
   if (
     !livingLab.kpi_results ||
     !allTransportModes ||
     allTransportModes.length === 0
   ) {
-    return { beforeData: [], afterData: [] };
+    return {
+      before: { label: "Before", data: [] },
+      after: { label: "After", data: [] },
+    };
   }
 
   // Find KPI 15.a results (modal split)
@@ -64,11 +70,20 @@ export function prepareModalSplitData(
   );
 
   if (modalSplitKpis.length === 0) {
-    return { beforeData: [], afterData: [] };
+    return {
+      before: { label: "Before", data: [] },
+      after: { label: "After", data: [] },
+    };
   }
 
   const beforeData: SplitItem[] = [];
   const afterData: SplitItem[] = [];
+  const beforeLabelWithMinYear = modalSplitKpis[0].result_before?.date
+    ? `Before (${new Date(modalSplitKpis[0].result_before.date).getFullYear()})`
+    : "Before";
+  const afterLabelWithMinYear = modalSplitKpis[0].result_after?.date
+    ? `After (${new Date(modalSplitKpis[0].result_after.date).getFullYear()})`
+    : "After";
 
   modalSplitKpis.forEach((kpi) => {
     // Find the transport mode for this KPI result
@@ -95,7 +110,10 @@ export function prepareModalSplitData(
     }
   });
 
-  return { beforeData, afterData };
+  return {
+    before: { label: beforeLabelWithMinYear, data: beforeData },
+    after: { label: afterLabelWithMinYear, data: afterData },
+  };
 }
 
 /**
